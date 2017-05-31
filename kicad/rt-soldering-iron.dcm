@@ -1,0 +1,20 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP JS5208
+D JS5208 Navigation Switch
+$ENDCMP
+#
+$CMP MMA8652FC
+D 3-Axis, 12-bit, Digital Accelerometer
+$ENDCMP
+#
+$CMP Q_PMOS_DGSD
+D Transistor P-MOSFET with substrate diode (general)
+K pmos p-mos p-mosfet transistor
+$ENDCMP
+#
+$CMP SSD1306-OLED-I2C
+D SSD1306-based OLED display from Ebay
+$ENDCMP
+#
+#End Doc Library
