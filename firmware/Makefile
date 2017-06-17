@@ -16,7 +16,8 @@ COMDIR = ../common
 CPU = cortex-m0
 
 # Sources
-SRC = $(wildcard $(SRCDIR)/*.c) $(wildcard $(COMDIR)/src/*.c)
+C_SRC = $(wildcard $(SRCDIR)/*.c) $(wildcard $(COMDIR)/src/*.c)
+CPP_SRC = $(wildcard $(SRCDIR)/*.cpp) $(wildcard $(COMDIR)/src/*.cpp)
 ASM = $(wildcard $(SRCDIR)/*.s) $(wildcard $(COMDIR)/src/*.s)
 
 # Include directories
@@ -26,9 +27,14 @@ INCLUDE  = -I$(INCDIR) -I$(COMDIR)/include -I$(COMDIR)/cmsis
 LSCRIPT = STM32F031X6.ld
 
 # C Flags
-GCFLAGS  = -std=c11 -Wall -Os -fno-common -mthumb -mcpu=$(CPU) -DSTM32F031x6 --specs=nosys.specs --specs=nano.specs -g -Wa,-ahlms=$(addprefix $(OBJDIR)/,$(notdir $(<:.c=.lst)))
+GCFLAGS  = -std=c11 -Wall -Os -fno-common -ffunction-sections -mthumb -mcpu=$(CPU) -DSTM32F031x6 --specs=nosys.specs --specs=nano.specs -g -Wa,-ahlms=$(addprefix $(OBJDIR)/,$(notdir $(<:.c=.lst)))
 GCFLAGS += $(INCLUDE)
+# CPP Flags
+GCPPFLAGS  = -std=c++11 -Wall -Os -fno-common -ffunction-sections -fno-exceptions -fno-threadsafe-statics -fno-rtti -mthumb -mcpu=$(CPU) -DSTM32F031x6 --specs=nosys.specs --specs=nano.specs -g -Wa,-ahlms=$(addprefix $(OBJDIR)/,$(notdir $(<:.cpp=.lst)))
+GCPPFLAGS += $(INCLUDE)
+# Linker Flags
 LDFLAGS += -T$(LSCRIPT) -mthumb -mcpu=$(CPU) --specs=nosys.specs --specs=nano.specs -Wl,-Map,$(BINDIR)/$(PROJECT).map -Wl,--gc-sections
+# Assembly Flags
 ASFLAGS += -mcpu=$(CPU)
 
 # Flashing
@@ -36,6 +42,7 @@ OCDFLAGS = -f openocd/openocd.cfg
 
 # Tools
 CC = arm-none-eabi-gcc
+CCX = arm-none-eabi-g++
 AS = arm-none-eabi-as
 AR = arm-none-eabi-ar
 LD = arm-none-eabi-ld
@@ -49,7 +56,8 @@ RM = rm -rf
 
 ## Build process
 
-OBJ := $(addprefix $(OBJDIR)/,$(notdir $(SRC:.c=.o)))
+OBJ := $(addprefix $(OBJDIR)/,$(notdir $(C_SRC:.c=.o)))
+OBJ += $(addprefix $(OBJDIR)/,$(notdir $(CPP_SRC:.cpp=.o)))
 OBJ += $(addprefix $(OBJDIR)/,$(notdir $(ASM:.s=.o)))
 
 
@@ -93,13 +101,17 @@ $(BINDIR)/$(PROJECT).bin: $(BINDIR)/$(PROJECT).elf
 
 $(BINDIR)/$(PROJECT).elf: $(OBJ) $(LSCRIPT)
 	@mkdir -p $(dir $@)
-	$(CC) $(OBJ) $(LDFLAGS) -o $(BINDIR)/$(PROJECT).elf
+	$(CCX) $(OBJ) $(LDFLAGS) -o $(BINDIR)/$(PROJECT).elf
 	$(OBJDUMP) -D $(BINDIR)/$(PROJECT).elf > $(BINDIR)/$(PROJECT).lst
 	$(SIZE) $(BINDIR)/$(PROJECT).elf
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(GCFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	@mkdir -p $(dir $@)
+	$(CCX) $(GCPPFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.s
 	@mkdir -p $(dir $@)
@@ -109,6 +121,10 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.s
 $(OBJDIR)/%.o: $(COMDIR)/src/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(GCFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(COMDIR)/src/%.cpp
+	@mkdir -p $(dir $@)
+	$(CCX) $(GCPPFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: $(COMDIR)/src/%.s
 	@mkdir -p $(dir $@)

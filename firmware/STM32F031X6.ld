@@ -120,6 +120,10 @@ SECTIONS
         __bss_end__ = _ebss;
     } > RAM
 
+    . = ALIGN(4);
+    /* End of user data, heap starts here */
+    end = .;
+
     /* Fake stack section to ensure that sufficient space is left */
     ._user_heap_stack :
     {

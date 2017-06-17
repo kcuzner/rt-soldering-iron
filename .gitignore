@@ -9,6 +9,8 @@ kicad/gerber
 dev/gerber
 kicad/*.lst
 kicad/*.csv
+kicad/*.xml
+kicad/*.html
 *_autosave-*
 
 #libreoffice
