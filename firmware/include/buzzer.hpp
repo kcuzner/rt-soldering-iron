@@ -25,6 +25,9 @@ public:
     void isr();
 private:
     std::uint32_t m_countdown;
+
+    StaticSemaphore_t m_mutex;
+    SemaphoreHandle_t m_mutexHandle;
 };
 
 #endif //_BUZZER_H_

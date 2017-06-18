@@ -8,6 +8,7 @@
 
 #include "buzzer.hpp"
 #include "isr.hpp"
+#include "autolock.hpp"
 
 #include "stm32f0xx.h"
 
@@ -16,6 +17,8 @@ using namespace std;
 Buzzer::Buzzer()
     : m_countdown(0)
 {
+    m_mutexHandle = xSemaphoreCreateMutexStatic(&m_mutex);
+
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
     RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;
 
@@ -35,6 +38,8 @@ Buzzer::Buzzer()
 
 void Buzzer::beep(uint16_t duration_ms, uint16_t frequency_hz)
 {
+    Autolock m_lock(m_mutexHandle);
+
     TIM1->ARR = SystemCoreClock / frequency_hz;
     TIM1->CCR1 = TIM1->ARR / 2;
 

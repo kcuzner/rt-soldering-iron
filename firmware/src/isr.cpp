@@ -103,6 +103,11 @@ void WWDG_IRQHandler (void)                   /* Window WatchDog              */
     ISR::isr(WWDG_IRQn).call();
 }
 
+void PVD_IRQHandler (void)                    /* PVD Interrupt through EXTI   */
+{
+    ISR::isr(PVD_IRQn).call();
+}
+
 void RTC_IRQHandler (void)                    /* RTC through the EXTI line    */
 {
     ISR::isr(RTC_IRQn).call();

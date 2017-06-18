@@ -35,7 +35,7 @@ MEMORY
 /**
  * Define the top of the stack as the end of RAM
  */
-_heap_size_min = 256;
+_heap_size_min = 0;
 _stack_size_min = 512; /* On a system with 64K, 8K was used */
 _estack = (0x20000000+4K);
 
