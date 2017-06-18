@@ -23,7 +23,11 @@ public:
 
     bool initialize();
 
+    bool display();
+
 private:
+    bool writeCommands(const uint8_t *buffer, uint32_t length);
+
     I2C *m_i2c;
     Address m_address;
     std::array<std::uint8_t, 128 * 32 / 8> m_buffer;

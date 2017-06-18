@@ -119,15 +119,15 @@ void I2C::isr()
 
 void I2C::setTiming(void)
 {
-    uint32_t prescaler = SystemCoreClock / 2000000;
+    uint32_t prescaler = 1;// SystemCoreClock / 2000000;
     if (prescaler > 15)
         prescaler = 15;
     //Set up for master mode, 100KHz, assuming an 8MHz clock
     I2C1->TIMINGR = ((prescaler & 0xF) << I2C_TIMINGR_PRESC_Pos) |
-        ((5 & 0xF) << I2C_TIMINGR_SCLDEL_Pos) |
-        ((5 & 0xF) << I2C_TIMINGR_SDADEL_Pos) |
-        ((5 & 0xFF) << I2C_TIMINGR_SCLH_Pos) |
-        ((5 & 0xFF) << I2C_TIMINGR_SCLL_Pos);
+        ((3 & 0xF) << I2C_TIMINGR_SCLDEL_Pos) |
+        ((1 & 0xF) << I2C_TIMINGR_SDADEL_Pos) |
+        ((3 & 0xFF) << I2C_TIMINGR_SCLH_Pos) |
+        ((9 & 0xFF) << I2C_TIMINGR_SCLL_Pos);
 }
 
 /**

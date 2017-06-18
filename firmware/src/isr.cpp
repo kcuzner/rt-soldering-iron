@@ -91,10 +91,7 @@ void NMI_Handler (void)
     ISR::isr(NonMaskableInt_IRQn).call();
 }
 
-void HardFault_Handler (void)
-{
-    ISR::isr(HardFault_IRQn).call();
-}
+/* HardFault hander implemented by debug.c */
 
 /* SVC, PendSV, and SysTick are implemented by FreeRTOS */
 

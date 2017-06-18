@@ -36,7 +36,7 @@ static void beepTask(void *pvParameters)
     }
 }
 
-static StackType_t i2cTaskStack[configMINIMAL_STACK_SIZE];
+static StackType_t i2cTaskStack[120];
 static StaticTask_t i2cTaskBuf;
 static void i2cTask(void *pvParameters)
 {
@@ -49,6 +49,8 @@ static void i2cTask(void *pvParameters)
 
     while (1)
     {
+        //buzzer.beep(10, 1000);
+        //ssd1306.display();
         //if (i2c.write(0x3a, 0, &buf[0], 1))
         //    buzzer.beep(150, 440);
         vTaskDelayUntil(&nextWake, 400);
@@ -58,7 +60,7 @@ static void i2cTask(void *pvParameters)
 int main(void)
 {
     xTaskCreateStatic(beepTask, "B", configMINIMAL_STACK_SIZE, NULL, 2, beepTaskStack, &beepTaskBuf);
-    xTaskCreateStatic(i2cTask, "I", configMINIMAL_STACK_SIZE, NULL, 1, i2cTaskStack, &i2cTaskBuf);
+    xTaskCreateStatic(i2cTask, "I", 120, NULL, 1, i2cTaskStack, &i2cTaskBuf);
     vTaskStartScheduler();
 
     while (1) { }
