@@ -13,7 +13,7 @@ using namespace std;
 array<ISR, 48> ISR::s_isrs;
 ISR ISR::s_invalidIsr;
 
-ISR::ISR()
+constexpr ISR::ISR()
     : m_handler(nullptr)
 {
 }
@@ -36,22 +36,6 @@ void ISR::call()
         while (1) { }
     }
     m_handler->isr();
-}
-
-bool ISR::isValid()
-{
-    return this == &s_invalidIsr;
-}
-
-ISR& ISR::isr(IRQn_Type irqn)
-{
-    uint8_t index = irqn + 16;
-    if (index > s_isrs.size())
-    {
-        return s_invalidIsr;
-    }
-
-    return s_isrs[index];
 }
 
 extern "C"
