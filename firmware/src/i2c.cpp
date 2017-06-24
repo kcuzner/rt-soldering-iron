@@ -35,8 +35,8 @@ I2C::I2C()
     setTiming();
     //osc_add_callback(&i2c_set_timing);
     
-    NVIC_EnableIRQ(I2C1_IRQn);
     ISR::isr(I2C1_IRQn).attach(this);
+    NVIC_EnableIRQ(I2C1_IRQn);
 }
 
 bool I2C::write(uint8_t address, uint8_t reg, const uint8_t *buffer, uint8_t len)
