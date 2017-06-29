@@ -32,7 +32,7 @@ LIBS:rt-soldering-iron
 LIBS:rt-soldering-iron-cache
 EELAYER 25 0
 EELAYER END
-$Descr A4 11693 8268
+$Descr USLetter 11000 8500
 encoding utf-8
 Sheet 4 4
 Title "RT Soldering Iron"
@@ -606,7 +606,7 @@ Text Notes 4500 3100 0    60   ~ 0
 I2C1_SCL
 Text Notes 4500 3200 0    60   ~ 0
 I2C1_SDA
-Text Notes 9650 4950 0    60   ~ 0
+Text Notes 9300 4100 0    60   ~ 0
 Charge pump enabled:\nVCC  = 7.5V\nRREF = 400K -> 390K
 $Comp
 L R R18

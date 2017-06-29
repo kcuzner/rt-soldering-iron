@@ -32,7 +32,7 @@ LIBS:rt-soldering-iron
 LIBS:rt-soldering-iron-cache
 EELAYER 25 0
 EELAYER END
-$Descr A4 11693 8268
+$Descr USLetter 11000 8500
 encoding utf-8
 Sheet 2 4
 Title "RT Soldering Iron"
@@ -99,11 +99,17 @@ Wire Wire Line
 Wire Wire Line
 	3400 3700 3300 3700
 Wire Wire Line
-	3400 3200 3400 3700
+	3400 3200 3400 3300
+Wire Wire Line
+	3400 3300 3400 3700
 Wire Wire Line
 	3700 3300 3700 3200
 Wire Wire Line
-	3400 3300 3700 3300
+	3400 3300 3500 3300
+Wire Wire Line
+	3500 3300 3600 3300
+Wire Wire Line
+	3600 3300 3700 3300
 Connection ~ 3400 3300
 Wire Wire Line
 	3500 3200 3500 3300
@@ -126,7 +132,9 @@ $EndComp
 Wire Wire Line
 	4300 1300 4300 2600
 Wire Wire Line
-	4300 2900 4300 3100
+	4300 2900 4300 3000
+Wire Wire Line
+	4300 3000 4300 3100
 Wire Wire Line
 	4300 3000 4000 3000
 Connection ~ 4300 3000
@@ -142,7 +150,9 @@ F 3 "" H 4300 3900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4300 3500 4300 3900
+	4300 3500 4300 3800
+Wire Wire Line
+	4300 3800 4300 3900
 $Comp
 L R R3
 U 1 1 592A6A68
@@ -156,7 +166,9 @@ F 4 "311-1.0KJRCT-ND" H 4950 3300 60  0001 C CNN "Part No."
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	4600 3300 4800 3300
+	4600 3300 4700 3300
+Wire Wire Line
+	4700 3300 4800 3300
 $Comp
 L R R4
 U 1 1 592A6B77
@@ -214,7 +226,11 @@ F 4 "RR05P100KDCT-ND" H 8050 3700 60  0001 C CNN "Part No."
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	6600 3700 7900 3700
+	6600 3700 6900 3700
+Wire Wire Line
+	6900 3700 7600 3700
+Wire Wire Line
+	7600 3700 7900 3700
 Wire Wire Line
 	7800 4400 6900 4400
 $Comp
@@ -244,14 +260,20 @@ $EndComp
 Wire Wire Line
 	8100 5000 8100 4800
 Wire Wire Line
-	8400 4500 10400 4500
+	8400 4500 8900 4500
+Wire Wire Line
+	8900 4500 9400 4500
+Wire Wire Line
+	9400 4500 9700 4500
 Wire Wire Line
 	8900 4500 8900 3700
 Wire Wire Line
-	8900 3700 8200 3700
-Text HLabel 10400 4500 2    60   Input ~ 0
+	8900 3700 8400 3700
+Wire Wire Line
+	8400 3700 8200 3700
+Text HLabel 9700 4500 2    60   Input ~ 0
 HEATER_SENSE
-Text Label 10300 4500 2    60   ~ 0
+Text Label 9600 4500 2    60   ~ 0
 HEATER_SENSE
 Connection ~ 8900 4500
 $Comp
@@ -325,7 +347,13 @@ $EndComp
 Wire Wire Line
 	4000 4600 4400 4600
 Wire Wire Line
-	4700 4600 7800 4600
+	4700 4600 5150 4600
+Wire Wire Line
+	5150 4600 5600 4600
+Wire Wire Line
+	5600 4600 5800 4600
+Wire Wire Line
+	5800 4600 7800 4600
 $Comp
 L C C2
 U 1 1 592CAA63
@@ -407,13 +435,17 @@ F 4 "620-1483-1-ND" H 2800 2000 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2100 1200 2100 1600
+	2100 1200 2100 1300
+Wire Wire Line
+	2100 1300 2100 1600
 Wire Wire Line
 	2100 1600 2200 1600
 Wire Wire Line
 	3400 1600 3700 1600
 Wire Wire Line
-	3700 1600 3700 2800
+	3700 1600 3700 2700
+Wire Wire Line
+	3700 2700 3700 2800
 Wire Wire Line
 	3600 2700 3700 2700
 Connection ~ 3700 2700
@@ -432,7 +464,13 @@ F 3 "" H 3500 2500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3500 2100 3500 2500
+	3500 2100 3500 2200
+Wire Wire Line
+	3500 2200 3500 2300
+Wire Wire Line
+	3500 2300 3500 2400
+Wire Wire Line
+	3500 2400 3500 2500
 Wire Wire Line
 	3500 2100 3400 2100
 Wire Wire Line
@@ -456,7 +494,9 @@ F 3 "" H 1800 1200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1800 1200 1800 1900
+	1800 1200 1800 1300
+Wire Wire Line
+	1800 1300 1800 1900
 Wire Wire Line
 	1800 1900 2200 1900
 Text HLabel 1900 2100 0    60   Input ~ 0
@@ -491,7 +531,9 @@ Wire Wire Line
 Wire Wire Line
 	1200 2800 1200 2900
 Wire Wire Line
-	1100 2900 1800 2900
+	1100 2900 1200 2900
+Wire Wire Line
+	1200 2900 1800 2900
 Wire Wire Line
 	1800 2900 1800 2300
 Wire Wire Line
