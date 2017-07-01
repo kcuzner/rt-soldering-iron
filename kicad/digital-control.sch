@@ -814,7 +814,6 @@ Wire Wire Line
 NoConn ~ 4900 2900
 NoConn ~ 4900 3000
 NoConn ~ 6300 2700
-NoConn ~ 6300 2600
 $Comp
 L JS5208 SW1
 U 1 1 592E29B5
@@ -997,4 +996,10 @@ Text Label 4550 5000 0    60   ~ 0
 BUZ_BASE
 Text Label 5100 4700 0    60   ~ 0
 BUZ_COL
+Text HLabel 7500 2600 2    60   Input ~ 0
+~HEATER_EN
+Wire Wire Line
+	7500 2600 6300 2600
+Text Label 6900 2600 0    60   ~ 0
+~HEATER_EN
 $EndSCHEMATC
