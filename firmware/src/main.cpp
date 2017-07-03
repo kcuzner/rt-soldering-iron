@@ -11,6 +11,8 @@
 #include "buzzer.hpp"
 #include "i2c.hpp"
 #include "ssd1306.hpp"
+#include "buttons.hpp"
+#include "heater.hpp"
 
 extern "C" {
     void vApplicationTickHook(void);
@@ -23,6 +25,8 @@ extern "C" {
 I2C i2c;
 Buzzer buzzer;
 SSD1306 ssd1306(&i2c, SSD1306::Address::LOW);
+Buttons buttons;
+Heater heater;
 
 static StackType_t beepTaskStack[configMINIMAL_STACK_SIZE];
 static StaticTask_t beepTaskBuf;
@@ -36,24 +40,65 @@ static void beepTask(void *pvParameters)
     }
 }
 
+const uint8_t bitmap[] = { 0xC0, 0x30, 0x0C, 0x03 };
+
 static StackType_t i2cTaskStack[120];
 static StaticTask_t i2cTaskBuf;
 static void i2cTask(void *pvParameters)
 {
+    Buttons::Button btn;
     TickType_t nextWake = xTaskGetTickCount();
     uint8_t buf[] = {0xae, 0xd5, 0x80};
 
-    buzzer.beep(100, 1200);
-    if (ssd1306.initialize()) { }
-        //buzzer.beep(150, 440);
+    if (ssd1306.initialize())
+        buzzer.beep(150, 440);
 
+    heater.setStandby(false);
+  
+    ssd1306.blit(45, 0, 8, 4, bitmap);
+    ssd1306.blit(53, 1, 8, 4, bitmap);
+    ssd1306.blit(61, 2, 8, 4, bitmap);
+    //ssd1306.blit(80, 8, 4, 8, bitmap);
+    ssd1306.display();
+
+
+    uint8_t x = 0;
+    uint8_t y = 0;
     while (1)
     {
+        ssd1306.clear();
+        ssd1306.blit(x, y, 8, 4, bitmap);
+        ssd1306.display();
+        x += 1;
+        y += 1;
+        if (y > 31)
+            y = 0;
+        if (x > 127)
+            x = 0;
+        vTaskDelay(16);
         //buzzer.beep(10, 1000);
         //ssd1306.display();
         //if (i2c.write(0x3a, 0, &buf[0], 1))
         //    buzzer.beep(150, 440);
-        vTaskDelayUntil(&nextWake, 400);
+        //vTaskDelayUntil(&nextWake, 400);
+    }
+}
+
+static StackType_t keyTaskStack[120];
+static StaticTask_t keyTaskBuf;
+static void keypressTask(void *pvParameters)
+{
+    while (1)
+    {
+        auto btn = buttons.getNextPress();
+        if (btn != Buttons::Button::NONE)
+        {
+            buzzer.beep(100, heater.getAvgAdcValue() + 1);
+        }
+        else
+        {
+            buzzer.beep(100, 2000);
+        }
     }
 }
 
@@ -61,6 +106,7 @@ int main(void)
 {
     xTaskCreateStatic(beepTask, "B", configMINIMAL_STACK_SIZE, NULL, 2, beepTaskStack, &beepTaskBuf);
     xTaskCreateStatic(i2cTask, "I", 120, NULL, 1, i2cTaskStack, &i2cTaskBuf);
+    xTaskCreateStatic(keypressTask, "K", 120, NULL, 1, keyTaskStack, &keyTaskBuf);
     vTaskStartScheduler();
 
     while (1) { }

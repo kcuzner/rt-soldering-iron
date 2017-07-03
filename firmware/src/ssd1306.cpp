@@ -14,6 +14,7 @@
 
 #include <cstdint>
 #include <cstring>
+#include <algorithm>
 
 using namespace std;
 
@@ -128,6 +129,44 @@ bool SSD1306::display()
     endDisp = xTaskGetTickCount();
 
     return true;
+}
+
+void SSD1306::clear()
+{
+    memset(m_buffer.data(), 0, m_buffer.size());
+}
+
+void SSD1306::setPixel(uint8_t x, uint8_t y, uint8_t value)
+{
+    uint8_t shiftOffset = y % 8;
+    if (x > 127)
+        return;
+    if (y > 31)
+        return;
+    if (value)
+    {
+        m_buffer[(y/8)*128 + x] |= 0x1 << shiftOffset;
+    }
+    else
+    {
+        m_buffer[(y/8)*128 + x] &= ~(0x1 << shiftOffset);
+    }
+}
+
+void SSD1306::blit(uint8_t destX, uint8_t destY, uint8_t width, uint8_t height, const uint8_t *buffer)
+{
+    uint8_t bufferWidth = width / 8 + (width % 8 ? 1 : 0);
+
+    for (uint8_t y = 0; y < height; y++)
+    {
+        uint16_t offset = y * bufferWidth;
+        for (uint8_t x = 0; x < width; x++)
+        {
+            uint8_t mask = 0x1 << x % 8;
+            uint8_t val = buffer[offset + x / 8] & mask ? 1 : 0;
+            setPixel(destX + x, destY + y, val);
+        }
+    }
 }
 
 bool SSD1306::writeCommands(const uint8_t *buffer, uint32_t length)
