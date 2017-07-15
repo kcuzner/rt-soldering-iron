@@ -169,6 +169,24 @@ void SSD1306::blit(uint8_t destX, uint8_t destY, uint8_t width, uint8_t height, 
     }
 }
 
+void SSD1306::hline(uint8_t startX, uint8_t startY, uint8_t endX)
+{
+    uint8_t mask = 1 << (startY % 8);
+    for (uint8_t x = 0; x < endX - startX; x++)
+    {
+        m_buffer[(startY/8)*128 + startX + x] |= mask;
+    }
+}
+
+void SSD1306::vline(uint8_t startX, uint8_t startY, uint8_t endY)
+{
+    for (uint8_t y = 0; y < endY - startY; y += 8)
+    {
+        uint8_t mask = 0xFF >> (y % 8);
+        m_buffer[((startY + y)/8)*128 + startX] |= mask;
+    }
+}
+
 bool SSD1306::writeCommands(const uint8_t *buffer, uint32_t length)
 {
     for (uint32_t i = 0; i < length; i += 2)

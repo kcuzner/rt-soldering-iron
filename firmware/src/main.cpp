@@ -14,6 +14,8 @@
 #include "buttons.hpp"
 #include "heater.hpp"
 
+#include "font.h"
+
 extern "C" {
     void vApplicationTickHook(void);
     void vApplicationStackOverflowHook(TaskHandle_t task, char *taskName);
@@ -40,7 +42,12 @@ static void beepTask(void *pvParameters)
     }
 }
 
-const uint8_t bitmap[] = { 0xC0, 0x30, 0x0C, 0x03 };
+const uint8_t bitmap[] = {
+0x00, 0x00, 0x0C, 0x0C, 0x0E, 0x12, 0x16, 0x1F, 0x31, 0x00, 0x00, 0x00, 
+  0x00,
+};
+
+static char character = '0';
 
 static StackType_t i2cTaskStack[120];
 static StaticTask_t i2cTaskBuf;
@@ -66,8 +73,11 @@ static void i2cTask(void *pvParameters)
     uint8_t y = 0;
     while (1)
     {
+        uint16_t hsize, vsize;
         ssd1306.clear();
-        ssd1306.blit(x, y, 8, 4, bitmap);
+        ssd1306.blit(x, y, hsize, vsize, font_get_character(FONT_16x32, character, &hsize, &vsize));
+        ssd1306.hline(5, 5, 100);
+        ssd1306.vline(10, 10, 30);
         ssd1306.display();
         x += 1;
         y += 1;
@@ -93,6 +103,22 @@ static void keypressTask(void *pvParameters)
         auto btn = buttons.getNextPress();
         if (btn != Buttons::Button::NONE)
         {
+            if (btn == Buttons::Button::UP)
+            {
+                character++;
+                if (character == ':')
+                    character = 'A';
+                if (character == '[')
+                    character = '0';
+            }
+            else if (btn == Buttons::Button::DOWN)
+            {
+                character--;
+                if (character == '/')
+                    character = 'Z';
+                if (character == '@')
+                    character = '9';
+            }
             buzzer.beep(100, heater.getAvgAdcValue() + 1);
         }
         else

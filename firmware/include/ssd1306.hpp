@@ -45,6 +45,10 @@ public:
      */
     void blit(std::uint8_t destX, std::uint8_t destY, std::uint8_t width, std::uint8_t height, const std::uint8_t *buffer);
 
+    void hline(std::uint8_t startX, std::uint8_t startY, std::uint8_t endX);
+
+    void vline(std::uint8_t startX, std::uint8_t startY, std::uint8_t endY);
+
 private:
     bool writeCommands(const std::uint8_t *buffer, std::uint32_t length);
 
