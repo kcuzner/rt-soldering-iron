@@ -6,29 +6,30 @@
 
 #include "isr.hpp"
 
+#include "FreeRTOS.h"
+#include "semphr.h"
+
 #include <cstdint>
 #include <array>
 
 class Heater : IRQHandler
 {
 public:
-    const uint32_t PWMFreq = 1E3;
-
-    enum class Status { STANDBY, RAMP, STEADY };
+    const std::uint16_t PWMPeriod = 0x1FF;
 
     Heater();
 
-    Status getStatus();
+    void setDutyCycle(std::uint16_t dc);
     std::uint16_t getTemperature();
-    void setStandby(bool standby);
-    void setTemperature(std::uint16_t temperature);
 
     void isr();
     std::uint16_t getAvgAdcValue();
 private:
 
-    bool m_standby;
-    std::uint16_t m_rawCommand;
+    StaticSemaphore_t m_mutex;
+    SemaphoreHandle_t m_mutexHandle;
+    StaticSemaphore_t m_binaryISRWait;
+    SemaphoreHandle_t m_binaryISRWaitHandle;
     std::array<std::uint16_t, 4> m_adcData;
 };
 
