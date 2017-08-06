@@ -8,31 +8,24 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "buzzer.hpp"
-#include "i2c.hpp"
-#include "ssd1306.hpp"
-#include "buttons.hpp"
-#include "heater.hpp"
+#include "buzzer.h"
+#include "i2c.h"
+#include "ssd1306.h"
+#include "buttons.h"
+#include "heater.h"
 
 #include "font.h"
 
 #define STACKSIZE(stk) (sizeof(stk)/sizeof(StackType_t))
 
-extern "C" {
-    void vApplicationTickHook(void);
-    void vApplicationStackOverflowHook(TaskHandle_t task, char *taskName);
-    void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
-                                        StackType_t **ppxIdleTaskStackBuffer,
-                                        uint32_t *pulIdleTaskStackSize );
-}
+void vApplicationTickHook(void);
+void vApplicationStackOverflowHook(TaskHandle_t task, char *taskName);
+void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
+                                    StackType_t **ppxIdleTaskStackBuffer,
+                                    uint32_t *pulIdleTaskStackSize );
 
-I2C i2c;
-Buzzer buzzer;
-Buttons buttons;
-Heater heater;
-
-static StackType_t controlTaskStack[120];
-static StaticTask_t controlTaskBuf;
+StackType_t controlTaskStack[configMINIMAL_STACK_SIZE];
+StaticTask_t controlTaskBuf;
 static void controlTask(void *pvParameters)
 {
     TickType_t nextWake = xTaskGetTickCount();
@@ -42,24 +35,23 @@ static void controlTask(void *pvParameters)
     }
 }
 
-static StackType_t displayTaskStack[120];
-static StaticTask_t displayTaskBuf;
+StackType_t displayTaskStack[configMINIMAL_STACK_SIZE];
+StaticTask_t displayTaskBuf;
 static void displayTask(void *pvParameters)
 {
-    SSD1306 ssd1306(&i2c, SSD1306::Address::LOW);
     TickType_t nextWake = xTaskGetTickCount();
     uint8_t buf[] = {0xae, 0xd5, 0x80};
 
-    if (ssd1306.initialize())
-        buzzer.beep(150, 440);
+    if (ssd1306_init(SSD1306_LOW))
+        buzzer_beep(150, 440);
 
     uint8_t x = 0;
     uint8_t y = 0;
     while (1)
     {
         uint16_t hsize, vsize;
-        ssd1306.clear();
-        ssd1306.display();
+        ssd1306_clear();
+        ssd1306_display();
         vTaskDelay(16);
         //buzzer.beep(10, 1000);
         //ssd1306.display();
@@ -69,26 +61,31 @@ static void displayTask(void *pvParameters)
     }
 }
 
-static StackType_t mainTaskStack[120];
-static StaticTask_t mainTaskBuf;
+StackType_t mainTaskStack[configMINIMAL_STACK_SIZE];
+StaticTask_t mainTaskBuf;
 static void mainTask(void *pvParameters)
 {
     while (1)
     {
-        auto btn = buttons.getNextPress();
-        if (btn != Buttons::Button::NONE)
+        auto btn = buttons_getNextPress(portMAX_DELAY);
+        if (btn != BTN_NONE)
         {
-            buzzer.beep(100, heater.getAvgAdcValue() + 1);
+            buzzer_beep(100, 1000);
         }
         else
         {
-            buzzer.beep(100, 2000);
+            buzzer_beep(100, 2000);
         }
     }
 }
 
 int main(void)
 {
+    i2c_init();
+    buzzer_init();
+    buttons_init();
+    heater_init();
+
     xTaskCreateStatic(mainTask, "M", STACKSIZE(mainTaskStack), NULL, 2, mainTaskStack, &mainTaskBuf);
     xTaskCreateStatic(displayTask, "D", STACKSIZE(displayTaskStack), NULL, 1, displayTaskStack, &displayTaskBuf);
     xTaskCreateStatic(controlTask, "C", STACKSIZE(controlTaskStack), NULL, 3, controlTaskStack, &controlTaskBuf);

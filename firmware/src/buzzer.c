@@ -6,16 +6,17 @@
  * Kevin Cuzner
  */
 
-#include "buzzer.hpp"
-#include "isr.hpp"
-#include "autolock.hpp"
+#include "buzzer.h"
+#include "autolock.h"
 
 #include "stm32f0xx.h"
 
-using namespace std;
+static uint32_t m_countdown = 0;
 
-Buzzer::Buzzer()
-    : m_countdown(0)
+static StaticSemaphore_t m_mutex;
+static SemaphoreHandle_t m_mutexHandle;
+
+void buzzer_init()
 {
     m_mutexHandle = xSemaphoreCreateMutexStatic(&m_mutex);
 
@@ -35,23 +36,23 @@ Buzzer::Buzzer()
     GPIOA->MODER |= GPIO_MODER_MODER8_1;
 
     NVIC_EnableIRQ(TIM1_BRK_UP_TRG_COM_IRQn);
-    ISR::isr(TIM1_BRK_UP_TRG_COM_IRQn).attach(this);
 }
 
-void Buzzer::beep(uint16_t duration_ms, uint16_t frequency_hz)
+void buzzer_beep(uint16_t duration_ms, uint16_t frequency_hz)
 {
-    Autolock m_lock(m_mutexHandle);
+    AUTOLOCK_TAKE(m_mutexHandle)
+    {
+        TIM1->ARR = SystemCoreClock / frequency_hz;
+        TIM1->CCR1 = TIM1->ARR / 2;
 
-    TIM1->ARR = SystemCoreClock / frequency_hz;
-    TIM1->CCR1 = TIM1->ARR / 2;
+        m_countdown = (uint32_t)duration_ms * (uint32_t)frequency_hz / 1000;
 
-    m_countdown = (uint32_t)duration_ms * (uint32_t)frequency_hz / 1000;
-
-    TIM1->CR1 |= TIM_CR1_CEN;
-    TIM1->EGR |= TIM_EGR_UG;
+        TIM1->CR1 |= TIM_CR1_CEN;
+        TIM1->EGR |= TIM_EGR_UG;
+    }
 }
 
-void Buzzer::isr()
+void TIM1_BRK_UP_TRG_COM_IRQHandler()
 {
     if (TIM1->SR & TIM_SR_UIF)
     {

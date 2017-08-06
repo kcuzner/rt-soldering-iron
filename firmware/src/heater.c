@@ -6,12 +6,18 @@
  * Kevin Cuzner
  */
 
-#include "heater.hpp"
+#include "heater.h"
 
 #include "stm32f0xx.h"
-#include "autolock.hpp"
+#include "autolock.h"
 
-Heater::Heater()
+static StaticSemaphore_t m_mutex;
+static SemaphoreHandle_t m_mutexHandle;
+static StaticSemaphore_t m_binaryISRWait;
+static SemaphoreHandle_t m_binaryISRWaitHandle;
+static uint16_t m_adcData[4];
+
+void heater_init()
 {
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN | RCC_AHBENR_DMAEN;
     RCC->APB2ENR |= RCC_APB2ENR_ADCEN;
@@ -23,7 +29,7 @@ Heater::Heater()
 
     //set up the heater PWM timer
     TIM14->PSC = 0;
-    TIM14->ARR = Heater::PWMPeriod;
+    TIM14->ARR = HEATER_PWMPERIOD;
     TIM14->CCR1 = 0;
     TIM14->CCMR1 |= TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 |
         TIM_CCMR1_OC1PE;
@@ -47,8 +53,8 @@ Heater::Heater()
 
     //configure the DMA to do 4 conversions and stop
     DMA1_Channel1->CPAR = (uint32_t)(&(ADC1->DR));
-    DMA1_Channel1->CMAR = (uint32_t)(m_adcData.data());
-    DMA1_Channel1->CNDTR = m_adcData.size();
+    DMA1_Channel1->CMAR = (uint32_t)(m_adcData);
+    DMA1_Channel1->CNDTR = sizeof(m_adcData)/sizeof(m_adcData[0]);
     DMA1_Channel1->CCR |= DMA_CCR_MINC | DMA_CCR_MSIZE_0 | DMA_CCR_PSIZE_0 | DMA_CCR_TCIE;
     DMA1_Channel1->CCR |= DMA_CCR_EN;
 
@@ -62,52 +68,55 @@ Heater::Heater()
     GPIOA->MODER |= GPIO_MODER_MODER7_1 | GPIO_MODER_MODER1_0 | GPIO_MODER_MODER1_1;
     GPIOA->ODR &= ~GPIO_ODR_7;
 
-    ISR::isr(DMA1_Channel1_IRQn).attach(this);
     NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 
-    setDutyCycle(0);
+    heater_setDutyCycle(0);
 }
 
-void Heater::setDutyCycle(std::uint16_t dc)
+void heater_setDutyCycle(uint16_t dc)
 {
-    Autolock l_lock(m_mutexHandle);
+    AUTOLOCK_TAKE(m_mutexHandle)
+    {
 
-    if (dc == 0)
-    {
-        TIM14->CR1 &= ~TIM_CR1_CEN;
-    }
-    else
-    {
-        if (dc > TIM14->ARR)
-            dc = TIM14->ARR;
-        TIM14->CCR1 = dc;
-        TIM14->CR1 |= TIM_CR1_CEN;
+        if (dc == 0)
+        {
+            TIM14->CR1 &= ~TIM_CR1_CEN;
+        }
+        else
+        {
+            if (dc > TIM14->ARR)
+                dc = TIM14->ARR;
+            TIM14->CCR1 = dc;
+            TIM14->CR1 |= TIM_CR1_CEN;
+        }
     }
 }
 
-std::uint16_t Heater::getTemperature()
+uint16_t heater_getTemperature()
 {
-    Autolock l_lock(m_mutexHandle);
+    AUTOLOCK_TAKE(m_mutexHandle)
+    {
+        GPIOA->MODER &= GPIO_MODER_MODER7;
+        GPIOA->MODER |= GPIO_MODER_MODER7_0;
 
-    GPIOA->MODER &= GPIO_MODER_MODER7;
-    GPIOA->MODER |= GPIO_MODER_MODER7_0;
-
-    GPIOA->MODER &= GPIO_MODER_MODER7;
-    GPIOA->MODER |= GPIO_MODER_MODER7_1;
-
+        GPIOA->MODER &= GPIO_MODER_MODER7;
+        GPIOA->MODER |= GPIO_MODER_MODER7_1;
+    }
     return 0;
 }
 
-uint16_t Heater::getAvgAdcValue()
+static uint16_t heater_getAvgAdcValue()
 {
     uint32_t acc = 0;
-    for (uint16_t i : m_adcData)
-        acc += i;
+    for (uint16_t i = 0; i < sizeof(m_adcData)/sizeof(m_adcData[0]); i++)
+    {
+        acc += m_adcData[i];
+    }
 
-    return acc / m_adcData.size();
+    return acc / sizeof(m_adcData)/sizeof(m_adcData[0]);
 }
 
-void Heater::isr() //DMA1 ISR for when all four samples are transferred
+void DMA1_Channel1_IRQHandler() //DMA1 ISR for when all four samples are transferred
 {
     static BaseType_t xHigherPriorityTaskWoken;
 
