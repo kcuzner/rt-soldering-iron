@@ -8,6 +8,11 @@ $CMP MMA8652FC
 D 3-Axis, 12-bit, Digital Accelerometer
 $ENDCMP
 #
+$CMP Q_NMOS_SGD_DUAL
+D Dual Transistor N-MOSFETwith substrate diode (general)
+K NMOS n-mos n-mosfet transistor
+$ENDCMP
+#
 $CMP Q_PMOS_DGSD
 D Transistor P-MOSFET with substrate diode (general)
 K pmos p-mos p-mosfet transistor
@@ -15,6 +20,10 @@ $ENDCMP
 #
 $CMP SSD1306-OLED-I2C
 D SSD1306-based OLED display from Ebay
+$ENDCMP
+#
+$CMP TL431
+D Precision shunt regulator
 $ENDCMP
 #
 #End Doc Library
