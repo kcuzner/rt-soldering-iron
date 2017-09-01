@@ -34,4 +34,8 @@ $CMP TL431
 D Precision shunt regulator
 $ENDCMP
 #
+$CMP TLV1701
+D Open-Drain Sub-microamp Comparator
+$ENDCMP
+#
 #End Doc Library

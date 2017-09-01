@@ -45,18 +45,6 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L STM32F031G U4
-U 1 1 59208351
-P 5600 2450
-F 0 "U4" H 5600 1550 60  0000 C CNN
-F 1 "STM32F031G" H 5600 3350 60  0000 C CNN
-F 2 "rt-soldering-iron:28-UFQFPN" H 5400 2300 60  0001 C CNN
-F 3 "" H 5400 2300 60  0001 C CNN
-F 4 "497-13619-ND" H 5600 2450 60  0001 C CNN "Part No."
-	1    5600 2450
-	1    0    0    -1  
-$EndComp
-$Comp
 L +3.3V #PWR042
 U 1 1 592BB6CC
 P 4600 1000
@@ -70,7 +58,9 @@ $EndComp
 Wire Wire Line
 	4600 1700 4900 1700
 Wire Wire Line
-	4600 1000 4600 1700
+	4600 1000 4600 1100
+Wire Wire Line
+	4600 1100 4600 1700
 $Comp
 L C C14
 U 1 1 592BB72D
@@ -95,7 +85,9 @@ F 3 "" H 3300 2400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3300 1900 3300 2400
+	3300 1900 3300 2300
+Wire Wire Line
+	3300 2300 3300 2400
 Wire Wire Line
 	3300 1900 4900 1900
 NoConn ~ 4900 2100
@@ -104,7 +96,9 @@ Wire Wire Line
 	3050 1900 3050 1800
 Connection ~ 3050 1800
 Wire Wire Line
-	2800 2300 3300 2300
+	2800 2300 3050 2300
+Wire Wire Line
+	3050 2300 3300 2300
 Wire Wire Line
 	3050 2300 3050 2200
 Connection ~ 3300 2300
@@ -123,7 +117,9 @@ $EndComp
 Wire Wire Line
 	4300 1200 4300 1100
 Wire Wire Line
-	4050 1100 4600 1100
+	4050 1100 4300 1100
+Wire Wire Line
+	4300 1100 4600 1100
 Connection ~ 4600 1100
 $Comp
 L GND #PWR044
@@ -179,7 +175,9 @@ F 4 "490-10018-1-ND" H 2800 2050 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2800 1600 2800 1900
+	2800 1600 2800 1800
+Wire Wire Line
+	2800 1800 2800 1900
 Connection ~ 2800 1800
 Wire Wire Line
 	2800 2200 2800 2300
@@ -214,7 +212,9 @@ $EndComp
 Wire Wire Line
 	3500 2900 3500 2800
 Wire Wire Line
-	2800 1800 4900 1800
+	2800 1800 3050 1800
+Wire Wire Line
+	3050 1800 4900 1800
 $Comp
 L +3.3VA #PWR047
 U 1 1 592C93D2
@@ -276,19 +276,19 @@ F 4 "311-4.7KLRCT-ND" H 3200 3450 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4900 3100 4400 3100
+	4900 3100 4500 3100
 Wire Wire Line
-	4400 3100 4400 3800
+	4500 3100 4500 3800
 Wire Wire Line
-	4400 3800 3200 3800
+	4500 3800 3200 3800
 Wire Wire Line
 	3200 3800 3200 3600
 Wire Wire Line
-	4900 3200 4500 3200
+	4900 3200 4600 3200
 Wire Wire Line
-	4500 3200 4500 3900
+	4600 3200 4600 3900
 Wire Wire Line
-	4500 3900 3000 3900
+	4600 3900 3000 3900
 Wire Wire Line
 	3000 3900 3000 3600
 $Comp
@@ -303,7 +303,9 @@ F 3 "" H 3000 3100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3000 3100 3000 3300
+	3000 3100 3000 3200
+Wire Wire Line
+	3000 3200 3000 3300
 Wire Wire Line
 	3000 3200 3200 3200
 Wire Wire Line
@@ -362,7 +364,11 @@ F 3 "" H 7800 3800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7800 3800 7800 4100
+	7800 3800 7800 3900
+Wire Wire Line
+	7800 3900 7800 4000
+Wire Wire Line
+	7800 4000 7800 4100
 Wire Wire Line
 	7800 4100 7900 4100
 $Comp
@@ -417,9 +423,15 @@ F 4 "490-14603-1-ND" H 3600 6650 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3000 6300 4500 6300
+	3000 6300 3300 6300
 Wire Wire Line
-	3600 6300 3600 6500
+	3300 6300 3600 6300
+Wire Wire Line
+	3600 6300 4500 6300
+Wire Wire Line
+	3600 6300 3600 6400
+Wire Wire Line
+	3600 6400 3600 6500
 Wire Wire Line
 	4500 6400 3600 6400
 Connection ~ 3600 6400
@@ -427,7 +439,9 @@ Wire Wire Line
 	3300 6300 3300 6500
 Connection ~ 3600 6300
 Wire Wire Line
-	3000 6200 3000 6500
+	3000 6200 3000 6300
+Wire Wire Line
+	3000 6300 3000 6500
 Connection ~ 3300 6300
 $Comp
 L GND #PWR052
@@ -453,9 +467,13 @@ F 3 "" H 3000 6200 50  0001 C CNN
 $EndComp
 Connection ~ 3000 6300
 Wire Wire Line
-	3000 6800 3000 7000
+	3000 6800 3000 6900
 Wire Wire Line
-	3000 6900 3600 6900
+	3000 6900 3000 7000
+Wire Wire Line
+	3000 6900 3300 6900
+Wire Wire Line
+	3300 6900 3600 6900
 Wire Wire Line
 	3600 6900 3600 6800
 Connection ~ 3000 6900
@@ -490,11 +508,17 @@ F 3 "" H 4100 7200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4100 7000 4100 7200
+	4100 7000 4100 7100
+Wire Wire Line
+	4100 7100 4100 7200
 Wire Wire Line
 	4300 7100 4100 7100
 Wire Wire Line
-	4300 6800 4300 7100
+	4300 6800 4300 6900
+Wire Wire Line
+	4300 6900 4300 7000
+Wire Wire Line
+	4300 7000 4300 7100
 Wire Wire Line
 	4300 6800 4500 6800
 Connection ~ 4100 7100
@@ -604,7 +628,7 @@ Text Label 3500 2400 0    60   ~ 0
 STM32_BOOT0
 Text Notes 4500 3100 0    60   ~ 0
 I2C1_SCL
-Text Notes 4500 3200 0    60   ~ 0
+Text Notes 4650 3300 0    60   ~ 0
 I2C1_SDA
 Text Notes 9300 4100 0    60   ~ 0
 Charge pump enabled:\nVCC  = 7.5V\nRREF = 400K -> 390K
@@ -636,7 +660,9 @@ F 3 "" H 9500 5800 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	9500 5400 9500 5800
+	9500 5400 9500 5700
+Wire Wire Line
+	9500 5700 9500 5800
 $Comp
 L C C15
 U 1 1 592D25C4
@@ -662,7 +688,9 @@ F 4 "490-10018-1-ND" H 7100 4250 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6800 4000 7800 4000
+	6800 4000 7100 4000
+Wire Wire Line
+	7100 4000 7800 4000
 Wire Wire Line
 	6800 4000 6800 4100
 Connection ~ 7800 4000
@@ -681,7 +709,9 @@ F 3 "" H 7100 4600 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7100 4400 7100 4600
+	7100 4400 7100 4500
+Wire Wire Line
+	7100 4500 7100 4600
 Wire Wire Line
 	7100 4500 6800 4500
 Wire Wire Line
@@ -694,12 +724,16 @@ Wire Wire Line
 Text Label 5850 6300 0    60   ~ 0
 ACC_INT
 Wire Wire Line
-	5500 6300 5850 6300
+	5500 6300 5600 6300
+Wire Wire Line
+	5600 6300 5850 6300
 NoConn ~ 5500 6400
 Text HLabel 9350 1800 2    60   Input ~ 0
 CURRENT_SENSE
 Wire Wire Line
-	6300 1800 9350 1800
+	6300 1800 8900 1800
+Wire Wire Line
+	8900 1800 9350 1800
 Text Notes 6300 1800 0    60   ~ 0
 ADC_IN1
 Text Label 6850 1800 0    60   ~ 0
@@ -756,7 +790,9 @@ F 4 "490-13234-1-ND" H 9000 5450 60  0001 C CNN "Part No."
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	9000 5700 9500 5700
+	9000 5700 9300 5700
+Wire Wire Line
+	9300 5700 9500 5700
 Wire Wire Line
 	9000 5700 9000 5600
 Connection ~ 9500 5700
@@ -811,7 +847,6 @@ F 3 "" H 5600 5700 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5600 5700 5600 5800
-NoConn ~ 4900 2900
 NoConn ~ 4900 3000
 NoConn ~ 6300 2700
 $Comp
@@ -960,7 +995,9 @@ Wire Wire Line
 Wire Wire Line
 	5000 5200 5000 5300
 Wire Wire Line
-	5000 4800 5000 4600
+	5000 4800 5000 4700
+Wire Wire Line
+	5000 4700 5000 4600
 Wire Wire Line
 	5000 4700 5700 4700
 Wire Wire Line
@@ -996,10 +1033,25 @@ Text Label 4550 5000 0    60   ~ 0
 BUZ_BASE
 Text Label 5100 4700 0    60   ~ 0
 BUZ_COL
-Text HLabel 7500 2600 2    60   Input ~ 0
-~HEATER_EN
+Text HLabel 4300 3200 0    60   Input ~ 0
+HEATER_LATCH_RESET
+$Comp
+L STM32F031G U4
+U 1 1 59208351
+P 5600 2450
+F 0 "U4" H 5600 1550 60  0000 C CNN
+F 1 "STM32F031G" H 5600 3350 60  0000 C CNN
+F 2 "rt-soldering-iron:28-UFQFPN" H 5400 2300 60  0001 C CNN
+F 3 "" H 5400 2300 60  0001 C CNN
+F 4 "497-13619-ND" H 5600 2450 60  0001 C CNN "Part No."
+	1    5600 2450
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	7500 2600 6300 2600
-Text Label 6900 2600 0    60   ~ 0
-~HEATER_EN
+	4900 2900 4400 2900
+Wire Wire Line
+	4400 2900 4400 3200
+Wire Wire Line
+	4400 3200 4300 3200
+NoConn ~ 6300 2600
 $EndSCHEMATC
