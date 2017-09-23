@@ -945,7 +945,7 @@ Text Label 4550 5000 0    60   ~ 0
 BUZ_BASE
 Text Label 5100 4700 0    60   ~ 0
 BUZ_COL
-Text HLabel 4300 3200 0    60   Input ~ 0
+Text HLabel 7500 2300 2    60   Input ~ 0
 HEATER_LATCH_RESET
 $Comp
 L STM32F031G U4
@@ -959,12 +959,6 @@ F 4 "497-13619-ND" H 5600 2450 60  0001 C CNN "Part No."
 	1    5600 2450
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	4900 2900 4400 2900
-Wire Wire Line
-	4400 2900 4400 3200
-Wire Wire Line
-	4400 3200 4300 3200
 NoConn ~ 6300 2600
 $Comp
 L SPST SW1
@@ -988,7 +982,7 @@ F 2 "rt-soldering-iron:Panasonic_EVQP4" H 1650 4600 60  0001 C CNN
 F 3 "" H 1650 4600 60  0001 C CNN
 F 4 "P15502CT-ND" H 1650 4600 60  0001 C CNN "Part No."
 	1    1650 4600
-	1    0    0    -1  
+	-1   0    0    -1  
 $EndComp
 Wire Wire Line
 	1300 4100 1200 4100
@@ -997,5 +991,7 @@ Wire Wire Line
 Connection ~ 1200 4600
 NoConn ~ 6300 2100
 NoConn ~ 6300 2200
-NoConn ~ 6300 2300
+Wire Wire Line
+	6300 2300 7500 2300
+NoConn ~ 4900 2900
 $EndSCHEMATC
