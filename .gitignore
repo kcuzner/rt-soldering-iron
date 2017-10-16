@@ -5,8 +5,8 @@
 *.net
 *.kicad_pcb-bak
 kicad/$*
-kicad/gerber
-dev/gerber
+kicad/gerber/*.zip
+dev/gerber/*.zip
 kicad/*.lst
 kicad/*.csv
 kicad/*.xml

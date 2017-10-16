@@ -4,8 +4,21 @@ $CMP JS5208
 D JS5208 Navigation Switch
 $ENDCMP
 #
+$CMP MCP6546
+D Open-Drain Sub-microamp Comparator
+$ENDCMP
+#
+$CMP MCP6546U
+D Open-Drain Sub-microamp Comparator
+$ENDCMP
+#
 $CMP MMA8652FC
 D 3-Axis, 12-bit, Digital Accelerometer
+$ENDCMP
+#
+$CMP Q_NMOS_SGD_DUAL
+D Dual Transistor N-MOSFETwith substrate diode (general)
+K NMOS n-mos n-mosfet transistor
 $ENDCMP
 #
 $CMP Q_PMOS_DGSD
@@ -15,6 +28,14 @@ $ENDCMP
 #
 $CMP SSD1306-OLED-I2C
 D SSD1306-based OLED display from Ebay
+$ENDCMP
+#
+$CMP TL431
+D Precision shunt regulator
+$ENDCMP
+#
+$CMP TLV1701
+D Open-Drain Sub-microamp Comparator
 $ENDCMP
 #
 #End Doc Library
