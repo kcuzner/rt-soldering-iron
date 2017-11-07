@@ -36,8 +36,8 @@ $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 4 4
 Title "RT Soldering Iron"
-Date "2017-06-02"
-Rev "A"
+Date "2017-11-06"
+Rev "B"
 Comp "Kevin Cuzner"
 Comment1 ""
 Comment2 ""
