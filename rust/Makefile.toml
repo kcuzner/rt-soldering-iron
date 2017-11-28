@@ -1,0 +1,40 @@
+[tasks.build]
+command = "xargo"
+args = ["build"]
+dependencies = ["clean"]
+
+[tasks.build-release]
+command = "xargo"
+args = ["build", "--release"]
+dependencies = ["clean"]
+
+[tasks.arm-dump]
+script = [ "xargo build -q --message-format=json | ./scripts/artifact-runner.py --target=rt-soldering-iron /bin/sh ./scripts/objdump.sh" ]
+
+[tasks.arm-copy]
+script = [ "xargo build -q --message-format=json | ./scripts/artifact-runner.py --target=rt-soldering-iron /bin/sh ./scripts/objcopy.sh" ]
+
+[tasks.arm-dump-release]
+script = [ "xargo build -q --release --message-format=json | ./scripts/artifact-runner.py --target=rt-soldering-iron /bin/sh ./scripts/objdump.sh" ]
+
+[tasks.arm-copy-release]
+script = [ "xargo build -q --release --message-format=json | ./scripts/artifact-runner.py --target=rt-soldering-iron /bin/sh ./scripts/objcopy.sh" ]
+
+[tasks.post-build]
+dependencies = ["arm-dump", "arm-copy"]
+
+[tasks.post-build-release]
+dependencies = ["arm-dump-release", "arm-copy-release"]
+
+[tasks.test-flow]
+dependencies = []
+
+[tasks.release-flow]
+dependencies = [
+    "format-flow",
+    "pre-build",
+    "build-release",
+    "post-build-release",
+    "test-flow"
+]
+
