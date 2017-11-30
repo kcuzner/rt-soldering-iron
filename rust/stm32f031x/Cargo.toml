@@ -1,0 +1,17 @@
+[package]
+authors = ["Kevin Cuzner <kevin@kevincuzner.com>"]
+name = "stm32f031x"
+version = "0.1.0"
+
+[dependencies]
+cortex-m = "0.3.1"
+bare-metal = "0.1.1"
+vcell = "0.1.0"
+
+[dependencies.cortex-m-rt]
+optional = true
+version = "0.3.0"
+
+[features]
+rt = [ "cortex-m-rt" ]
+

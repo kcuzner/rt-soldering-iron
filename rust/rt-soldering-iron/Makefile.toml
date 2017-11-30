@@ -8,6 +8,13 @@ command = "xargo"
 args = ["build", "--release"]
 dependencies = ["clean"]
 
+[tasks.svd2rust]
+script = ["svd2rust -i STM32F031x.svd | rustfmt > src/stm32f031x.rs"]
+
+[tasks.pre-build]
+dependencies = [
+]
+
 [tasks.arm-dump]
 script = [ "xargo build -q --message-format=json | ./scripts/artifact-runner.py --target=rt-soldering-iron /bin/sh ./scripts/objdump.sh" ]
 

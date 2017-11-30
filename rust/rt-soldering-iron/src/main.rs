@@ -4,8 +4,10 @@
 #[macro_use]
 extern crate cortex_m;
 extern crate cortex_m_rt;
+extern crate stm32f031x;
 
 use cortex_m::asm;
+
 
 fn main() {
     loop {}
@@ -21,3 +23,4 @@ static INTERRUPTS: [extern "C" fn(); 32] = [default_handler; 32];
 extern "C" fn default_handler() {
     asm::bkpt();
 }
+

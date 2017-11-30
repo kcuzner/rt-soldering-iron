@@ -6,6 +6,7 @@ authors = ["Kevin Cuzner <kevin@kevincuzner.com>"]
 [dependencies]
 cortex-m = "0.3.0"
 cortex-m-semihosting = "0.2.0"
+stm32f031x = { path = "../stm32f031x" }
 
 [dependencies.cortex-m-rt]
 features = ["abort-on-panic"]
