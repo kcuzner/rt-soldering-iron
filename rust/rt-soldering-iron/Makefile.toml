@@ -15,23 +15,43 @@ script = ["svd2rust -i STM32F031x.svd | rustfmt > src/stm32f031x.rs"]
 dependencies = [
 ]
 
-[tasks.arm-dump]
-script = [ "xargo build -q --message-format=json | ./scripts/artifact-runner.py --target=rt-soldering-iron /bin/sh ./scripts/objdump.sh" ]
+[tasks.embedded-dump]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "dump"]
 
-[tasks.arm-copy]
-script = [ "xargo build -q --message-format=json | ./scripts/artifact-runner.py --target=rt-soldering-iron /bin/sh ./scripts/objcopy.sh" ]
+[tasks.embedded-copy-hex]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "copy", "ihex"]
 
-[tasks.arm-dump-release]
-script = [ "xargo build -q --release --message-format=json | ./scripts/artifact-runner.py --target=rt-soldering-iron /bin/sh ./scripts/objdump.sh" ]
+[tasks.embedded-copy-bin]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "copy", "binary"]
 
-[tasks.arm-copy-release]
-script = [ "xargo build -q --release --message-format=json | ./scripts/artifact-runner.py --target=rt-soldering-iron /bin/sh ./scripts/objcopy.sh" ]
+[tasks.embedded-size]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "size"]
+
+[tasks.embedded-dump-release]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "dump"]
+
+[tasks.embedded-copy-hex-release]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "copy", "ihex"]
+
+[tasks.embedded-copy-bin-release]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "copy", "binary"]
+
+[tasks.embedded.size]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "size"]
 
 [tasks.post-build]
-dependencies = ["arm-dump", "arm-copy"]
+dependencies = ["embedded-dump", "embedded-copy-hex", "embedded-size"]
 
 [tasks.post-build-release]
-dependencies = ["arm-dump-release", "arm-copy-release"]
+dependencies = ["embedded-dump-release", "embedded-copy-hex-release", "embedded-size-release"]
 
 [tasks.test-flow]
 dependencies = []
