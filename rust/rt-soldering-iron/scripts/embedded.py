@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import argparse, subprocess, sys, os
-import json
+from telnetlib import Telnet
+import argparse, subprocess, sys, os, time
+import json, re, tempfile
 
 def get_artifacts(args):
     """
@@ -51,6 +52,56 @@ def binary_size(args):
             print(line.decode('ascii').rstrip())
         p.wait()
 
+class DeviceProgrammingError(RuntimeError):
+    pass
+
+class OpenocdError(RuntimeError):
+    pass
+
+def flash(args):
+    """
+    Sub-command function for flashing the microcontroller
+    """
+    artifacts = list(get_artifacts(args))
+    if len(artifacts) != 1:
+        raise DeviceProgrammingError('Expected exactly 1 build artifact, got ' + len(artifacts))
+    with tempfile.TemporaryDirectory() as dirname:
+        binpath = os.path.join(dirname, 'flash.bin')
+        subprocess.check_call([args.objcopy, '-O', 'binary', artifacts[0], binpath])
+        flash_offset = int(args.flash_offset, 0) if isinstance(args.flash_offset, str) else\
+                args.flash_offset
+        command = [args.openocd, '-f', args.openocd_config]
+        proc = subprocess.Popen(command, stderr=subprocess.PIPE)
+        try:
+            while True:
+                line = proc.stderr.readline().decode('ascii')
+                if line:
+                    print(line.rstrip())
+                if re.search(r'^\s*Info\s*:\s*[a-z0-9]+.cpu\s*:\s*hardware\s+has\s+\d+\s+breakpoints,\s+\d+\s+watchpoints\s*$', line):
+                    break
+                elif re.search(r'(Error|error)', line):
+                    raise OpenocdError(line)
+
+            time.sleep(0.1)
+            with Telnet('localhost', 4444) as tn:
+                tn.read_until(b'>')
+                tn.write(b'init\n')
+                tn.read_until(b'>')
+                tn.write(b'reset halt\n')
+                tn.read_until(b'>')
+                tn.write(b'program ' + binpath.encode('ascii') + b' verify reset ' + hex(flash_offset).encode('ascii') + b'\n')
+                tn.read_until(b'>')
+                tn.write(b'shutdown\n')
+
+            while proc.returncode is None:
+                print(proc.stderr.readline().decode('ascii').rstrip())
+                proc.poll()
+
+        except:
+            proc.kill()
+            raise
+
+
 def main():
     parser = argparse.ArgumentParser(description='Performs embedded-device specific operations on rust build artifacts.')
     parser.add_argument('--release', action='store_true',
@@ -84,6 +135,11 @@ def main():
     parser_flash = subparsers.add_parser('flash', help='Flashes the microcontroller')
     parser_flash.add_argument('--openocd', default='openocd',
             help='Path to the openocd executable')
+    parser_flash.add_argument('--openocd-config', default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'openocd.cfg'),
+            help='Path to the openocd configuration file')
+    parser_flash.add_argument('--flash-offset', default=0x08000000,
+            help='Offset to program the flash at')
+    parser_flash.set_defaults(func=flash)
 
     args = parser.parse_args()
     args.func(args)

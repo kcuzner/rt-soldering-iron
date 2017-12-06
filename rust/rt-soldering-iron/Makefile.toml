@@ -1,19 +1,15 @@
 [tasks.build]
 command = "xargo"
 args = ["build"]
-dependencies = ["clean"]
+dependencies = []
 
 [tasks.build-release]
 command = "xargo"
 args = ["build", "--release"]
-dependencies = ["clean"]
-
-[tasks.svd2rust]
-script = ["svd2rust -i STM32F031x.svd | rustfmt > src/stm32f031x.rs"]
+dependencies = []
 
 [tasks.pre-build]
-dependencies = [
-]
+dependencies = [ ]
 
 [tasks.embedded-dump]
 command = "./scripts/embedded.py"
@@ -31,6 +27,10 @@ args = ["--target=rt-soldering-iron", "copy", "binary"]
 command = "./scripts/embedded.py"
 args = ["--target=rt-soldering-iron", "size"]
 
+[tasks.embedded-flash]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "flash"]
+
 [tasks.embedded-dump-release]
 command = "./scripts/embedded.py"
 args = ["--release", "--target=rt-soldering-iron", "dump"]
@@ -43,9 +43,13 @@ args = ["--release", "--target=rt-soldering-iron", "copy", "ihex"]
 command = "./scripts/embedded.py"
 args = ["--release", "--target=rt-soldering-iron", "copy", "binary"]
 
-[tasks.embedded.size]
+[tasks.embedded-size-release]
 command = "./scripts/embedded.py"
 args = ["--release", "--target=rt-soldering-iron", "size"]
+
+[tasks.embedded-flash-release]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "flash"]
 
 [tasks.post-build]
 dependencies = ["embedded-dump", "embedded-copy-hex", "embedded-size"]
@@ -53,15 +57,20 @@ dependencies = ["embedded-dump", "embedded-copy-hex", "embedded-size"]
 [tasks.post-build-release]
 dependencies = ["embedded-dump-release", "embedded-copy-hex-release", "embedded-size-release"]
 
-[tasks.test-flow]
-dependencies = []
-
-[tasks.release-flow]
+[tasks.embedded-flow]
 dependencies = [
-    "format-flow",
+    "pre-build",
+    "build",
+    "post-build"
+]
+
+[tasks.embedded-flow-release]
+dependencies = [
     "pre-build",
     "build-release",
-    "post-build-release",
-    "test-flow"
+    "post-build-release"
 ]
+
+[tasks.default]
+alias = "embedded-flow"
 
