@@ -137,6 +137,25 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>30</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues>
+                <name>GPIO_mode_enum</name>
+                <enumeratedValue>
+                  <name>Input</name>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>Output</name>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>Alternate</name>
+                  <value>2</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>AnalogInput</name>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
             </field>
             <field>
               <name>MODER14</name>
@@ -144,6 +163,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>28</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER13</name>
@@ -151,6 +171,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>26</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER12</name>
@@ -158,6 +179,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>24</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER11</name>
@@ -165,6 +187,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>22</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER10</name>
@@ -172,6 +195,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>20</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER9</name>
@@ -179,6 +203,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>18</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER8</name>
@@ -186,6 +211,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>16</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER7</name>
@@ -193,6 +219,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>14</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER6</name>
@@ -200,6 +227,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>12</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER5</name>
@@ -207,6 +235,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>10</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER4</name>
@@ -214,6 +243,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>8</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER3</name>
@@ -221,6 +251,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>6</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER2</name>
@@ -228,6 +259,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>4</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER1</name>
@@ -235,6 +267,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>2</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER0</name>
@@ -242,6 +275,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
           </fields>
         </register>
@@ -374,6 +408,21 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>30</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues>
+                <name>GPIO_OSPEEDR_enum</name>
+                <enumeratedValue>
+                  <name>Low</name>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>Medium</name>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>High</name>
+                  <value>3</value>
+                </enumeratedValue>
+              </enumeratedValues>
             </field>
             <field>
               <name>OSPEEDR14</name>
@@ -381,6 +430,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>28</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR13</name>
@@ -388,6 +438,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>26</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR12</name>
@@ -395,6 +446,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>24</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR11</name>
@@ -402,6 +454,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>22</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR10</name>
@@ -409,6 +462,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>20</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR9</name>
@@ -416,6 +470,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>18</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR8</name>
@@ -423,6 +478,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>16</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR7</name>
@@ -430,6 +486,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>14</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR6</name>
@@ -437,6 +494,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>12</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR5</name>
@@ -444,6 +502,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>10</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR4</name>
@@ -451,6 +510,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>8</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR3</name>
@@ -458,6 +518,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>6</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR2</name>
@@ -465,6 +526,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>4</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR1</name>
@@ -472,6 +534,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>2</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR0</name>
@@ -479,6 +542,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
           </fields>
         </register>
@@ -498,6 +562,21 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>30</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues>
+                <name>GPIO_PUPDR_enum</name>
+                <enumeratedValue>
+                  <name>None</name>
+                  <value>0</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>Pullup</name>
+                  <value>1</value>
+                </enumeratedValue>
+                <enumeratedValue>
+                  <name>Pulldown</name>
+                  <value>2</value>
+                </enumeratedValue>
+              </enumeratedValues>
             </field>
             <field>
               <name>PUPDR14</name>
@@ -505,6 +584,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>28</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR13</name>
@@ -512,6 +592,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>26</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR12</name>
@@ -519,6 +600,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>24</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR11</name>
@@ -526,6 +608,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>22</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR10</name>
@@ -533,6 +616,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>20</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR9</name>
@@ -540,6 +624,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>18</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR8</name>
@@ -547,6 +632,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>16</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR7</name>
@@ -554,6 +640,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>14</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR6</name>
@@ -561,6 +648,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>12</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR5</name>
@@ -568,6 +656,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>10</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR4</name>
@@ -575,6 +664,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>8</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR3</name>
@@ -582,6 +672,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>6</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR2</name>
@@ -589,6 +680,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>4</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR1</name>
@@ -596,6 +688,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>2</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR0</name>
@@ -603,6 +696,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
           </fields>
         </register>
@@ -1497,6 +1591,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>30</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER14</name>
@@ -1504,6 +1599,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>28</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER13</name>
@@ -1511,6 +1607,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>26</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER12</name>
@@ -1518,6 +1615,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>24</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER11</name>
@@ -1525,6 +1623,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>22</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER10</name>
@@ -1532,6 +1631,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>20</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER9</name>
@@ -1539,6 +1639,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>18</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER8</name>
@@ -1546,6 +1647,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>16</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER7</name>
@@ -1553,6 +1655,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>14</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER6</name>
@@ -1560,6 +1663,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>12</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER5</name>
@@ -1567,6 +1671,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>10</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER4</name>
@@ -1574,6 +1679,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>8</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER3</name>
@@ -1581,6 +1687,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>6</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER2</name>
@@ -1588,6 +1695,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>4</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER1</name>
@@ -1595,6 +1703,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>2</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
             <field>
               <name>MODER0</name>
@@ -1602,6 +1711,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.MODER.MODER15.GPIO_mode_enum" />
             </field>
           </fields>
         </register>
@@ -1744,6 +1854,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>30</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR14</name>
@@ -1751,6 +1862,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>28</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR13</name>
@@ -1758,6 +1870,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>26</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR12</name>
@@ -1765,6 +1878,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>24</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR11</name>
@@ -1772,6 +1886,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>22</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR10</name>
@@ -1779,6 +1894,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>20</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR9</name>
@@ -1786,6 +1902,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>18</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR8</name>
@@ -1793,6 +1910,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>16</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR7</name>
@@ -1800,6 +1918,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>14</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR6</name>
@@ -1807,6 +1926,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>12</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR5</name>
@@ -1814,6 +1934,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>10</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR4</name>
@@ -1821,6 +1942,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>8</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR3</name>
@@ -1828,6 +1950,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>6</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR2</name>
@@ -1835,6 +1958,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>4</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR1</name>
@@ -1842,6 +1966,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>2</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
             <field>
               <name>OSPEEDR0</name>
@@ -1849,6 +1974,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.OSPEEDR.OSPEEDR15.GPIO_OSPEEDR_enum" />
             </field>
           </fields>
         </register>
@@ -1868,6 +1994,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>30</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR14</name>
@@ -1875,6 +2002,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>28</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR13</name>
@@ -1882,6 +2010,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>26</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR12</name>
@@ -1889,6 +2018,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>24</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR11</name>
@@ -1896,6 +2026,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>22</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR10</name>
@@ -1903,6 +2034,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>20</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR9</name>
@@ -1910,6 +2042,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>18</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR8</name>
@@ -1917,6 +2050,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>16</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR7</name>
@@ -1924,6 +2058,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>14</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR6</name>
@@ -1931,6 +2066,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>12</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR5</name>
@@ -1938,6 +2074,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>10</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR4</name>
@@ -1945,6 +2082,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>8</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR3</name>
@@ -1952,6 +2090,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>6</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR2</name>
@@ -1959,6 +2098,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>4</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR1</name>
@@ -1966,6 +2106,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>2</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
             <field>
               <name>PUPDR0</name>
@@ -1973,6 +2114,7 @@ xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
               0..15)</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
+              <enumeratedValues derivedFrom="GPIOF.PUPDR.PUPDR15.GPIO_PUPDR_enum" />
             </field>
           </fields>
         </register>

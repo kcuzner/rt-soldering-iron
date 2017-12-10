@@ -856,180 +856,114 @@ pub mod gpiof {
                 self.write(|w| w)
             }
         }
-        #[doc = r" Value of the field"]
-        pub struct MODER15R {
-            bits: u8,
+        #[doc = "Possible values of the field `MODER15`"]
+        #[derive(Clone, Copy, Debug, PartialEq)]
+        pub enum MODER15R {
+            #[doc = "undocumented"]
+            INPUT,
+            #[doc = "undocumented"]
+            OUTPUT,
+            #[doc = "undocumented"]
+            ALTERNATE,
+            #[doc = "undocumented"]
+            ANALOGINPUT,
         }
         impl MODER15R {
             #[doc = r" Value of the field as raw bits"]
             #[inline(always)]
             pub fn bits(&self) -> u8 {
-                self.bits
+                match *self {
+                    MODER15R::INPUT => 0,
+                    MODER15R::OUTPUT => 1,
+                    MODER15R::ALTERNATE => 2,
+                    MODER15R::ANALOGINPUT => 3,
+                }
+            }
+            #[allow(missing_docs)]
+            #[doc(hidden)]
+            #[inline(always)]
+            pub fn _from(value: u8) -> MODER15R {
+                match value {
+                    0 => MODER15R::INPUT,
+                    1 => MODER15R::OUTPUT,
+                    2 => MODER15R::ALTERNATE,
+                    3 => MODER15R::ANALOGINPUT,
+                    _ => unreachable!(),
+                }
+            }
+            #[doc = "Checks if the value of the field is `INPUT`"]
+            #[inline(always)]
+            pub fn is_input(&self) -> bool {
+                *self == MODER15R::INPUT
+            }
+            #[doc = "Checks if the value of the field is `OUTPUT`"]
+            #[inline(always)]
+            pub fn is_output(&self) -> bool {
+                *self == MODER15R::OUTPUT
+            }
+            #[doc = "Checks if the value of the field is `ALTERNATE`"]
+            #[inline(always)]
+            pub fn is_alternate(&self) -> bool {
+                *self == MODER15R::ALTERNATE
+            }
+            #[doc = "Checks if the value of the field is `ANALOGINPUT`"]
+            #[inline(always)]
+            pub fn is_analog_input(&self) -> bool {
+                *self == MODER15R::ANALOGINPUT
             }
         }
-        #[doc = r" Value of the field"]
-        pub struct MODER14R {
-            bits: u8,
+        #[doc = "Possible values of the field `MODER14`"]
+        pub type MODER14R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER13`"]
+        pub type MODER13R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER12`"]
+        pub type MODER12R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER11`"]
+        pub type MODER11R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER10`"]
+        pub type MODER10R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER9`"]
+        pub type MODER9R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER8`"]
+        pub type MODER8R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER7`"]
+        pub type MODER7R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER6`"]
+        pub type MODER6R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER5`"]
+        pub type MODER5R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER4`"]
+        pub type MODER4R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER3`"]
+        pub type MODER3R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER2`"]
+        pub type MODER2R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER1`"]
+        pub type MODER1R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER0`"]
+        pub type MODER0R = ::gpiof::moder::MODER15R;
+        #[doc = "Values that can be written to the field `MODER15`"]
+        pub enum MODER15W {
+            #[doc = "`0`"]
+            INPUT,
+            #[doc = "`1`"]
+            OUTPUT,
+            #[doc = "`10`"]
+            ALTERNATE,
+            #[doc = "`11`"]
+            ANALOGINPUT,
         }
-        impl MODER14R {
-            #[doc = r" Value of the field as raw bits"]
+        impl MODER15W {
+            #[allow(missing_docs)]
+            #[doc(hidden)]
             #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER13R {
-            bits: u8,
-        }
-        impl MODER13R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER12R {
-            bits: u8,
-        }
-        impl MODER12R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER11R {
-            bits: u8,
-        }
-        impl MODER11R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER10R {
-            bits: u8,
-        }
-        impl MODER10R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER9R {
-            bits: u8,
-        }
-        impl MODER9R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER8R {
-            bits: u8,
-        }
-        impl MODER8R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER7R {
-            bits: u8,
-        }
-        impl MODER7R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER6R {
-            bits: u8,
-        }
-        impl MODER6R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER5R {
-            bits: u8,
-        }
-        impl MODER5R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER4R {
-            bits: u8,
-        }
-        impl MODER4R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER3R {
-            bits: u8,
-        }
-        impl MODER3R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER2R {
-            bits: u8,
-        }
-        impl MODER2R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER1R {
-            bits: u8,
-        }
-        impl MODER1R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER0R {
-            bits: u8,
-        }
-        impl MODER0R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
+            pub fn _bits(&self) -> u8 {
+                match *self {
+                    MODER15W::INPUT => 0,
+                    MODER15W::OUTPUT => 1,
+                    MODER15W::ALTERNATE => 2,
+                    MODER15W::ANALOGINPUT => 3,
+                }
             }
         }
         #[doc = r" Proxy"]
@@ -1037,9 +971,36 @@ pub mod gpiof {
             w: &'a mut W,
         }
         impl<'a> _MODER15W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER15W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 30;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1047,14 +1008,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER14`"]
+        pub type MODER14W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER14W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER14W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER14W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 28;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1062,14 +1052,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER13`"]
+        pub type MODER13W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER13W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER13W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER13W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 26;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1077,14 +1096,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER12`"]
+        pub type MODER12W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER12W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER12W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER12W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 24;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1092,14 +1140,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER11`"]
+        pub type MODER11W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER11W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER11W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER11W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 22;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1107,14 +1184,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER10`"]
+        pub type MODER10W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER10W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER10W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER10W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 20;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1122,14 +1228,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER9`"]
+        pub type MODER9W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER9W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER9W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER9W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 18;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1137,14 +1272,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER8`"]
+        pub type MODER8W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER8W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER8W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER8W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 16;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1152,14 +1316,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER7`"]
+        pub type MODER7W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER7W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER7W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER7W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 14;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1167,14 +1360,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER6`"]
+        pub type MODER6W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER6W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER6W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER6W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 12;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1182,14 +1404,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER5`"]
+        pub type MODER5W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER5W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER5W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER5W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 10;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1197,14 +1448,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER4`"]
+        pub type MODER4W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER4W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER4W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER4W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 8;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1212,14 +1492,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER3`"]
+        pub type MODER3W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER3W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER3W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER3W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 6;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1227,14 +1536,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER2`"]
+        pub type MODER2W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER2W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER2W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER2W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 4;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1242,14 +1580,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER1`"]
+        pub type MODER1W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER1W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER1W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER1W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 2;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1257,14 +1624,43 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER0`"]
+        pub type MODER0W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER0W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER0W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER0W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 0;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -1281,162 +1677,146 @@ pub mod gpiof {
             #[doc = "Bits 30:31 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder15(&self) -> MODER15R {
-                let bits = {
+                MODER15R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 30;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER15R { bits }
+                })
             }
             #[doc = "Bits 28:29 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder14(&self) -> MODER14R {
-                let bits = {
+                MODER14R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 28;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER14R { bits }
+                })
             }
             #[doc = "Bits 26:27 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder13(&self) -> MODER13R {
-                let bits = {
+                MODER13R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 26;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER13R { bits }
+                })
             }
             #[doc = "Bits 24:25 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder12(&self) -> MODER12R {
-                let bits = {
+                MODER12R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 24;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER12R { bits }
+                })
             }
             #[doc = "Bits 22:23 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder11(&self) -> MODER11R {
-                let bits = {
+                MODER11R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 22;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER11R { bits }
+                })
             }
             #[doc = "Bits 20:21 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder10(&self) -> MODER10R {
-                let bits = {
+                MODER10R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 20;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER10R { bits }
+                })
             }
             #[doc = "Bits 18:19 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder9(&self) -> MODER9R {
-                let bits = {
+                MODER9R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 18;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER9R { bits }
+                })
             }
             #[doc = "Bits 16:17 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder8(&self) -> MODER8R {
-                let bits = {
+                MODER8R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 16;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER8R { bits }
+                })
             }
             #[doc = "Bits 14:15 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder7(&self) -> MODER7R {
-                let bits = {
+                MODER7R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 14;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER7R { bits }
+                })
             }
             #[doc = "Bits 12:13 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder6(&self) -> MODER6R {
-                let bits = {
+                MODER6R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 12;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER6R { bits }
+                })
             }
             #[doc = "Bits 10:11 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder5(&self) -> MODER5R {
-                let bits = {
+                MODER5R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 10;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER5R { bits }
+                })
             }
             #[doc = "Bits 8:9 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder4(&self) -> MODER4R {
-                let bits = {
+                MODER4R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 8;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER4R { bits }
+                })
             }
             #[doc = "Bits 6:7 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder3(&self) -> MODER3R {
-                let bits = {
+                MODER3R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 6;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER3R { bits }
+                })
             }
             #[doc = "Bits 4:5 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder2(&self) -> MODER2R {
-                let bits = {
+                MODER2R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 4;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER2R { bits }
+                })
             }
             #[doc = "Bits 2:3 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder1(&self) -> MODER1R {
-                let bits = {
+                MODER1R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 2;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER1R { bits }
+                })
             }
             #[doc = "Bits 0:1 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder0(&self) -> MODER0R {
-                let bits = {
+                MODER0R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 0;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER0R { bits }
+                })
             }
         }
         impl W {
@@ -2594,180 +2974,105 @@ pub mod gpiof {
                 self.write(|w| w)
             }
         }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR15R {
-            bits: u8,
+        #[doc = "Possible values of the field `OSPEEDR15`"]
+        #[derive(Clone, Copy, Debug, PartialEq)]
+        pub enum OSPEEDR15R {
+            #[doc = "undocumented"]
+            LOW,
+            #[doc = "undocumented"]
+            MEDIUM,
+            #[doc = "undocumented"]
+            HIGH,
+            #[doc = r" Reserved"]
+            _Reserved(u8),
         }
         impl OSPEEDR15R {
             #[doc = r" Value of the field as raw bits"]
             #[inline(always)]
             pub fn bits(&self) -> u8 {
-                self.bits
+                match *self {
+                    OSPEEDR15R::LOW => 0,
+                    OSPEEDR15R::MEDIUM => 1,
+                    OSPEEDR15R::HIGH => 3,
+                    OSPEEDR15R::_Reserved(bits) => bits,
+                }
+            }
+            #[allow(missing_docs)]
+            #[doc(hidden)]
+            #[inline(always)]
+            pub fn _from(value: u8) -> OSPEEDR15R {
+                match value {
+                    0 => OSPEEDR15R::LOW,
+                    1 => OSPEEDR15R::MEDIUM,
+                    3 => OSPEEDR15R::HIGH,
+                    i => OSPEEDR15R::_Reserved(i),
+                }
+            }
+            #[doc = "Checks if the value of the field is `LOW`"]
+            #[inline(always)]
+            pub fn is_low(&self) -> bool {
+                *self == OSPEEDR15R::LOW
+            }
+            #[doc = "Checks if the value of the field is `MEDIUM`"]
+            #[inline(always)]
+            pub fn is_medium(&self) -> bool {
+                *self == OSPEEDR15R::MEDIUM
+            }
+            #[doc = "Checks if the value of the field is `HIGH`"]
+            #[inline(always)]
+            pub fn is_high(&self) -> bool {
+                *self == OSPEEDR15R::HIGH
             }
         }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR14R {
-            bits: u8,
+        #[doc = "Possible values of the field `OSPEEDR14`"]
+        pub type OSPEEDR14R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR13`"]
+        pub type OSPEEDR13R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR12`"]
+        pub type OSPEEDR12R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR11`"]
+        pub type OSPEEDR11R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR10`"]
+        pub type OSPEEDR10R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR9`"]
+        pub type OSPEEDR9R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR8`"]
+        pub type OSPEEDR8R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR7`"]
+        pub type OSPEEDR7R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR6`"]
+        pub type OSPEEDR6R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR5`"]
+        pub type OSPEEDR5R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR4`"]
+        pub type OSPEEDR4R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR3`"]
+        pub type OSPEEDR3R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR2`"]
+        pub type OSPEEDR2R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR1`"]
+        pub type OSPEEDR1R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR0`"]
+        pub type OSPEEDR0R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Values that can be written to the field `OSPEEDR15`"]
+        pub enum OSPEEDR15W {
+            #[doc = "`0`"]
+            LOW,
+            #[doc = "`1`"]
+            MEDIUM,
+            #[doc = "`11`"]
+            HIGH,
         }
-        impl OSPEEDR14R {
-            #[doc = r" Value of the field as raw bits"]
+        impl OSPEEDR15W {
+            #[allow(missing_docs)]
+            #[doc(hidden)]
             #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR13R {
-            bits: u8,
-        }
-        impl OSPEEDR13R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR12R {
-            bits: u8,
-        }
-        impl OSPEEDR12R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR11R {
-            bits: u8,
-        }
-        impl OSPEEDR11R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR10R {
-            bits: u8,
-        }
-        impl OSPEEDR10R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR9R {
-            bits: u8,
-        }
-        impl OSPEEDR9R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR8R {
-            bits: u8,
-        }
-        impl OSPEEDR8R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR7R {
-            bits: u8,
-        }
-        impl OSPEEDR7R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR6R {
-            bits: u8,
-        }
-        impl OSPEEDR6R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR5R {
-            bits: u8,
-        }
-        impl OSPEEDR5R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR4R {
-            bits: u8,
-        }
-        impl OSPEEDR4R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR3R {
-            bits: u8,
-        }
-        impl OSPEEDR3R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR2R {
-            bits: u8,
-        }
-        impl OSPEEDR2R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR1R {
-            bits: u8,
-        }
-        impl OSPEEDR1R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR0R {
-            bits: u8,
-        }
-        impl OSPEEDR0R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
+            pub fn _bits(&self) -> u8 {
+                match *self {
+                    OSPEEDR15W::LOW => 0,
+                    OSPEEDR15W::MEDIUM => 1,
+                    OSPEEDR15W::HIGH => 3,
+                }
             }
         }
         #[doc = r" Proxy"]
@@ -2775,6 +3080,26 @@ pub mod gpiof {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR15W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR15W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2785,11 +3110,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR14`"]
+        pub type OSPEEDR14W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR14W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR14W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR14W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2800,11 +3147,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR13`"]
+        pub type OSPEEDR13W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR13W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR13W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR13W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2815,11 +3184,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR12`"]
+        pub type OSPEEDR12W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR12W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR12W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR12W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2830,11 +3221,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR11`"]
+        pub type OSPEEDR11W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR11W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR11W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR11W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2845,11 +3258,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR10`"]
+        pub type OSPEEDR10W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR10W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR10W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR10W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2860,11 +3295,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR9`"]
+        pub type OSPEEDR9W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR9W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR9W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR9W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2875,11 +3332,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR8`"]
+        pub type OSPEEDR8W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR8W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR8W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR8W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2890,11 +3369,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR7`"]
+        pub type OSPEEDR7W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR7W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR7W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR7W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2905,11 +3406,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR6`"]
+        pub type OSPEEDR6W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR6W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR6W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR6W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2920,11 +3443,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR5`"]
+        pub type OSPEEDR5W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR5W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR5W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR5W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2935,11 +3480,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR4`"]
+        pub type OSPEEDR4W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR4W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR4W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR4W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2950,11 +3517,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR3`"]
+        pub type OSPEEDR3W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR3W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR3W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR3W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2965,11 +3554,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR2`"]
+        pub type OSPEEDR2W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR2W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR2W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR2W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2980,11 +3591,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR1`"]
+        pub type OSPEEDR1W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR1W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR1W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR1W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -2995,11 +3628,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR0`"]
+        pub type OSPEEDR0W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR0W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR0W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR0W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3019,162 +3674,146 @@ pub mod gpiof {
             #[doc = "Bits 30:31 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr15(&self) -> OSPEEDR15R {
-                let bits = {
+                OSPEEDR15R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 30;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR15R { bits }
+                })
             }
             #[doc = "Bits 28:29 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr14(&self) -> OSPEEDR14R {
-                let bits = {
+                OSPEEDR14R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 28;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR14R { bits }
+                })
             }
             #[doc = "Bits 26:27 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr13(&self) -> OSPEEDR13R {
-                let bits = {
+                OSPEEDR13R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 26;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR13R { bits }
+                })
             }
             #[doc = "Bits 24:25 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr12(&self) -> OSPEEDR12R {
-                let bits = {
+                OSPEEDR12R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 24;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR12R { bits }
+                })
             }
             #[doc = "Bits 22:23 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr11(&self) -> OSPEEDR11R {
-                let bits = {
+                OSPEEDR11R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 22;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR11R { bits }
+                })
             }
             #[doc = "Bits 20:21 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr10(&self) -> OSPEEDR10R {
-                let bits = {
+                OSPEEDR10R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 20;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR10R { bits }
+                })
             }
             #[doc = "Bits 18:19 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr9(&self) -> OSPEEDR9R {
-                let bits = {
+                OSPEEDR9R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 18;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR9R { bits }
+                })
             }
             #[doc = "Bits 16:17 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr8(&self) -> OSPEEDR8R {
-                let bits = {
+                OSPEEDR8R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 16;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR8R { bits }
+                })
             }
             #[doc = "Bits 14:15 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr7(&self) -> OSPEEDR7R {
-                let bits = {
+                OSPEEDR7R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 14;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR7R { bits }
+                })
             }
             #[doc = "Bits 12:13 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr6(&self) -> OSPEEDR6R {
-                let bits = {
+                OSPEEDR6R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 12;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR6R { bits }
+                })
             }
             #[doc = "Bits 10:11 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr5(&self) -> OSPEEDR5R {
-                let bits = {
+                OSPEEDR5R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 10;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR5R { bits }
+                })
             }
             #[doc = "Bits 8:9 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr4(&self) -> OSPEEDR4R {
-                let bits = {
+                OSPEEDR4R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 8;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR4R { bits }
+                })
             }
             #[doc = "Bits 6:7 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr3(&self) -> OSPEEDR3R {
-                let bits = {
+                OSPEEDR3R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 6;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR3R { bits }
+                })
             }
             #[doc = "Bits 4:5 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr2(&self) -> OSPEEDR2R {
-                let bits = {
+                OSPEEDR2R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 4;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR2R { bits }
+                })
             }
             #[doc = "Bits 2:3 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr1(&self) -> OSPEEDR1R {
-                let bits = {
+                OSPEEDR1R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 2;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR1R { bits }
+                })
             }
             #[doc = "Bits 0:1 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr0(&self) -> OSPEEDR0R {
-                let bits = {
+                OSPEEDR0R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 0;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR0R { bits }
+                })
             }
         }
         impl W {
@@ -3319,180 +3958,105 @@ pub mod gpiof {
                 self.write(|w| w)
             }
         }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR15R {
-            bits: u8,
+        #[doc = "Possible values of the field `PUPDR15`"]
+        #[derive(Clone, Copy, Debug, PartialEq)]
+        pub enum PUPDR15R {
+            #[doc = "undocumented"]
+            NONE,
+            #[doc = "undocumented"]
+            PULLUP,
+            #[doc = "undocumented"]
+            PULLDOWN,
+            #[doc = r" Reserved"]
+            _Reserved(u8),
         }
         impl PUPDR15R {
             #[doc = r" Value of the field as raw bits"]
             #[inline(always)]
             pub fn bits(&self) -> u8 {
-                self.bits
+                match *self {
+                    PUPDR15R::NONE => 0,
+                    PUPDR15R::PULLUP => 1,
+                    PUPDR15R::PULLDOWN => 2,
+                    PUPDR15R::_Reserved(bits) => bits,
+                }
+            }
+            #[allow(missing_docs)]
+            #[doc(hidden)]
+            #[inline(always)]
+            pub fn _from(value: u8) -> PUPDR15R {
+                match value {
+                    0 => PUPDR15R::NONE,
+                    1 => PUPDR15R::PULLUP,
+                    2 => PUPDR15R::PULLDOWN,
+                    i => PUPDR15R::_Reserved(i),
+                }
+            }
+            #[doc = "Checks if the value of the field is `NONE`"]
+            #[inline(always)]
+            pub fn is_none(&self) -> bool {
+                *self == PUPDR15R::NONE
+            }
+            #[doc = "Checks if the value of the field is `PULLUP`"]
+            #[inline(always)]
+            pub fn is_pullup(&self) -> bool {
+                *self == PUPDR15R::PULLUP
+            }
+            #[doc = "Checks if the value of the field is `PULLDOWN`"]
+            #[inline(always)]
+            pub fn is_pulldown(&self) -> bool {
+                *self == PUPDR15R::PULLDOWN
             }
         }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR14R {
-            bits: u8,
+        #[doc = "Possible values of the field `PUPDR14`"]
+        pub type PUPDR14R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR13`"]
+        pub type PUPDR13R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR12`"]
+        pub type PUPDR12R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR11`"]
+        pub type PUPDR11R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR10`"]
+        pub type PUPDR10R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR9`"]
+        pub type PUPDR9R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR8`"]
+        pub type PUPDR8R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR7`"]
+        pub type PUPDR7R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR6`"]
+        pub type PUPDR6R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR5`"]
+        pub type PUPDR5R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR4`"]
+        pub type PUPDR4R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR3`"]
+        pub type PUPDR3R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR2`"]
+        pub type PUPDR2R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR1`"]
+        pub type PUPDR1R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR0`"]
+        pub type PUPDR0R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Values that can be written to the field `PUPDR15`"]
+        pub enum PUPDR15W {
+            #[doc = "`0`"]
+            NONE,
+            #[doc = "`1`"]
+            PULLUP,
+            #[doc = "`10`"]
+            PULLDOWN,
         }
-        impl PUPDR14R {
-            #[doc = r" Value of the field as raw bits"]
+        impl PUPDR15W {
+            #[allow(missing_docs)]
+            #[doc(hidden)]
             #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR13R {
-            bits: u8,
-        }
-        impl PUPDR13R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR12R {
-            bits: u8,
-        }
-        impl PUPDR12R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR11R {
-            bits: u8,
-        }
-        impl PUPDR11R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR10R {
-            bits: u8,
-        }
-        impl PUPDR10R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR9R {
-            bits: u8,
-        }
-        impl PUPDR9R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR8R {
-            bits: u8,
-        }
-        impl PUPDR8R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR7R {
-            bits: u8,
-        }
-        impl PUPDR7R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR6R {
-            bits: u8,
-        }
-        impl PUPDR6R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR5R {
-            bits: u8,
-        }
-        impl PUPDR5R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR4R {
-            bits: u8,
-        }
-        impl PUPDR4R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR3R {
-            bits: u8,
-        }
-        impl PUPDR3R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR2R {
-            bits: u8,
-        }
-        impl PUPDR2R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR1R {
-            bits: u8,
-        }
-        impl PUPDR1R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR0R {
-            bits: u8,
-        }
-        impl PUPDR0R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
+            pub fn _bits(&self) -> u8 {
+                match *self {
+                    PUPDR15W::NONE => 0,
+                    PUPDR15W::PULLUP => 1,
+                    PUPDR15W::PULLDOWN => 2,
+                }
             }
         }
         #[doc = r" Proxy"]
@@ -3500,6 +4064,26 @@ pub mod gpiof {
             w: &'a mut W,
         }
         impl<'a> _PUPDR15W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR15W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3510,11 +4094,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR14`"]
+        pub type PUPDR14W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR14W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR14W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR14W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3525,11 +4131,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR13`"]
+        pub type PUPDR13W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR13W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR13W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR13W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3540,11 +4168,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR12`"]
+        pub type PUPDR12W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR12W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR12W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR12W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3555,11 +4205,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR11`"]
+        pub type PUPDR11W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR11W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR11W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR11W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3570,11 +4242,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR10`"]
+        pub type PUPDR10W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR10W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR10W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR10W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3585,11 +4279,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR9`"]
+        pub type PUPDR9W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR9W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR9W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR9W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3600,11 +4316,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR8`"]
+        pub type PUPDR8W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR8W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR8W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR8W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3615,11 +4353,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR7`"]
+        pub type PUPDR7W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR7W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR7W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR7W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3630,11 +4390,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR6`"]
+        pub type PUPDR6W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR6W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR6W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR6W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3645,11 +4427,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR5`"]
+        pub type PUPDR5W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR5W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR5W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR5W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3660,11 +4464,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR4`"]
+        pub type PUPDR4W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR4W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR4W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR4W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3675,11 +4501,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR3`"]
+        pub type PUPDR3W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR3W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR3W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR3W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3690,11 +4538,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR2`"]
+        pub type PUPDR2W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR2W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR2W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR2W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3705,11 +4575,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR1`"]
+        pub type PUPDR1W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR1W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR1W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR1W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3720,11 +4612,33 @@ pub mod gpiof {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR0`"]
+        pub type PUPDR0W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR0W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR0W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR0W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -3744,162 +4658,146 @@ pub mod gpiof {
             #[doc = "Bits 30:31 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr15(&self) -> PUPDR15R {
-                let bits = {
+                PUPDR15R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 30;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR15R { bits }
+                })
             }
             #[doc = "Bits 28:29 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr14(&self) -> PUPDR14R {
-                let bits = {
+                PUPDR14R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 28;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR14R { bits }
+                })
             }
             #[doc = "Bits 26:27 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr13(&self) -> PUPDR13R {
-                let bits = {
+                PUPDR13R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 26;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR13R { bits }
+                })
             }
             #[doc = "Bits 24:25 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr12(&self) -> PUPDR12R {
-                let bits = {
+                PUPDR12R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 24;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR12R { bits }
+                })
             }
             #[doc = "Bits 22:23 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr11(&self) -> PUPDR11R {
-                let bits = {
+                PUPDR11R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 22;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR11R { bits }
+                })
             }
             #[doc = "Bits 20:21 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr10(&self) -> PUPDR10R {
-                let bits = {
+                PUPDR10R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 20;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR10R { bits }
+                })
             }
             #[doc = "Bits 18:19 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr9(&self) -> PUPDR9R {
-                let bits = {
+                PUPDR9R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 18;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR9R { bits }
+                })
             }
             #[doc = "Bits 16:17 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr8(&self) -> PUPDR8R {
-                let bits = {
+                PUPDR8R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 16;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR8R { bits }
+                })
             }
             #[doc = "Bits 14:15 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr7(&self) -> PUPDR7R {
-                let bits = {
+                PUPDR7R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 14;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR7R { bits }
+                })
             }
             #[doc = "Bits 12:13 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr6(&self) -> PUPDR6R {
-                let bits = {
+                PUPDR6R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 12;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR6R { bits }
+                })
             }
             #[doc = "Bits 10:11 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr5(&self) -> PUPDR5R {
-                let bits = {
+                PUPDR5R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 10;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR5R { bits }
+                })
             }
             #[doc = "Bits 8:9 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr4(&self) -> PUPDR4R {
-                let bits = {
+                PUPDR4R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 8;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR4R { bits }
+                })
             }
             #[doc = "Bits 6:7 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr3(&self) -> PUPDR3R {
-                let bits = {
+                PUPDR3R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 6;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR3R { bits }
+                })
             }
             #[doc = "Bits 4:5 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr2(&self) -> PUPDR2R {
-                let bits = {
+                PUPDR2R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 4;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR2R { bits }
+                })
             }
             #[doc = "Bits 2:3 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr1(&self) -> PUPDR1R {
-                let bits = {
+                PUPDR1R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 2;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR1R { bits }
+                })
             }
             #[doc = "Bits 0:1 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr0(&self) -> PUPDR0R {
-                let bits = {
+                PUPDR0R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 0;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR0R { bits }
+                })
             }
         }
         impl W {
@@ -8926,190 +9824,75 @@ pub mod gpioa {
                 self.write(|w| w)
             }
         }
-        #[doc = r" Value of the field"]
-        pub struct MODER15R {
-            bits: u8,
-        }
-        impl MODER15R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER14R {
-            bits: u8,
-        }
-        impl MODER14R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER13R {
-            bits: u8,
-        }
-        impl MODER13R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER12R {
-            bits: u8,
-        }
-        impl MODER12R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER11R {
-            bits: u8,
-        }
-        impl MODER11R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER10R {
-            bits: u8,
-        }
-        impl MODER10R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER9R {
-            bits: u8,
-        }
-        impl MODER9R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER8R {
-            bits: u8,
-        }
-        impl MODER8R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER7R {
-            bits: u8,
-        }
-        impl MODER7R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER6R {
-            bits: u8,
-        }
-        impl MODER6R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER5R {
-            bits: u8,
-        }
-        impl MODER5R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER4R {
-            bits: u8,
-        }
-        impl MODER4R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER3R {
-            bits: u8,
-        }
-        impl MODER3R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER2R {
-            bits: u8,
-        }
-        impl MODER2R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER1R {
-            bits: u8,
-        }
-        impl MODER1R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct MODER0R {
-            bits: u8,
-        }
-        impl MODER0R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
+        #[doc = "Possible values of the field `MODER15`"]
+        pub type MODER15R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER14`"]
+        pub type MODER14R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER13`"]
+        pub type MODER13R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER12`"]
+        pub type MODER12R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER11`"]
+        pub type MODER11R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER10`"]
+        pub type MODER10R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER9`"]
+        pub type MODER9R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER8`"]
+        pub type MODER8R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER7`"]
+        pub type MODER7R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER6`"]
+        pub type MODER6R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER5`"]
+        pub type MODER5R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER4`"]
+        pub type MODER4R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER3`"]
+        pub type MODER3R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER2`"]
+        pub type MODER2R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER1`"]
+        pub type MODER1R = ::gpiof::moder::MODER15R;
+        #[doc = "Possible values of the field `MODER0`"]
+        pub type MODER0R = ::gpiof::moder::MODER15R;
+        #[doc = "Values that can be written to the field `MODER15`"]
+        pub type MODER15W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER15W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER15W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER15W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 30;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9117,14 +9900,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER14`"]
+        pub type MODER14W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER14W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER14W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER14W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 28;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9132,14 +9944,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER13`"]
+        pub type MODER13W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER13W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER13W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER13W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 26;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9147,14 +9988,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER12`"]
+        pub type MODER12W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER12W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER12W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER12W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 24;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9162,14 +10032,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER11`"]
+        pub type MODER11W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER11W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER11W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER11W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 22;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9177,14 +10076,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER10`"]
+        pub type MODER10W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER10W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER10W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER10W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 20;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9192,14 +10120,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER9`"]
+        pub type MODER9W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER9W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER9W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER9W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 18;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9207,14 +10164,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER8`"]
+        pub type MODER8W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER8W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER8W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER8W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 16;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9222,14 +10208,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER7`"]
+        pub type MODER7W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER7W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER7W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER7W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 14;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9237,14 +10252,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER6`"]
+        pub type MODER6W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER6W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER6W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER6W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 12;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9252,14 +10296,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER5`"]
+        pub type MODER5W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER5W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER5W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER5W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 10;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9267,14 +10340,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER4`"]
+        pub type MODER4W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER4W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER4W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER4W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 8;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9282,14 +10384,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER3`"]
+        pub type MODER3W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER3W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER3W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER3W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 6;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9297,14 +10428,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER2`"]
+        pub type MODER2W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER2W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER2W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER2W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 4;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9312,14 +10472,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER1`"]
+        pub type MODER1W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER1W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER1W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER1W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 2;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9327,14 +10516,43 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `MODER0`"]
+        pub type MODER0W = ::gpiof::moder::MODER15W;
         #[doc = r" Proxy"]
         pub struct _MODER0W<'a> {
             w: &'a mut W,
         }
         impl<'a> _MODER0W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: MODER0W) -> &'a mut W {
+                {
+                    self.bits(variant._bits())
+                }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::INPUT)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn output(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::OUTPUT)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn alternate(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ALTERNATE)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn analog_input(self) -> &'a mut W {
+                self.variant(::gpiof::moder::MODER15W::ANALOGINPUT)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
-            pub unsafe fn bits(self, value: u8) -> &'a mut W {
+            pub fn bits(self, value: u8) -> &'a mut W {
                 const MASK: u8 = 3;
                 const OFFSET: u8 = 0;
                 self.w.bits &= !((MASK as u32) << OFFSET);
@@ -9351,162 +10569,146 @@ pub mod gpioa {
             #[doc = "Bits 30:31 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder15(&self) -> MODER15R {
-                let bits = {
+                MODER15R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 30;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER15R { bits }
+                })
             }
             #[doc = "Bits 28:29 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder14(&self) -> MODER14R {
-                let bits = {
+                MODER14R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 28;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER14R { bits }
+                })
             }
             #[doc = "Bits 26:27 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder13(&self) -> MODER13R {
-                let bits = {
+                MODER13R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 26;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER13R { bits }
+                })
             }
             #[doc = "Bits 24:25 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder12(&self) -> MODER12R {
-                let bits = {
+                MODER12R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 24;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER12R { bits }
+                })
             }
             #[doc = "Bits 22:23 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder11(&self) -> MODER11R {
-                let bits = {
+                MODER11R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 22;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER11R { bits }
+                })
             }
             #[doc = "Bits 20:21 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder10(&self) -> MODER10R {
-                let bits = {
+                MODER10R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 20;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER10R { bits }
+                })
             }
             #[doc = "Bits 18:19 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder9(&self) -> MODER9R {
-                let bits = {
+                MODER9R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 18;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER9R { bits }
+                })
             }
             #[doc = "Bits 16:17 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder8(&self) -> MODER8R {
-                let bits = {
+                MODER8R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 16;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER8R { bits }
+                })
             }
             #[doc = "Bits 14:15 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder7(&self) -> MODER7R {
-                let bits = {
+                MODER7R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 14;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER7R { bits }
+                })
             }
             #[doc = "Bits 12:13 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder6(&self) -> MODER6R {
-                let bits = {
+                MODER6R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 12;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER6R { bits }
+                })
             }
             #[doc = "Bits 10:11 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder5(&self) -> MODER5R {
-                let bits = {
+                MODER5R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 10;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER5R { bits }
+                })
             }
             #[doc = "Bits 8:9 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder4(&self) -> MODER4R {
-                let bits = {
+                MODER4R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 8;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER4R { bits }
+                })
             }
             #[doc = "Bits 6:7 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder3(&self) -> MODER3R {
-                let bits = {
+                MODER3R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 6;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER3R { bits }
+                })
             }
             #[doc = "Bits 4:5 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder2(&self) -> MODER2R {
-                let bits = {
+                MODER2R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 4;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER2R { bits }
+                })
             }
             #[doc = "Bits 2:3 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder1(&self) -> MODER1R {
-                let bits = {
+                MODER1R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 2;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER1R { bits }
+                })
             }
             #[doc = "Bits 0:1 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn moder0(&self) -> MODER0R {
-                let bits = {
+                MODER0R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 0;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                MODER0R { bits }
+                })
             }
         }
         impl W {
@@ -10664,187 +11866,65 @@ pub mod gpioa {
                 self.write(|w| w)
             }
         }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR15R {
-            bits: u8,
-        }
-        impl OSPEEDR15R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR14R {
-            bits: u8,
-        }
-        impl OSPEEDR14R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR13R {
-            bits: u8,
-        }
-        impl OSPEEDR13R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR12R {
-            bits: u8,
-        }
-        impl OSPEEDR12R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR11R {
-            bits: u8,
-        }
-        impl OSPEEDR11R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR10R {
-            bits: u8,
-        }
-        impl OSPEEDR10R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR9R {
-            bits: u8,
-        }
-        impl OSPEEDR9R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR8R {
-            bits: u8,
-        }
-        impl OSPEEDR8R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR7R {
-            bits: u8,
-        }
-        impl OSPEEDR7R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR6R {
-            bits: u8,
-        }
-        impl OSPEEDR6R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR5R {
-            bits: u8,
-        }
-        impl OSPEEDR5R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR4R {
-            bits: u8,
-        }
-        impl OSPEEDR4R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR3R {
-            bits: u8,
-        }
-        impl OSPEEDR3R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR2R {
-            bits: u8,
-        }
-        impl OSPEEDR2R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR1R {
-            bits: u8,
-        }
-        impl OSPEEDR1R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct OSPEEDR0R {
-            bits: u8,
-        }
-        impl OSPEEDR0R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
+        #[doc = "Possible values of the field `OSPEEDR15`"]
+        pub type OSPEEDR15R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR14`"]
+        pub type OSPEEDR14R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR13`"]
+        pub type OSPEEDR13R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR12`"]
+        pub type OSPEEDR12R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR11`"]
+        pub type OSPEEDR11R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR10`"]
+        pub type OSPEEDR10R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR9`"]
+        pub type OSPEEDR9R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR8`"]
+        pub type OSPEEDR8R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR7`"]
+        pub type OSPEEDR7R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR6`"]
+        pub type OSPEEDR6R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR5`"]
+        pub type OSPEEDR5R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR4`"]
+        pub type OSPEEDR4R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR3`"]
+        pub type OSPEEDR3R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR2`"]
+        pub type OSPEEDR2R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR1`"]
+        pub type OSPEEDR1R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Possible values of the field `OSPEEDR0`"]
+        pub type OSPEEDR0R = ::gpiof::ospeedr::OSPEEDR15R;
+        #[doc = "Values that can be written to the field `OSPEEDR15`"]
+        pub type OSPEEDR15W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR15W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR15W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR15W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10855,11 +11935,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR14`"]
+        pub type OSPEEDR14W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR14W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR14W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR14W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10870,11 +11972,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR13`"]
+        pub type OSPEEDR13W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR13W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR13W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR13W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10885,11 +12009,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR12`"]
+        pub type OSPEEDR12W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR12W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR12W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR12W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10900,11 +12046,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR11`"]
+        pub type OSPEEDR11W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR11W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR11W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR11W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10915,11 +12083,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR10`"]
+        pub type OSPEEDR10W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR10W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR10W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR10W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10930,11 +12120,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR9`"]
+        pub type OSPEEDR9W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR9W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR9W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR9W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10945,11 +12157,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR8`"]
+        pub type OSPEEDR8W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR8W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR8W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR8W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10960,11 +12194,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR7`"]
+        pub type OSPEEDR7W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR7W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR7W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR7W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10975,11 +12231,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR6`"]
+        pub type OSPEEDR6W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR6W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR6W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR6W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -10990,11 +12268,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR5`"]
+        pub type OSPEEDR5W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR5W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR5W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR5W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11005,11 +12305,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR4`"]
+        pub type OSPEEDR4W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR4W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR4W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR4W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11020,11 +12342,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR3`"]
+        pub type OSPEEDR3W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR3W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR3W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR3W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11035,11 +12379,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR2`"]
+        pub type OSPEEDR2W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR2W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR2W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR2W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11050,11 +12416,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR1`"]
+        pub type OSPEEDR1W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR1W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR1W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR1W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11065,11 +12453,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `OSPEEDR0`"]
+        pub type OSPEEDR0W = ::gpiof::ospeedr::OSPEEDR15W;
         #[doc = r" Proxy"]
         pub struct _OSPEEDR0W<'a> {
             w: &'a mut W,
         }
         impl<'a> _OSPEEDR0W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: OSPEEDR0W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn low(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::LOW)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn medium(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::MEDIUM)
+            }
+            #[doc = "`11`"]
+            #[inline(always)]
+            pub fn high(self) -> &'a mut W {
+                self.variant(::gpiof::ospeedr::OSPEEDR15W::HIGH)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11089,162 +12499,146 @@ pub mod gpioa {
             #[doc = "Bits 30:31 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr15(&self) -> OSPEEDR15R {
-                let bits = {
+                OSPEEDR15R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 30;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR15R { bits }
+                })
             }
             #[doc = "Bits 28:29 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr14(&self) -> OSPEEDR14R {
-                let bits = {
+                OSPEEDR14R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 28;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR14R { bits }
+                })
             }
             #[doc = "Bits 26:27 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr13(&self) -> OSPEEDR13R {
-                let bits = {
+                OSPEEDR13R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 26;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR13R { bits }
+                })
             }
             #[doc = "Bits 24:25 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr12(&self) -> OSPEEDR12R {
-                let bits = {
+                OSPEEDR12R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 24;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR12R { bits }
+                })
             }
             #[doc = "Bits 22:23 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr11(&self) -> OSPEEDR11R {
-                let bits = {
+                OSPEEDR11R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 22;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR11R { bits }
+                })
             }
             #[doc = "Bits 20:21 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr10(&self) -> OSPEEDR10R {
-                let bits = {
+                OSPEEDR10R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 20;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR10R { bits }
+                })
             }
             #[doc = "Bits 18:19 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr9(&self) -> OSPEEDR9R {
-                let bits = {
+                OSPEEDR9R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 18;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR9R { bits }
+                })
             }
             #[doc = "Bits 16:17 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr8(&self) -> OSPEEDR8R {
-                let bits = {
+                OSPEEDR8R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 16;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR8R { bits }
+                })
             }
             #[doc = "Bits 14:15 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr7(&self) -> OSPEEDR7R {
-                let bits = {
+                OSPEEDR7R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 14;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR7R { bits }
+                })
             }
             #[doc = "Bits 12:13 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr6(&self) -> OSPEEDR6R {
-                let bits = {
+                OSPEEDR6R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 12;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR6R { bits }
+                })
             }
             #[doc = "Bits 10:11 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr5(&self) -> OSPEEDR5R {
-                let bits = {
+                OSPEEDR5R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 10;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR5R { bits }
+                })
             }
             #[doc = "Bits 8:9 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr4(&self) -> OSPEEDR4R {
-                let bits = {
+                OSPEEDR4R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 8;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR4R { bits }
+                })
             }
             #[doc = "Bits 6:7 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr3(&self) -> OSPEEDR3R {
-                let bits = {
+                OSPEEDR3R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 6;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR3R { bits }
+                })
             }
             #[doc = "Bits 4:5 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr2(&self) -> OSPEEDR2R {
-                let bits = {
+                OSPEEDR2R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 4;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR2R { bits }
+                })
             }
             #[doc = "Bits 2:3 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr1(&self) -> OSPEEDR1R {
-                let bits = {
+                OSPEEDR1R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 2;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR1R { bits }
+                })
             }
             #[doc = "Bits 0:1 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn ospeedr0(&self) -> OSPEEDR0R {
-                let bits = {
+                OSPEEDR0R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 0;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                OSPEEDR0R { bits }
+                })
             }
         }
         impl W {
@@ -11389,187 +12783,65 @@ pub mod gpioa {
                 self.write(|w| w)
             }
         }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR15R {
-            bits: u8,
-        }
-        impl PUPDR15R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR14R {
-            bits: u8,
-        }
-        impl PUPDR14R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR13R {
-            bits: u8,
-        }
-        impl PUPDR13R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR12R {
-            bits: u8,
-        }
-        impl PUPDR12R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR11R {
-            bits: u8,
-        }
-        impl PUPDR11R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR10R {
-            bits: u8,
-        }
-        impl PUPDR10R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR9R {
-            bits: u8,
-        }
-        impl PUPDR9R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR8R {
-            bits: u8,
-        }
-        impl PUPDR8R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR7R {
-            bits: u8,
-        }
-        impl PUPDR7R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR6R {
-            bits: u8,
-        }
-        impl PUPDR6R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR5R {
-            bits: u8,
-        }
-        impl PUPDR5R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR4R {
-            bits: u8,
-        }
-        impl PUPDR4R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR3R {
-            bits: u8,
-        }
-        impl PUPDR3R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR2R {
-            bits: u8,
-        }
-        impl PUPDR2R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR1R {
-            bits: u8,
-        }
-        impl PUPDR1R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
-        #[doc = r" Value of the field"]
-        pub struct PUPDR0R {
-            bits: u8,
-        }
-        impl PUPDR0R {
-            #[doc = r" Value of the field as raw bits"]
-            #[inline(always)]
-            pub fn bits(&self) -> u8 {
-                self.bits
-            }
-        }
+        #[doc = "Possible values of the field `PUPDR15`"]
+        pub type PUPDR15R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR14`"]
+        pub type PUPDR14R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR13`"]
+        pub type PUPDR13R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR12`"]
+        pub type PUPDR12R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR11`"]
+        pub type PUPDR11R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR10`"]
+        pub type PUPDR10R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR9`"]
+        pub type PUPDR9R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR8`"]
+        pub type PUPDR8R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR7`"]
+        pub type PUPDR7R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR6`"]
+        pub type PUPDR6R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR5`"]
+        pub type PUPDR5R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR4`"]
+        pub type PUPDR4R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR3`"]
+        pub type PUPDR3R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR2`"]
+        pub type PUPDR2R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR1`"]
+        pub type PUPDR1R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Possible values of the field `PUPDR0`"]
+        pub type PUPDR0R = ::gpiof::pupdr::PUPDR15R;
+        #[doc = "Values that can be written to the field `PUPDR15`"]
+        pub type PUPDR15W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR15W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR15W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR15W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11580,11 +12852,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR14`"]
+        pub type PUPDR14W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR14W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR14W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR14W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11595,11 +12889,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR13`"]
+        pub type PUPDR13W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR13W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR13W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR13W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11610,11 +12926,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR12`"]
+        pub type PUPDR12W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR12W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR12W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR12W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11625,11 +12963,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR11`"]
+        pub type PUPDR11W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR11W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR11W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR11W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11640,11 +13000,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR10`"]
+        pub type PUPDR10W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR10W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR10W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR10W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11655,11 +13037,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR9`"]
+        pub type PUPDR9W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR9W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR9W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR9W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11670,11 +13074,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR8`"]
+        pub type PUPDR8W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR8W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR8W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR8W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11685,11 +13111,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR7`"]
+        pub type PUPDR7W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR7W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR7W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR7W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11700,11 +13148,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR6`"]
+        pub type PUPDR6W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR6W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR6W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR6W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11715,11 +13185,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR5`"]
+        pub type PUPDR5W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR5W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR5W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR5W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11730,11 +13222,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR4`"]
+        pub type PUPDR4W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR4W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR4W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR4W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11745,11 +13259,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR3`"]
+        pub type PUPDR3W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR3W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR3W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR3W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11760,11 +13296,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR2`"]
+        pub type PUPDR2W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR2W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR2W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR2W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11775,11 +13333,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR1`"]
+        pub type PUPDR1W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR1W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR1W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR1W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11790,11 +13370,33 @@ pub mod gpioa {
                 self.w
             }
         }
+        #[doc = "Values that can be written to the field `PUPDR0`"]
+        pub type PUPDR0W = ::gpiof::pupdr::PUPDR15W;
         #[doc = r" Proxy"]
         pub struct _PUPDR0W<'a> {
             w: &'a mut W,
         }
         impl<'a> _PUPDR0W<'a> {
+            #[doc = r" Writes `variant` to the field"]
+            #[inline(always)]
+            pub fn variant(self, variant: PUPDR0W) -> &'a mut W {
+                unsafe { self.bits(variant._bits()) }
+            }
+            #[doc = "`0`"]
+            #[inline(always)]
+            pub fn none(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::NONE)
+            }
+            #[doc = "`1`"]
+            #[inline(always)]
+            pub fn pullup(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLUP)
+            }
+            #[doc = "`10`"]
+            #[inline(always)]
+            pub fn pulldown(self) -> &'a mut W {
+                self.variant(::gpiof::pupdr::PUPDR15W::PULLDOWN)
+            }
             #[doc = r" Writes raw bits to the field"]
             #[inline(always)]
             pub unsafe fn bits(self, value: u8) -> &'a mut W {
@@ -11814,162 +13416,146 @@ pub mod gpioa {
             #[doc = "Bits 30:31 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr15(&self) -> PUPDR15R {
-                let bits = {
+                PUPDR15R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 30;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR15R { bits }
+                })
             }
             #[doc = "Bits 28:29 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr14(&self) -> PUPDR14R {
-                let bits = {
+                PUPDR14R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 28;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR14R { bits }
+                })
             }
             #[doc = "Bits 26:27 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr13(&self) -> PUPDR13R {
-                let bits = {
+                PUPDR13R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 26;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR13R { bits }
+                })
             }
             #[doc = "Bits 24:25 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr12(&self) -> PUPDR12R {
-                let bits = {
+                PUPDR12R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 24;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR12R { bits }
+                })
             }
             #[doc = "Bits 22:23 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr11(&self) -> PUPDR11R {
-                let bits = {
+                PUPDR11R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 22;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR11R { bits }
+                })
             }
             #[doc = "Bits 20:21 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr10(&self) -> PUPDR10R {
-                let bits = {
+                PUPDR10R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 20;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR10R { bits }
+                })
             }
             #[doc = "Bits 18:19 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr9(&self) -> PUPDR9R {
-                let bits = {
+                PUPDR9R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 18;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR9R { bits }
+                })
             }
             #[doc = "Bits 16:17 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr8(&self) -> PUPDR8R {
-                let bits = {
+                PUPDR8R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 16;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR8R { bits }
+                })
             }
             #[doc = "Bits 14:15 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr7(&self) -> PUPDR7R {
-                let bits = {
+                PUPDR7R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 14;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR7R { bits }
+                })
             }
             #[doc = "Bits 12:13 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr6(&self) -> PUPDR6R {
-                let bits = {
+                PUPDR6R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 12;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR6R { bits }
+                })
             }
             #[doc = "Bits 10:11 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr5(&self) -> PUPDR5R {
-                let bits = {
+                PUPDR5R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 10;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR5R { bits }
+                })
             }
             #[doc = "Bits 8:9 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr4(&self) -> PUPDR4R {
-                let bits = {
+                PUPDR4R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 8;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR4R { bits }
+                })
             }
             #[doc = "Bits 6:7 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr3(&self) -> PUPDR3R {
-                let bits = {
+                PUPDR3R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 6;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR3R { bits }
+                })
             }
             #[doc = "Bits 4:5 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr2(&self) -> PUPDR2R {
-                let bits = {
+                PUPDR2R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 4;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR2R { bits }
+                })
             }
             #[doc = "Bits 2:3 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr1(&self) -> PUPDR1R {
-                let bits = {
+                PUPDR1R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 2;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR1R { bits }
+                })
             }
             #[doc = "Bits 0:1 - Port x configuration bits (y = 0..15)"]
             #[inline(always)]
             pub fn pupdr0(&self) -> PUPDR0R {
-                let bits = {
+                PUPDR0R::_from({
                     const MASK: u8 = 3;
                     const OFFSET: u8 = 0;
                     ((self.bits >> OFFSET) & MASK as u32) as u8
-                };
-                PUPDR0R { bits }
+                })
             }
         }
         impl W {
