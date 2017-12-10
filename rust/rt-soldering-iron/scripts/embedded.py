@@ -8,7 +8,7 @@ def get_artifacts(args):
     """
     Gets the rust build artifact paths
     """
-    command = ['xargo', 'build', '--message-format=json', '-q']
+    command = [args.cargo, 'build', '--message-format=json', '-q']
     if args.release:
         command.append('--release')
     output = subprocess.check_output(command)

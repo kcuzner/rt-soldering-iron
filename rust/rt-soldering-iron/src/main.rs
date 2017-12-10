@@ -11,7 +11,18 @@ use core::u16;
 use cortex_m::asm;
 use stm32f031x::{GPIOA, RCC, TIM1};
 
+mod rtos;
+
+fn test() {
+    asm::bkpt();
+}
+
 fn main() {
+    let mut task = rtos::Task::new(&test);
+    rtos::TaskGroup::new()
+        .add_task(&mut task)
+        .run();
+
     cortex_m::interrupt::free(|cs| {
         let gpioa = GPIOA.borrow(cs);
         let rcc = RCC.borrow(cs);
@@ -30,7 +41,7 @@ fn main() {
         tim1.ccr1.write(|w| unsafe { w.ccr1().bits(4000) });
 
         gpioa.afrh.modify(|_, w| unsafe { w.afrh8().bits(0b0010) });
-        gpioa.moder.modify(|_, w| unsafe { w.moder8().bits(0b10) });
+        gpioa.moder.modify(|_, w| { w.moder8().output() });
 
         tim1.cr1.modify(|_, w| w.cen().bit(true));
         tim1.egr.write(|w| w.ug().bit(true));
@@ -39,12 +50,12 @@ fn main() {
 }
 
 // As we are not using interrupts, we just register a dummy catch all handler
-#[allow(dead_code)]
+/*#[allow(dead_code)]
 #[used]
 #[link_section = ".vector_table.interrupts"]
 static INTERRUPTS: [extern "C" fn(); 32] = [default_handler; 32];
 
-extern "C" fn default_handler() {}
+extern "C" fn default_handler() {}*/
 
 default_handler!(exception_handler);
 
