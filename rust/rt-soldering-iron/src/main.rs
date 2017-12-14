@@ -13,12 +13,13 @@ use stm32f031x::{GPIOA, RCC, TIM1};
 
 mod rtos;
 
+static mut TEST_STACK: [u32; 512] = [0; 512];
 fn test() {
     asm::bkpt();
 }
 
 fn main() {
-    let mut task = rtos::Task::new(&test);
+    let mut task = rtos::Task::new(&test, unsafe { &mut TEST_STACK });
     rtos::TaskGroup::new()
         .add_task(&mut task)
         .run();
