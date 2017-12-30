@@ -1,9 +1,10 @@
-#![feature(used)]
+#![feature(used, const_fn, asm)]
 #![no_std]
 
 extern crate cortex_m;
 #[macro_use]
 extern crate cortex_m_rt;
+extern crate bare_metal;
 extern crate stm32f031x;
 
 use core::u16;
@@ -13,17 +14,11 @@ use stm32f031x::{GPIOA, RCC, TIM1};
 
 mod rtos;
 
-static mut TEST_STACK: [u32; 512] = [0; 512];
 fn test() {
     asm::bkpt();
 }
 
 fn main() {
-    let mut task = rtos::Task::new(&test, unsafe { &mut TEST_STACK });
-    rtos::TaskGroup::new()
-        .add_task(&mut task)
-        .run();
-
     cortex_m::interrupt::free(|cs| {
         let gpioa = GPIOA.borrow(cs);
         let rcc = RCC.borrow(cs);
