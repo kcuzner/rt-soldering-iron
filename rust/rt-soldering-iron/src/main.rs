@@ -14,11 +14,15 @@ use stm32f031x::{GPIOA, RCC, TIM1};
 
 mod rtos;
 
+static TEST_STACK: [u8; 256] = [0; 256];
+
 fn test() {
     asm::bkpt();
 }
 
 fn main() {
+    rtos::add_task(test, &TEST_STACK[..]);
+
     cortex_m::interrupt::free(|cs| {
         let gpioa = GPIOA.borrow(cs);
         let rcc = RCC.borrow(cs);
