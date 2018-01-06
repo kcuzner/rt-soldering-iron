@@ -1,4 +1,4 @@
-#![feature(used, const_fn, asm)]
+#![feature(used, const_fn, asm, naked_functions)]
 #![no_std]
 
 extern crate cortex_m;
@@ -12,16 +12,18 @@ use core::u16;
 use cortex_m::asm;
 use stm32f031x::{GPIOA, RCC, TIM1};
 
+pub use rtos::PENDSV;
+
 mod rtos;
 
-static TEST_STACK: [u8; 256] = [0; 256];
+static mut TEST_STACK: [u8; 256] = [0; 256];
 
 fn test() {
     asm::bkpt();
 }
 
 fn main() {
-    rtos::add_task(test, &TEST_STACK[..]);
+    rtos::add_task(test, unsafe{ &TEST_STACK[..] });
 
     cortex_m::interrupt::free(|cs| {
         let gpioa = GPIOA.borrow(cs);

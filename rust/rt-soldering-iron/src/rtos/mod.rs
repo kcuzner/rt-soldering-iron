@@ -34,7 +34,7 @@ pub mod sync;
 
 use core;
 
-pub use self::sched::{add_task, run};
+pub use self::sched::{add_task, run, PENDSV};
 
 pub type Result<T> = core::result::Result<T, ()>;
 
