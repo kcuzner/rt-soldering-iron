@@ -73,8 +73,6 @@ unsafe extern "C" fn scheduler(sp: u32) -> u32 {
     sp
 }
 
-const NVIC_FINISHED_LR_VALUE: u32 = 0xfffffff9;
-
 /// PendSV interrupt handler
 #[naked]
 #[no_mangle]
@@ -89,28 +87,33 @@ pub extern "C" fn PENDSV() {
         // - LR
         // - PC
         // - PSR
-        asm!("mov r0, sp
-             mov r1, r0
-             stmia r1!, {r4-r7}
+        //
+        // Since this RTOS does not yet use the two different stack pointers,
+        // we have the "push" and "pop" instructions available.
+        asm!("push {r4-r7} //store r4-r7
              mov r4, r8
              mov r5, r9
              mov r6, r10
              mov r7, r11
-             stmia r1!, {r4-r7}
-             mov sp, r0
+             push {r4-r7} //store r8-r11
+             mov r0, sp //this is the point where we save the stack
 
+             //enter critical section
              cpsid i
+             bl $0
              cpsie i
+             //exit critical section
 
-             ldmia r0!, {r4-r7}
+             mov sp, r0  //switch the stack over
+             pop {r4-r7} //pop r8-r11
              mov r8, r4
              mov r9, r5
              mov r10, r6
              mov r11, r7
-             ldmia r0!, {r4-r7}
-             mov r0, $0
-             mov sp, r0
-             bx lr" : : "i"(&NVIC_FINISHED_LR_VALUE) : : "volatile");
+             pop {r4-r7} //pop r4-r7
+             ldr r0, =0xfffffff9 //tell the NVIC we are done
+             mov lr, r0
+             bx lr" : : "i"(scheduler as unsafe extern "C" fn(u32) -> u32) : : "volatile");
     }
 }
 
