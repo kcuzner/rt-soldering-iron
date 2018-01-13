@@ -10,8 +10,13 @@ use cortex_m;
 use rtos::Result;
 use rtos::sync::Block;
 
-/// Minimum required stack size in bytes
-pub const MIN_STACK_SIZE: u32 = 4*8 + 4*8 + 4*8;
+const REGISTER_SIZE: u32 = size_of::<u32>() as u32;
+/// Minimum required stack size in bytes.
+///
+/// 32 bytes for SavedState
+/// 32 bytes for r4-r12
+/// 32 bytes for stack space
+pub const MIN_STACK_SIZE: u32 = REGISTER_SIZE*8 + REGISTER_SIZE*8 + REGISTER_SIZE*8;
 
 /// State of a task
 #[derive(Copy, Clone)]
@@ -81,7 +86,7 @@ impl SavedState {
     ///   decides to `bx lr` or `pop {pc}`
     /// - PC: Points to the task function so that the task will resume into the
     ///   beginning of the function
-    /// - PSR
+    /// - PSR: Sets the process for thumb mode
     fn new(t: TaskFn) -> SavedState {
         SavedState {
             r0: 0,
@@ -96,6 +101,7 @@ impl SavedState {
     }
 }
 
+/// Catch function for when a task decides to return. Just an infinite loop.
 #[inline(never)]
 fn task_return_handler() {
     loop {}
@@ -133,8 +139,8 @@ impl TaskDescriptor {
                 self.stack_top = (self.stack_end - stack.len() as u32) - size_of::<SavedState>() as u32;
                 // Add the NVIC-saved state to resume into the task entry point
                 unsafe { *(self.stack_top as *mut SavedState) = SavedState::new(t) };
-                // Add r4-r7 on top
-                self.stack_top -= 4*8;
+                // Add r4-r7 and r8-r12 on top
+                self.stack_top -= REGISTER_SIZE*8;
                 Ok(())
             },
             _ => Err(())
@@ -172,14 +178,16 @@ impl TaskDescriptor {
         }
     }
 
+    /// Returns whether or not this task is ready
+    pub fn is_ready(&self) -> bool {
+        match self.state {
+            TaskState::Ready => true,
+            _ => false
+        }
+    }
+
     /// Gets the previously set task stack top memory address
-    ///
-    /// This is unsafe because it is not atomic (combined with set_stack_top)
-    /// and requires interrupts to be disabled, but can't require a
-    /// CriticalSection since it is called from PendSV and I'm not sure how to
-    /// create a valid CriticalSection using only inline assembly inside a
-    /// naked function.
-    pub unsafe fn stack_top(&self) -> Result<u32> {
+    pub fn stack_top(&self, _: &CriticalSection) -> Result<u32> {
         match self.state {
             TaskState::Invalid => Err(()),
             _ => Ok(self.stack_top)
@@ -187,12 +195,7 @@ impl TaskDescriptor {
     }
 
     /// Stores the stack top memory address
-    ///
-    /// This is unsafe because it is not atomic and requires interrupts to be
-    /// disabled, but can't require a CriticalSection since it is called from
-    /// PendSV and I'm not sure how to create a valid CriticalSection using
-    /// only inline assembly inside a naked function.
-    pub unsafe fn set_stack_top(&mut self, sp: u32) -> Result<()> {
+    pub fn set_stack_top(&mut self, sp: u32, _: &CriticalSection) -> Result<()> {
         match self.state {
             TaskState::Invalid => Err(()),
             _ => { self.stack_top = sp; Ok(()) }
