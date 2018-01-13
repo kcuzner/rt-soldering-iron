@@ -1,4 +1,4 @@
-#![feature(used, const_fn, asm, naked_functions)]
+#![feature(used, const_fn, asm, naked_functions, const_size_of)]
 #![no_std]
 
 extern crate cortex_m;
