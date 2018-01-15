@@ -43,7 +43,7 @@ fn main() {
         tim1.ccr1.write(|w| unsafe { w.ccr1().bits(4000) });
 
         gpioa.afrh.modify(|_, w| unsafe { w.afrh8().bits(0b0010) });
-        gpioa.moder.modify(|_, w| { w.moder8().output() });
+        gpioa.moder.modify(|_, w| { w.moder8().alternate() });
 
         tim1.cr1.modify(|_, w| w.cen().bit(true));
         tim1.egr.write(|w| w.ug().bit(true));

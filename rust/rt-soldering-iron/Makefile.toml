@@ -71,6 +71,12 @@ dependencies = [
     "post-build-release"
 ]
 
+[tasks.install-embedded-release]
+dependencies = [
+	"embedded-flow-release",
+	"embedded-flash-release"
+]
+
 [tasks.default]
 alias = "embedded-flow-release"
 
