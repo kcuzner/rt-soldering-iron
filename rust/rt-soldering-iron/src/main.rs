@@ -13,8 +13,10 @@ use cortex_m::asm;
 use stm32f031x::{GPIOA, RCC, TIM1};
 
 pub use rtos::PENDSV;
+pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
 
 mod rtos;
+mod debug;
 
 static mut TEST_STACK: [u8; 256] = [0; 256];
 
