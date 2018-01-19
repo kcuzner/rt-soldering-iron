@@ -136,7 +136,7 @@ impl TaskDescriptor {
             TaskState::Invalid => {
                 self.state = TaskState::Ready;
                 self.stack_end = stack.as_ptr() as u32;
-                self.stack_top = (self.stack_end - stack.len() as u32) - size_of::<SavedState>() as u32;
+                self.stack_top = (self.stack_end + stack.len() as u32) - size_of::<SavedState>() as u32;
                 // Add the NVIC-saved state to resume into the task entry point
                 unsafe { *(self.stack_top as *mut SavedState) = SavedState::new(t) };
                 // Add r4-r7 and r8-r12 on top

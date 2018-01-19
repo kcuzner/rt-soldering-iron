@@ -66,7 +66,7 @@ impl TaskCollection {
     }
 }
 
-static IDLE_STACK: [u8; MIN_STACK_SIZE as usize] = [0; MIN_STACK_SIZE as usize];
+static mut IDLE_STACK: [u8; MIN_STACK_SIZE as usize] = [0; MIN_STACK_SIZE as usize];
 
 /// Idle task
 #[inline(never)]
@@ -86,7 +86,7 @@ pub fn add_task(t: TaskFn, stack: &'static[u8]) -> Result<()> {
 /// error.
 #[inline(never)]
 pub fn run() -> Result<()> {
-    add_task(idle_task, &IDLE_STACK[..])?;
+    add_task(idle_task, unsafe { &IDLE_STACK[..] })?;
 
     switch_context();
     Err(())
