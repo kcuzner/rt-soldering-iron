@@ -21,12 +21,6 @@ mod debug;
 static mut TEST_STACK: [u8; 256] = [0; 256];
 
 fn test() {
-    asm::bkpt();
-}
-
-fn main() {
-    rtos::add_task(test, unsafe{ &TEST_STACK[..] });
-
     cortex_m::interrupt::free(|cs| {
         let gpioa = GPIOA.borrow(cs);
         let rcc = RCC.borrow(cs);
@@ -49,8 +43,19 @@ fn main() {
 
         tim1.cr1.modify(|_, w| w.cen().bit(true));
         tim1.egr.write(|w| w.ug().bit(true));
-        loop {}
     });
+    loop {}
+}
+
+fn startup() -> Result<(), ()> {
+    rtos::add_task(test, unsafe{ &TEST_STACK[..] })?;
+    rtos::run()
+}
+
+fn main() {
+    match startup() {
+        _ => loop {}
+    }
 }
 
 // As we are not using interrupts, we just register a dummy catch all handler
