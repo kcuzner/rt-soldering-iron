@@ -29,34 +29,6 @@ enum TaskState {
     Blocked(u32),
 }
 
-/// Gets the current stack pointer
-#[cfg(target_arch = "arm")]
-#[inline(always)]
-fn get_stack_pointer() -> u32 {
-    let mut sp : u32;
-    unsafe { asm!("mov $0, sp" : "=r"(sp) ::: "volatile") };
-    sp
-}
-
-/// Gets the current stack pointer (unimplemented for non-ARM architectures)
-#[cfg(not(target_arch = "arm"))]
-fn get_stack_pointer() -> u32 {
-    unimplemented!();
-}
-
-/// Sets the current stack pointer
-#[cfg(target_arch = "arm")]
-#[inline(always)]
-fn set_stack_pointer(sp: u32) {
-    unsafe { asm!("mov sp, $0" :: "r"(sp) :: "volatile") };
-}
-
-/// Sets the current stack pointer (unimplemented for non-ARM architectures)
-#[cfg(not(target_arch = "arm"))]
-fn set_stack_pointer(sp: u32) {
-    unimplemented!();
-}
-
 /// Task function type
 pub type TaskFn = fn();
 

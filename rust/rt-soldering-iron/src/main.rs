@@ -1,4 +1,4 @@
-#![feature(used, const_fn, asm, naked_functions, const_size_of)]
+#![feature(used, const_fn, asm, naked_functions, const_size_of, const_unsafe_cell_new, const_ptr_null_mut)]
 #![no_std]
 
 extern crate cortex_m;
@@ -43,6 +43,7 @@ fn test() {
 
         tim1.cr1.modify(|_, w| w.cen().bit(true));
         tim1.egr.write(|w| w.ug().bit(true));
+        rtos::sync::wait(100);
     });
     loop {}
 }
@@ -67,5 +68,4 @@ static INTERRUPTS: [extern "C" fn(); 32] = [default_handler; 32];
 extern "C" fn default_handler() {}*/
 
 default_handler!(exception_handler);
-
 fn exception_handler() {}

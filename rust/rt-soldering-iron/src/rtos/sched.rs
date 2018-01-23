@@ -2,19 +2,22 @@
 //!
 //! Contains the global task list and methods for interacting with it.
 
-use core;
 use core::u32;
 use bare_metal::CriticalSection;
 use cortex_m;
 
 use rtos::Result;
 use rtos::tasks::{TaskFn, TaskDescriptor, MIN_STACK_SIZE};
+use rtos::sync::Block;
 
 /// Maximum task count, excluding the idle task
 pub const MAX_TASKS_COUNT: usize = 4;
 
 /// Task collection
 static mut TASKS: TaskCollection = TaskCollection::new();
+
+//TODO: Handle the case where tasks are added after the scheduler is running. Right now, the idle
+//task won't be the lowest priority
 
 struct TaskCollection {
     current_task: Option<usize>,
@@ -24,7 +27,7 @@ struct TaskCollection {
 
 impl TaskCollection {
     /// Creates a new task collection
-    const fn new() -> TaskCollection {
+    const fn new() -> Self {
         TaskCollection {
             current_task: None,
             task_count: 0,
@@ -64,6 +67,40 @@ impl TaskCollection {
         self.task_count += 1;
         Ok(())
     }
+
+    /// Changes the current task state to blocked. Fails if the RTOS has not
+    /// been started or a task not properly runtime-initialized.
+    fn block(&mut self, block: &'static Block, cs: &CriticalSection) -> Result<()> {
+        match self.current_task {
+            Some(n) => self.tasks[n].block(block, cs),
+            _ => Err(())
+        }
+    }
+
+    /// Runs through the tasks and unblocks the highest priority blocked task
+    /// that accepts the passed Block. A task may or may not unblock, but this
+    /// function succeeds in all cases.
+    fn unblock(&mut self, block: &'static Block, cs: &CriticalSection) -> bool {
+        for i in 0..self.task_count {
+            if self.tasks[i].try_unblock(block, cs) {
+                return true
+            }
+        }
+        false
+    }
+
+    /// Gets an id representing the current task
+    fn task_id(&self) -> Option<u32> {
+        match self.current_task {
+            Some(i) => Some(i as u32),
+            _ => None
+        }
+    }
+
+    /// Unblocks the task based on the passed ID and block
+    fn unblock_by_id(&mut self, id: u32, block: &'static Block, cs: &CriticalSection) {
+        self.tasks[id as usize].try_unblock(block, cs);
+    }
 }
 
 static mut IDLE_STACK: [u8; MIN_STACK_SIZE as usize] = [0; MIN_STACK_SIZE as usize];
@@ -88,15 +125,40 @@ pub fn add_task(t: TaskFn, stack: &'static[u8]) -> Result<()> {
 pub fn run() -> Result<()> {
     add_task(idle_task, unsafe { &IDLE_STACK[..] })?;
 
-    switch_context();
+    //Interrupts must be enabled at this point
+    unsafe {
+        cortex_m::interrupt::enable();
+        switch_context();
+    };
+
     Err(())
 }
 
 /// Requests a context switch by setting PendSV.
+///
+/// Interrupts must be enabled when this is called. If they are disabled, the
+/// context switch will occur immediately after they are re-enabled. This is
+/// unsafe, because misbehavior may result if this is called with interrupts
+/// disabled.
 #[inline(always)]
-pub fn switch_context() {
+pub unsafe fn switch_context() {
     let scb = cortex_m::peripheral::SCB.get();
-    unsafe { (*scb).icsr.write(0x10000000); }
+    (*scb).icsr.write(0x10000000);
+}
+
+/// Blocks the current task. Does not request a context switch. The context
+/// switch must be requested after the critical section. The task will not
+/// actually block until switch_context() is called.
+pub fn block(block: &'static Block, cs: &CriticalSection) -> Result<()> {
+    unsafe { TASKS.block(block, cs) }?;
+    Ok(())
+}
+
+/// Unblocks zero or one tasks, in priority order. Does not request a context
+/// switch. The context switch must be requested after the critical section.
+/// The task will not actually yield until switch_context() is called.
+pub fn unblock(block: &'static Block, cs: &CriticalSection) -> bool {
+    unsafe { TASKS.unblock(block, cs) }
 }
 
 /// Scheduler implementation, presented as a safe interface
@@ -120,7 +182,6 @@ pub fn switch_context() {
 /// interrupted while the internal state was mutating. We are mutating statics
 /// here, after all.
 fn scheduler_impl(sp: u32, cs: &CriticalSection) -> Result<u32> {
-    //TODO: The startup case!! There is no stack top to set...
     unsafe { TASKS.set_stack_top(sp, cs) }?;
     unsafe { TASKS.next(cs) }
 }
