@@ -43,13 +43,13 @@ fn test() {
 
         tim1.cr1.modify(|_, w| w.cen().bit(true));
         tim1.egr.write(|w| w.ug().bit(true));
-        rtos::sync::wait(100);
+        //rtos::sync::wait(100);
     });
     loop {}
 }
 
 fn startup() -> Result<(), ()> {
-    rtos::add_task(test, unsafe{ &TEST_STACK[..] })?;
+    //rtos::add_task(test, unsafe{ &TEST_STACK[..] })?;
     rtos::run()
 }
 

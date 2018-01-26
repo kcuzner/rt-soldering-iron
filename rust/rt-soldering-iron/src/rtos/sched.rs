@@ -16,13 +16,11 @@ pub const MAX_TASKS_COUNT: usize = 4;
 /// Task collection
 static mut TASKS: TaskCollection = TaskCollection::new();
 
-//TODO: Handle the case where tasks are added after the scheduler is running. Right now, the idle
-//task won't be the lowest priority
-
 struct TaskCollection {
     current_task: Option<usize>,
     task_count: usize,
     tasks: [TaskDescriptor; MAX_TASKS_COUNT],
+    idle_task: TaskDescriptor,
 }
 
 impl TaskCollection {
@@ -31,31 +29,40 @@ impl TaskCollection {
         TaskCollection {
             current_task: None,
             task_count: 0,
-            tasks: [TaskDescriptor::new(); MAX_TASKS_COUNT]
+            tasks: [TaskDescriptor::new(); MAX_TASKS_COUNT],
+            idle_task: TaskDescriptor::new()
         }
     }
 
-    /// Sets the stack top for the current task
-    fn set_stack_top(&mut self, sp: u32, cs: &CriticalSection)  -> Result<()>{
+    /// Runs initial setup for the task collection.
+    fn setup(&mut self, cs: &CriticalSection) -> Result<()> {
+        self.idle_task.setup(idle_task, unsafe { &IDLE_STACK }, cs)
+    }
+
+    /// Sets the stack top for the current task.
+    ///
+    /// The caller must ensure that a task was already runing at the time that
+    /// this is called.
+    unsafe fn set_stack_top(&mut self, sp: u32, cs: &CriticalSection)  -> Result<()>{
         match self.current_task {
             Some(n) => self.tasks[n].set_stack_top(sp, cs),
-            _ => Ok(())
+            None => self.idle_task.set_stack_top(sp, cs)
         }
     }
 
     /// Sets the current task to the next one and returns the resulting stack
     /// pointer
     fn next(&mut self, cs: &CriticalSection) -> Result<u32> {
+        // Find the first task in the array that is ready
         for i in 0..self.task_count {
             if self.tasks[i].is_ready() {
                 self.current_task = Some(i);
                 return self.tasks[i].stack_top(cs);
             }
         }
-        match self.current_task {
-            Some(i) => self.tasks[i].stack_top(cs),
-            _ => Err(())
-        }
+        // If no tasks are ready, resume from the idle task
+        self.current_task = None; //prevent block from functioning in this situation
+        self.idle_task.stack_top(cs)
     }
 
     /// Adds a new task to this collection
@@ -123,7 +130,9 @@ pub fn add_task(t: TaskFn, stack: &'static[u8]) -> Result<()> {
 /// error.
 #[inline(never)]
 pub fn run() -> Result<()> {
-    add_task(idle_task, unsafe { &IDLE_STACK[..] })?;
+    cortex_m::interrupt::free(|cs| unsafe {
+        TASKS.setup(cs)
+    })?;
 
     //Interrupts must be enabled at this point
     unsafe {
@@ -181,8 +190,10 @@ pub fn unblock(block: &'static Block, cs: &CriticalSection) -> bool {
 /// A critical section is required because it would be quite bad if this were
 /// interrupted while the internal state was mutating. We are mutating statics
 /// here, after all.
-fn scheduler_impl(sp: u32, cs: &CriticalSection) -> Result<u32> {
-    unsafe { TASKS.set_stack_top(sp, cs) }?;
+fn scheduler_impl(sp: u32, stored: bool, cs: &CriticalSection) -> Result<u32> {
+    if stored {
+        unsafe { TASKS.set_stack_top(sp, cs) }?;
+    }
     unsafe { TASKS.next(cs) }
 }
 
@@ -194,13 +205,13 @@ fn scheduler_impl(sp: u32, cs: &CriticalSection) -> Result<u32> {
 ///
 /// This should be run in a critical section, but I don't know how to create
 /// a CriticalSection from a naked function, so the function is marked unsafe.
-unsafe extern "C" fn scheduler(sp: u32) -> u32 {
+unsafe extern "C" fn scheduler(sp: u32, stored: u32) -> u32 {
     // The caller should be calling this from within a critical section, so we
     // now start one up to interface with the safe code.
     let cs = CriticalSection::new();
     // Attempt to switch to the next task. If unsuccessful, just use the
     // current task.
-    match scheduler_impl(sp, &cs) {
+    match scheduler_impl(sp, stored > 0, &cs) {
         Ok(nsp) => nsp,
         _ => sp
     }
@@ -210,7 +221,16 @@ unsafe extern "C" fn scheduler(sp: u32) -> u32 {
 ///
 /// This interrupt handler is implemented in assembly. It targets the thumbv6m
 /// instruction set. It assumes that there are 12 registers in addition to the
-/// core registers: r0-r11.
+/// core registers: r0-r11. It further assumes that if it interrupts something
+/// running on the msp (rather than the psp), it is running for the first time.
+/// This means that the PENDSV interrupt must be the lowest priority interrupt.
+///
+/// On a Cortex-M0+, it seems there is no preemption priority bits in the AICR.
+/// This should mean that interrupts should be unable to preempt other
+/// interrupts.
+///
+/// If this does preempt an ISR, it will believe that the OS has just started
+/// and will not store the stack. This could seriously misbehave.
 #[naked]
 #[no_mangle]
 #[cfg(target_arch = "arm")]
@@ -224,16 +244,28 @@ pub extern "C" fn PENDSV() {
         // - LR
         // - PC
         // - PSR
-        //
-        // Since this RTOS does not yet use the two different stack pointers,
-        // we have the "push" and "pop" instructions available.
-        asm!("push {r4-r7} //store r4-r7
+        asm!("mov r0, lr
+             ldr r1, =0x4
+             tst r0, r1
+             beq 1f //if lr & 0x4 == 0, then we interrupted the msp.
+             mrs r0, psp
+             subs r0, r0, #32 //4*4 for r4-r7, 4*4 for r8-r11
+             mov r2, r0
+             stmia r2!, {r4-r7} //store r4-r7
              mov r4, r8
              mov r5, r9
              mov r6, r10
              mov r7, r11
-             push {r4-r7} //store r8-r11
-             mov r0, sp //this is the point where we save the stack
+             stmia r2!, {r4-r7} //store r8-r11
+             //r0 contains the top of the stack
+             //r1 contains the number 4, which is greater than zero and will mean that we stored
+             //the context
+             b 2f
+
+             //if we get here, no context was stored since we interrupted the msp
+             1:
+             eors r1, r1 //zero out r1
+             2:
 
              //enter critical section
              cpsid i
@@ -241,15 +273,19 @@ pub extern "C" fn PENDSV() {
              cpsie i
              //exit critical section
 
-             mov sp, r0  //switch the stack over
-             pop {r4-r7} //pop r8-r11
+             //the top of the stack contains r4-r7 followed by r8-r11 as the address increases
+             adds r0, r0, #16 //start at r8-r11
+             ldmia r0!, {r4-r7}
              mov r8, r4
              mov r9, r5
              mov r10, r6
              mov r11, r7
-             pop {r4-r7} //pop r4-r7
-             ldr r0, =0xfffffff9 //tell the NVIC we are done
-             mov lr, r0" : : "i"(scheduler as unsafe extern "C" fn(u32) -> u32) : : "volatile");
+             //at this point, r0 contains the top of the stack for the NVIC
+             msr psp, r0
+             subs r0, r0, #32 //move to r4-r7
+             ldmia r0!, {r4-r7}
+             ldr r0, =0xfffffffd //tell the NVIC we are done, resume into psp
+             mov lr, r0" : : "i"(scheduler as unsafe extern "C" fn(u32, u32) -> u32) : : "volatile");
         // Naked function does provide a "bx lr" at the end
     }
 }
