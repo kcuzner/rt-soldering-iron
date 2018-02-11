@@ -43,13 +43,20 @@ fn test() {
 
         tim1.cr1.modify(|_, w| w.cen().bit(true));
         tim1.egr.write(|w| w.ug().bit(true));
-        //rtos::sync::wait(100);
     });
-    loop {}
+    loop {
+        rtos::sync::wait(100);
+        /*cortex_m::interrupt::free(|cs| {
+            let tim1 = TIM1.borrow(cs);
+
+            let max = tim1.arr.read();
+            tim1.ccr1.modify(|v, w| {  });
+        });*/
+    }
 }
 
 fn startup() -> Result<(), ()> {
-    //rtos::add_task(test, unsafe{ &TEST_STACK[..] })?;
+    rtos::add_task(test, unsafe{ &TEST_STACK[..] })?;
     rtos::run()
 }
 

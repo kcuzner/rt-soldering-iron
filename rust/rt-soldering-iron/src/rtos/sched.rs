@@ -77,7 +77,7 @@ impl TaskCollection {
 
     /// Changes the current task state to blocked. Fails if the RTOS has not
     /// been started or a task not properly runtime-initialized.
-    fn block(&mut self, block: &'static Block, cs: &CriticalSection) -> Result<()> {
+    fn block(&mut self, block: &Block, cs: &CriticalSection) -> Result<()> {
         match self.current_task {
             Some(n) => self.tasks[n].block(block, cs),
             _ => Err(())
@@ -87,7 +87,7 @@ impl TaskCollection {
     /// Runs through the tasks and unblocks the highest priority blocked task
     /// that accepts the passed Block. A task may or may not unblock, but this
     /// function succeeds in all cases.
-    fn unblock(&mut self, block: &'static Block, cs: &CriticalSection) -> bool {
+    fn unblock(&mut self, block: &Block, cs: &CriticalSection) -> bool {
         for i in 0..self.task_count {
             if self.tasks[i].try_unblock(block, cs) {
                 return true
@@ -96,16 +96,17 @@ impl TaskCollection {
         false
     }
 
-    /// Gets an id representing the current task
-    fn task_id(&self) -> Option<u32> {
+    /// Gets an id representing the current task. Not valid to call during the
+    /// idle task.
+    fn task_id(&self, _: &CriticalSection) -> Result<u32> {
         match self.current_task {
-            Some(i) => Some(i as u32),
-            _ => None
+            Some(i) => Ok(i as u32),
+            _ => Err(())
         }
     }
 
     /// Unblocks the task based on the passed ID and block
-    fn unblock_by_id(&mut self, id: u32, block: &'static Block, cs: &CriticalSection) {
+    fn unblock_by_id(&mut self, id: u32, block: &Block, cs: &CriticalSection) {
         self.tasks[id as usize].try_unblock(block, cs);
     }
 }
@@ -158,7 +159,7 @@ pub unsafe fn switch_context() {
 /// Blocks the current task. Does not request a context switch. The context
 /// switch must be requested after the critical section. The task will not
 /// actually block until switch_context() is called.
-pub fn block(block: &'static Block, cs: &CriticalSection) -> Result<()> {
+pub fn block(block: &Block, cs: &CriticalSection) -> Result<()> {
     unsafe { TASKS.block(block, cs) }?;
     Ok(())
 }
@@ -166,8 +167,15 @@ pub fn block(block: &'static Block, cs: &CriticalSection) -> Result<()> {
 /// Unblocks zero or one tasks, in priority order. Does not request a context
 /// switch. The context switch must be requested after the critical section.
 /// The task will not actually yield until switch_context() is called.
-pub fn unblock(block: &'static Block, cs: &CriticalSection) -> bool {
+pub fn unblock(block: &Block, cs: &CriticalSection) -> bool {
     unsafe { TASKS.unblock(block, cs) }
+}
+
+/// Gets the id of the current task.
+///
+/// Requires a critical section to ensure that the task id won't change.
+pub fn task_id(cs: &CriticalSection) -> Result<u32> {
+    unsafe { TASKS.task_id(cs) }
 }
 
 /// Scheduler implementation, presented as a safe interface

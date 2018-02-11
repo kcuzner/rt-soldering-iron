@@ -11,16 +11,57 @@ use core::ptr;
 use cortex_m;
 use bare_metal::CriticalSection;
 
-use rtos::sched::{block, unblock, switch_context};
+use rtos::Result;
+use rtos::sched::{block, unblock, switch_context, task_id};
+
+static mut CURRENT_BLOCK_ID: u32 = 0;
+
+/// Tuple struct of an idenifier
+#[derive(Copy, Clone, PartialEq, Eq)]
+pub struct Id(u32);
+
+/// Holds a unique idenfier for use with synchronization primitives
+pub struct UniqueId {
+    id: UnsafeCell<Option<Id>>
+}
+
+impl UniqueId {
+    /// Creates a new unique id
+    pub const fn new() -> Self {
+        UniqueId { id: UnsafeCell::new(None) }
+    }
+
+    /// Gets the unique id value
+    pub fn get(&self, _: &CriticalSection) -> Id {
+        // This get is safe because id is Copy an we are in a critical section
+        // which makes this function atomic, so no other call is inspecting
+        // the value.
+        match unsafe { *self.id.get() } {
+            Some(id) => id,
+            None => {
+                // This unsafe block is safe because it is executed in a
+                // critical section. The read-modify-write is therefore
+                let id = unsafe {
+                    let i = CURRENT_BLOCK_ID;
+                    CURRENT_BLOCK_ID += 1;
+                    i
+                };
+                unsafe { *self.id.get() = Some(Id(id)) };
+                Id(id)
+            }
+        }
+    }
+}
+
+/// UniqueId is sync because all access methods are atomic through the use of
+/// CriticalSections. It is therefore safe to access in multiple threads.
+unsafe impl Sync for UniqueId {
+}
 
 /// Trait implemented by things which can block tasks
 pub trait Block {
-    /// Gets the "unique" block id. Note that it is unique only for the lifetime
-    /// of the block, since it is just the memory location of the block. To
-    /// keep weird behavior from occuring, we force a static lifetime.
-    fn id(&'static self) -> u32 {
-        &self as *const _ as u32
-    }
+    /// Returns a unique block id.
+    fn id(&self, cs: &CriticalSection) -> Id;
 }
 
 /// Unsafe List
@@ -39,8 +80,16 @@ struct UnsafeListNode<T> {
 }
 
 impl<T> UnsafeListNode<T> {
-    const fn new() -> Self {
-        UnsafeListNode { data: ptr::null_mut(), next: ptr::null_mut() }
+    const fn new(data: *mut T) -> Self {
+        UnsafeListNode { data: data, next: ptr::null_mut() }
+    }
+
+    unsafe fn data<'a>(&self) -> Option<&'a T> {
+        self.data.as_ref()
+    }
+
+    unsafe fn next(&self) -> *mut UnsafeListNode<T> {
+        self.next
     }
 }
 
@@ -67,7 +116,7 @@ impl<T> UnsafeList<T> {
             Some(head) => {
                 let mut current = head;
                 loop {
-                    match current.next.as_mut() {
+                    match current.next().as_mut() {
                         Some(n) => current = n,
                         None => {
                             current.next = node;
@@ -117,6 +166,7 @@ unsafe impl<T> Sync for UnsafeList<T> {
 
 /// Counting semaphore
 pub struct Semaphore {
+    id: UniqueId,
     count: UnsafeCell<i16>,
 }
 
@@ -128,7 +178,7 @@ pub struct SemaphoreGuard {
 impl Semaphore {
     /// Creates a new semaphore around the passed value
     pub const fn new(count: u8) -> Self {
-        Semaphore { count: UnsafeCell::new(count as i16) }
+        Semaphore { id: UniqueId::new(), count: UnsafeCell::new(count as i16) }
     }
 
     /// Atomically waits on this mutex
@@ -169,6 +219,9 @@ impl Semaphore {
 }
 
 impl Block for Semaphore {
+    fn id(&self, cs: &CriticalSection) -> Id {
+        self.id.get(cs)
+    }
 }
 
 /*impl<T> Deref for MutexGuard<T> {
@@ -186,7 +239,6 @@ impl<T> DerefMut for MutexGuard<T> {
 }*/
 
 impl Drop for SemaphoreGuard {
-    #[inline]
     fn drop(&mut self) {
         cortex_m::interrupt::free(|cs| {
             unsafe { *(self.__lock.count.get()) += 1 };
@@ -197,9 +249,13 @@ impl Drop for SemaphoreGuard {
 }
 
 pub struct Queue {
+    id: UniqueId
 }
 
 impl Block for Queue {
+    fn id(&self, cs: &CriticalSection) -> Id {
+        self.id.get(cs)
+    }
 }
 
 /// Data used for waiting on a tick
@@ -210,17 +266,18 @@ struct WaitData {
 
 /// Structure that tracks global wait data
 struct TickWait {
+    id: UniqueId,
     waiting: UnsafeList<WaitData>,
     tick: u32
 }
 
 impl TickWait {
     const fn new() -> Self {
-        TickWait { waiting: UnsafeList::new(), tick: 0 }
+        TickWait { id: UniqueId::new(), waiting: UnsafeList::new(), tick: 0 }
     }
 
     /// Gets the current tick count
-    fn tick(&self) -> u32 {
+    fn tick(&self, _: &CriticalSection) -> u32 {
         self.tick
     }
 
@@ -228,29 +285,43 @@ impl TickWait {
     fn next_tick(&mut self) {
     }
 
-    /// Schedules the current task to wait.
-    ///
-    /// Warning! This will effectively be called by multiple threads at the
-    /// same time, so a mutable borrow occurs all the time. This should be safe
-    /// because we require a critical section when this is called.
-    unsafe fn wait(&mut self, until_tick: u32, cs: &CriticalSection) {
+    /// Schedules the current task to wait in a interrupt-safe manner
+    fn wait(&'static mut self, until_tick: u32) -> Result<()> {
+        let mut wd = cortex_m::interrupt::free(|cs| {
+            let id = task_id(&cs)?;
+            Ok(WaitData { task_index: id, wake_tick: until_tick })
+        })?;
 
+        let mut node = UnsafeListNode::new(&mut wd);
+
+        cortex_m::interrupt::free(|cs| {
+            unsafe { self.waiting.append(&mut node, &cs) };
+            block(self, &cs)?;
+            Ok(())
+        })?;
+
+        while cortex_m::interrupt::free(|cs| { self.tick(&cs) < until_tick }) {
+            unsafe { switch_context() };
+        }
+
+        cortex_m::interrupt::free(|cs| {
+            unsafe { self.waiting.remove(&mut node, &cs) };
+        });
+
+        Ok(())
     }
 }
 
 impl Block for TickWait {
+    fn id(&self, cs: &CriticalSection) -> Id {
+        self.id.get(cs)
+    }
 }
 
 
 static TICK_WAIT: TickWait = TickWait::new();
 
 /// Causes the current task to block for the passed number of SysTick events
-pub fn wait(ticks: u32) {
-    cortex_m::interrupt::free(|cs| {
-        match block(&TICK_WAIT, cs) {
-            Err(_) => loop { }
-            _ => { }
-        }
-    });
+pub fn wait(until_tick: u32)  {
 }
 

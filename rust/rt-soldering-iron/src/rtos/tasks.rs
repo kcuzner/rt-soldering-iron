@@ -8,7 +8,7 @@ use bare_metal::CriticalSection;
 use cortex_m;
 
 use rtos::Result;
-use rtos::sync::Block;
+use rtos::sync::{Block, Id};
 
 const REGISTER_SIZE: u32 = size_of::<u32>() as u32;
 /// Minimum required stack size in bytes.
@@ -26,7 +26,7 @@ enum TaskState {
     /// The task is ready
     Ready,
     /// The task is blocked on something
-    Blocked(u32),
+    Blocked(Id),
 }
 
 /// Task function type
@@ -120,11 +120,11 @@ impl TaskDescriptor {
     }
 
     /// Blocks this task with the passed Block
-    pub fn block(&mut self, block: &'static Block, _: &CriticalSection) -> Result<()> {
+    pub fn block(&mut self, block: &Block, cs: &CriticalSection) -> Result<()> {
         match self.state {
             TaskState::Invalid => Err(()),
             _ => {
-                self.state = TaskState::Blocked(block.id());
+                self.state = TaskState::Blocked(block.id(cs));
                 Ok(())
             }
         }
@@ -134,8 +134,8 @@ impl TaskDescriptor {
     ///
     /// Returns whether or not the task was transitioned from Blocked(_) to
     /// Ready.
-    pub fn try_unblock(&mut self, block: &'static Block, _: &CriticalSection) -> bool {
-        let block_id = block.id();
+    pub fn try_unblock(&mut self, block: &Block, cs: &CriticalSection) -> bool {
+        let block_id = block.id(cs);
         match self.state {
             TaskState::Blocked(id) => {
                 if id == block_id {
