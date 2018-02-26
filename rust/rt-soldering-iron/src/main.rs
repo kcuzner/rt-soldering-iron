@@ -21,11 +21,12 @@ mod debug;
 static mut TEST_STACK: [u8; 256] = [0; 256];
 
 fn test() {
-    cortex_m::interrupt::free(|cs| {
-        let gpioa = GPIOA.borrow(cs);
-        let rcc = RCC.borrow(cs);
-        let tim1 = TIM1.borrow(cs);
+    let mut peripherals = stm32f031x::Peripherals::take().unwrap();
+    let gpioa = peripherals.GPIOA;
+    let rcc = peripherals.RCC;
+    let tim1 = peripherals.TIM1;
 
+    cortex_m::interrupt::free(|cs| {
         rcc.ahbenr.modify(|_, w| w.iopaen().bit(true));
         rcc.apb2enr.modify(|_, w| w.tim1en().bit(true));
 

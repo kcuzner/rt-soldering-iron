@@ -1,10 +1,10 @@
 [package]
 authors = ["Kevin Cuzner <kevin@kevincuzner.com>"]
 name = "stm32f031x"
-version = "0.1.0"
+version = "0.2.0"
 
 [dependencies]
-cortex-m = "0.3.1"
+cortex-m = "0.4.0"
 bare-metal = "0.1.1"
 vcell = "0.1.0"
 

@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Kevin Cuzner <kevin@kevincuzner.com>"]
 
 [dependencies]
-cortex-m = "0.3.0"
+cortex-m = "0.4.0"
 cortex-m-semihosting = "0.2.0"
 bare-metal = "0.1.0"
 
@@ -15,6 +15,7 @@ version = "0.3.3"
 [dependencies.stm32f031x]
 features = ["rt"]
 path = "../stm32f031x"
+version = "0.2.0"
 
 [profile.release]
 debug = true

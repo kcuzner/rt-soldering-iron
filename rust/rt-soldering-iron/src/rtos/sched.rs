@@ -152,8 +152,8 @@ pub fn run() -> Result<()> {
 /// disabled.
 #[inline(always)]
 pub unsafe fn switch_context() {
-    let scb = cortex_m::peripheral::SCB.get();
-    (*scb).icsr.write(0x10000000);
+    //This is an atomic write and should be safe at all times.
+    (*cortex_m::peripheral::SCB::ptr()).icsr.write(0x10000000);
 }
 
 /// Blocks the current task. Does not request a context switch. The context
