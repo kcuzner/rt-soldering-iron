@@ -14,11 +14,11 @@ version = "0.3.3"
 
 [dependencies.stm32f031x]
 features = ["rt"]
-path = "../stm32f031x"
+path = "./components/stm32f031x"
 version = "0.2.0"
 
 [dependencies.rtos]
-path = "../rtos"
+path = "./components/rtos"
 
 [profile.release]
 debug = true
