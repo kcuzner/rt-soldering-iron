@@ -6,9 +6,9 @@ use core::u32;
 use bare_metal::CriticalSection;
 use cortex_m;
 
-use rtos::Result;
-use rtos::tasks::{TaskFn, TaskDescriptor, MIN_STACK_SIZE};
-use rtos::sync::Block;
+use Result;
+use tasks::{TaskFn, TaskDescriptor, MIN_STACK_SIZE};
+use sync::Block;
 
 /// Maximum task count, excluding the idle task
 pub const MAX_TASKS_COUNT: usize = 4;

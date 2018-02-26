@@ -6,6 +6,7 @@ extern crate cortex_m;
 extern crate cortex_m_rt;
 extern crate bare_metal;
 extern crate stm32f031x;
+extern crate rtos;
 
 use core::u16;
 
@@ -15,7 +16,6 @@ use stm32f031x::{GPIOA, RCC, TIM1};
 pub use rtos::PENDSV;
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
 
-mod rtos;
 mod debug;
 
 static mut TEST_STACK: [u8; 256] = [0; 256];

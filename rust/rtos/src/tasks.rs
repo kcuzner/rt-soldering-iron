@@ -7,8 +7,8 @@ use core::mem::size_of;
 use bare_metal::CriticalSection;
 use cortex_m;
 
-use rtos::Result;
-use rtos::sync::{Block, Id};
+use Result;
+use sync::{Block, Id};
 
 const REGISTER_SIZE: u32 = size_of::<u32>() as u32;
 /// Minimum required stack size in bytes.

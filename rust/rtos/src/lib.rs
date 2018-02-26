@@ -28,11 +28,15 @@
 //! lifetime. Proper use of `Cell` and `cortex_m::interrupt::free` should allow
 //! `static mut` to be avoided.
 
+#![no_std]
+#![feature(used, const_fn, asm, naked_functions, const_size_of, const_unsafe_cell_new, const_ptr_null_mut)]
+
+extern crate cortex_m;
+extern crate bare_metal;
+
 mod tasks;
 mod sched;
 pub mod sync;
-
-use core;
 
 pub use self::sched::{add_task, run, PENDSV};
 

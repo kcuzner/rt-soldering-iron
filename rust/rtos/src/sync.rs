@@ -11,8 +11,8 @@ use core::ptr;
 use cortex_m;
 use bare_metal::CriticalSection;
 
-use rtos::Result;
-use rtos::sched::{block, unblock, switch_context, task_id};
+use Result;
+use sched::{block, unblock, switch_context, task_id};
 
 static mut CURRENT_BLOCK_ID: u32 = 0;
 
