@@ -1,4 +1,6 @@
-#![feature(used, const_fn, asm, naked_functions, const_size_of, const_unsafe_cell_new, const_ptr_null_mut)]
+//! Firmware for the rt soldering iron
+
+#![feature(used, const_fn, asm, naked_functions, const_size_of, const_unsafe_cell_new, const_ptr_null_mut, never_type)]
 #![no_std]
 
 extern crate cortex_m;
@@ -6,65 +8,50 @@ extern crate cortex_m;
 extern crate cortex_m_rt;
 extern crate bare_metal;
 extern crate stm32f031x;
-extern crate rtos;
+extern crate stm32f031x_hal;
+extern crate nb;
 
 use core::u16;
 
 use cortex_m::asm;
 use stm32f031x::{GPIOA, RCC, TIM1};
+use stm32f031x_hal::rcc::RccExt;
+use stm32f031x_hal::time::{U32Ext};
+use stm32f031x_hal::flash::{FlashExt};
 
-pub use rtos::PENDSV;
+pub use board::{SYS_TICK, TIM1_BRK_UP_IRQ};
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
 
+mod board;
 mod debug;
 
 static mut TEST_STACK: [u8; 256] = [0; 256];
 
 fn test() {
+    let mut core_peripherals = stm32f031x::CorePeripherals::take().unwrap();
     let mut peripherals = stm32f031x::Peripherals::take().unwrap();
+    let mut nvic = core_peripherals.NVIC;
     let gpioa = peripherals.GPIOA;
-    let rcc = peripherals.RCC;
+    let mut rcc = peripherals.RCC.constrain();
+    let mut flash = peripherals.FLASH.constrain();
     let tim1 = peripherals.TIM1;
 
-    cortex_m::interrupt::free(|cs| {
-        rcc.ahbenr.modify(|_, w| w.iopaen().bit(true));
-        rcc.apb2enr.modify(|_, w| w.tim1en().bit(true));
+    rcc.cfgr = rcc.cfgr.sysclk(8.mhz())
+        .hclk(8.mhz())
+        .pclk(8.mhz());
+    let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-        tim1.psc.write(|w| unsafe { w.psc().bits(0) });
-        tim1.ccmr1_output.modify(|_, w| unsafe {
-            w.oc1m().bits(0b110).oc1pe().bit(true)
-        });
-        tim1.ccer.modify(|_, w| w.cc1e().bit(true));
-        tim1.bdtr.modify(|_, w| w.moe().bit(true));
-        tim1.arr.write(|w| unsafe { w.arr().bits(8000) });
-        tim1.ccr1.write(|w| unsafe { w.ccr1().bits(4000) });
+    let buzzer = board::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic);
+    rcc.ahb.enr().modify(|_, w| w.iopaen().bit(true));
+    gpioa.afrh.modify(|_, w| unsafe { w.afrh8().bits(0b0010) });
+    gpioa.moder.modify(|_, w| { w.moder8().alternate() });
 
-        gpioa.afrh.modify(|_, w| unsafe { w.afrh8().bits(0b0010) });
-        gpioa.moder.modify(|_, w| { w.moder8().alternate() });
-
-        tim1.cr1.modify(|_, w| w.cen().bit(true));
-        tim1.egr.write(|w| w.ug().bit(true));
-    });
-    loop {
-        rtos::sync::wait(100);
-        /*cortex_m::interrupt::free(|cs| {
-            let tim1 = TIM1.borrow(cs);
-
-            let max = tim1.arr.read();
-            tim1.ccr1.modify(|v, w| {  });
-        });*/
-    }
-}
-
-fn startup() -> Result<(), ()> {
-    rtos::add_task(test, unsafe{ &TEST_STACK[..] })?;
-    rtos::run()
+    buzzer.beep(100, 1000);
+    loop { }
 }
 
 fn main() {
-    match startup() {
-        _ => loop {}
-    }
+    test()
 }
 
 // As we are not using interrupts, we just register a dummy catch all handler
