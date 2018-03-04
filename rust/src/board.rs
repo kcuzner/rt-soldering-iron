@@ -5,7 +5,12 @@ use cortex_m;
 
 use stm32f031x;
 use stm32f031x::{RCC, TIM1, NVIC};
-use stm32f031x_hal::rcc::APB2;
+use stm32f031x_hal::rcc::{APB2, Clocks};
+use stm32f031x_hal::pwm::{PwmExt, pwm1};
+use stm32f031x_hal::gpio::gpioa;
+use stm32f031x_hal::time::Hertz;
+
+use embedded_hal::PwmPin;
 
 static mut TICK_COUNT: u32 = 0;
 
@@ -29,7 +34,8 @@ pub fn wait_until(tick: u32) -> nb::Result<u32, !> {
 static mut BUZZER_COUNTDOWN: u32 = 0;
 
 pub struct Buzzer {
-    tim: TIM1
+    pwm: pwm1::Parts,
+    ch1: pwm1::CH1,
 }
 
 impl Buzzer {
@@ -37,32 +43,30 @@ impl Buzzer {
     ///
     /// This requires that TIM1 be moved in here. This enfoces that there can
     /// only ever be one Buzzer at a time.
-    pub fn new(tim: TIM1, apb2: &mut APB2, nvic: &mut NVIC) -> Self {
-        apb2.enr().modify(|_, w| w.tim1en().bit(true));
-        tim.psc.write(|w| unsafe { w.psc().bits(0) });
-        tim.ccmr1_output.modify(|_, w| unsafe {
-            w.oc1m().bits(0b110).oc1pe().bit(true)
-        });
-        tim.ccer.modify(|_, w| w.cc1e().bit(true));
-        tim.bdtr.modify(|_, w| w.moe().bit(true));
-        tim.dier.modify(|_, w| w.uie().bit(true));
+    pub fn new<Mode>(tim: TIM1, apb2: &mut APB2, nvic: &mut NVIC, pa8: gpioa::PA8<Mode>, gpioa: &mut gpioa::Regs) -> Self {
+        let mut pwm = tim.constrain_pwm(apb2);
+        let mut ch1 = pwm.ch1(pa8, gpioa);
+        ch1.enable();
+        pwm.dier().modify(|_, w| w.uie().bit(true));
 
         nvic.enable(stm32f031x::Interrupt::TIM1_BRK_UP_IRQ);
-        Buzzer { tim: tim }
+        Buzzer { pwm: pwm, ch1: ch1 }
     }
 
     /// Beeps the buzzer
-    pub fn beep(&self, ms: u16, freq: u16) {
+    pub fn beep<T>(&mut self, ms: u16, freq: T, clocks: Clocks)
+    where T: Into<Hertz> + Clone
+    {
         cortex_m::interrupt::free(|_| {
-            let period = (8000000 / freq as u32) as u16;
-            self.tim.arr.write(|w| unsafe { w.arr().bits(period) });
-            self.tim.ccr1.write(|w| unsafe { w.ccr1().bits(period/2) });
-            self.tim.cr1.modify(|_, w| w.cen().bit(true));
-            self.tim.egr.write(|w| w.ug().bit(true));
+            self.pwm.set_period(clocks, freq.clone());
+            let max_duty = self.ch1.get_max_duty();
+            self.ch1.set_duty(max_duty / 2);
+            self.pwm.enable();
+            self.pwm.commit();
 
             //This mutable static access is ok because do it during a critical
             //section.
-            unsafe { BUZZER_COUNTDOWN = (ms as u32) * (freq as u32) / 1000 };
+            unsafe { BUZZER_COUNTDOWN = (ms as u32) * (freq.into().0) / 1000 };
         });
     }
 }
@@ -74,6 +78,7 @@ impl Buzzer {
 pub extern "C" fn TIM1_BRK_UP_IRQ() {
     if unsafe { (*TIM1::ptr()).sr.read().uif().bit_is_set() } {
         if unsafe { BUZZER_COUNTDOWN == 0 } {
+            // Safe because all other accesses to cr1 occur in a critical section
             unsafe { (*TIM1::ptr()).cr1.modify(|_, w| w.cen().bit(false)) };
         }
         else {

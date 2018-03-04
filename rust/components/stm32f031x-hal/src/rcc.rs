@@ -154,11 +154,6 @@ impl CFGR {
             .unwrap_or(0b011);
 
         let pclk = hclk / (1 << (ppre_bits - 0b011));
-        let timclk = if ppre_bits == 0b011 {
-            pclk
-        } else {
-            pclk * 2
-        };
 
         assert!(pclk < 48000000);
 
@@ -197,18 +192,38 @@ impl CFGR {
         Clocks {
             hclk: hclk.hz(),
             pclk: pclk.hz(),
-            timclk: timclk.hz(),
             sysclk: sysclk.hz(),
+            ppre: ppre_bits,
         }
     }
 }
 
 /// Frozen clock speeds. The presence of this struct indicates that the clock state can no longer
 /// be changed
+#[derive(Copy, Clone)]
 pub struct Clocks {
     hclk: Hertz,
     pclk: Hertz,
-    timclk: Hertz,
-    sysclk: Hertz
+    sysclk: Hertz,
+    ppre: u8
 }
+
+impl Clocks {
+    pub fn hclk(&self) -> Hertz {
+        self.hclk
+    }
+
+    pub fn pclk(&self) -> Hertz {
+        self.pclk
+    }
+
+    pub fn sysclk(&self) -> Hertz {
+        self.sysclk
+    }
+
+    pub(crate) fn ppre(&self) -> u8 {
+        self.ppre
+    }
+}
+
 

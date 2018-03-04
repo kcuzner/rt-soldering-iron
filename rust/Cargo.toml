@@ -21,6 +21,10 @@ version = "0.2.0"
 [dependencies.stm32f031x-hal]
 path = "./components/stm32f031x-hal"
 
+[dependencies.embedded-hal]
+features = ["unproven"]
+version = "0.1.0"
+
 [dependencies.rtos]
 path = "./components/rtos"
 

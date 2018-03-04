@@ -7,6 +7,7 @@ extern crate cortex_m;
 #[macro_use]
 extern crate cortex_m_rt;
 extern crate bare_metal;
+extern crate embedded_hal;
 extern crate stm32f031x;
 extern crate stm32f031x_hal;
 extern crate nb;
@@ -18,6 +19,7 @@ use stm32f031x::{GPIOA, RCC, TIM1};
 use stm32f031x_hal::rcc::RccExt;
 use stm32f031x_hal::time::{U32Ext};
 use stm32f031x_hal::flash::{FlashExt};
+use stm32f031x_hal::gpio::GpioExt;
 
 pub use board::{SYS_TICK, TIM1_BRK_UP_IRQ};
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
@@ -31,8 +33,8 @@ fn test() {
     let mut core_peripherals = stm32f031x::CorePeripherals::take().unwrap();
     let mut peripherals = stm32f031x::Peripherals::take().unwrap();
     let mut nvic = core_peripherals.NVIC;
-    let gpioa = peripherals.GPIOA;
     let mut rcc = peripherals.RCC.constrain();
+    let mut gpioa = peripherals.GPIOA.split(&mut rcc.ahb);
     let mut flash = peripherals.FLASH.constrain();
     let tim1 = peripherals.TIM1;
 
@@ -41,12 +43,12 @@ fn test() {
         .pclk(8.mhz());
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-    let buzzer = board::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic);
-    rcc.ahb.enr().modify(|_, w| w.iopaen().bit(true));
+    let mut buzzer = board::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
+    /*rcc.ahb.enr().modify(|_, w| w.iopaen().bit(true));
     gpioa.afrh.modify(|_, w| unsafe { w.afrh8().bits(0b0010) });
-    gpioa.moder.modify(|_, w| { w.moder8().alternate() });
+    gpioa.moder.modify(|_, w| { w.moder8().alternate() });*/
 
-    buzzer.beep(100, 1000);
+    buzzer.beep(100, 1000.hz(), clocks.clone());
     loop { }
 }
 

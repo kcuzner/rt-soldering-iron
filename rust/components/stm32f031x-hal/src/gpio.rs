@@ -243,7 +243,7 @@ macro_rules! gpio {
                         else {
                             let offset = (4 * ($i - 8)) % 32;
                             (*$GPIOX::ptr())
-                                .afrl.modify(|r, w| { w.bits((r.bits() & !(0b1111 << offset)) | (alternate_function << offset)) });
+                                .afrh.modify(|r, w| { w.bits((r.bits() & !(0b1111 << offset)) | (alternate_function << offset)) });
                         }
 
                         $PXi { _mode: PhantomData }
