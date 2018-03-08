@@ -44,9 +44,6 @@ fn test() {
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
     let mut buzzer = board::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
-    /*rcc.ahb.enr().modify(|_, w| w.iopaen().bit(true));
-    gpioa.afrh.modify(|_, w| unsafe { w.afrh8().bits(0b0010) });
-    gpioa.moder.modify(|_, w| { w.moder8().alternate() });*/
 
     buzzer.beep(100, 1000.hz(), clocks.clone());
     loop { }

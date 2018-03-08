@@ -33,9 +33,37 @@ pub struct Output<Mode> {
     _mode: PhantomData<Mode>,
 }
 
-/// Alternate function mode
-pub struct Alternate<Mode> {
-    _mode: PhantomData<Mode>,
+/// Alternate function 0
+pub struct AF0<Mode> {
+    _mode: PhantomData<Mode>
+}
+/// Alternate function 1
+pub struct AF1<Mode> {
+    _mode: PhantomData<Mode>
+}
+/// Alternate function 2
+pub struct AF2<Mode> {
+    _mode: PhantomData<Mode>
+}
+/// Alternate function 3
+pub struct AF3<Mode> {
+    _mode: PhantomData<Mode>
+}
+/// Alternate function 4
+pub struct AF4<Mode> {
+    _mode: PhantomData<Mode>
+}
+/// Alternate function 5
+pub struct AF5<Mode> {
+    _mode: PhantomData<Mode>
+}
+/// Alternate function 6
+pub struct AF6<Mode> {
+    _mode: PhantomData<Mode>
+}
+/// Alternate function 7
+pub struct AF7<Mode> {
+    _mode: PhantomData<Mode>
 }
 
 /// Push-Pull mode
@@ -44,20 +72,19 @@ pub struct PushPull;
 /// Open-Drain mode
 pub struct OpenDrain;
 
-/// Alternate function enumeration
-pub enum AlternateFunction {
-    AF0,
-    AF1,
-    AF2,
-    AF3,
-    AF4,
-    AF5,
-    AF6,
-    AF7
+pub(crate) trait IntoAlternate<Mode> {
+    type Regs;
+    type Output;
+    fn into_alternate(self, regs: &mut Self::Regs) -> Self::Output;
 }
 
 /// Analog mode
 pub struct Analog;
+
+/// Alternate function used for configuration of pins
+enum AlternateFunction {
+    AF0, AF1, AF2, AF3, AF4, AF5, AF6, AF7
+}
 
 /// Macro for creating a GPIO abstraction
 ///
@@ -71,7 +98,7 @@ pub struct Analog;
 /// $MODE: Default pin mode
 macro_rules! gpio {
     ($GPIOX:ident, $gpiox:ident, $iopenxr:ident, $PXx: ident, [
-        $($PXi:ident: ($pxi:ident, $i:expr, $Mode:ty),)+
+        $($PXi:ident: ($pxi:ident, $i:expr, $Mode:ty, [$($AFn:ident,)*]),)+
     ]) => {
         /// GPIO
         pub mod $gpiox {
@@ -82,7 +109,8 @@ macro_rules! gpio {
             use super::{
                 GpioExt,
                 Input, Floating, PullUp, PullDown,
-                Output, Alternate, PushPull, OpenDrain, AlternateFunction,
+                Output, PushPull, OpenDrain,
+                IntoAlternate, AlternateFunction,
                 Analog
             };
 
@@ -190,11 +218,10 @@ macro_rules! gpio {
                     /// Configures the pin into alternate mode with a push pull driver
                     ///
                     /// This is unsafe because it does no checking on which alternate function is
-                    /// selected and whether that is valid for this particular pin. It is intended
-                    /// that this will be used by another HAL module to implement a pin-specific
-                    /// trait to change the pin.
+                    /// selected and whether that is valid for this particular pin.
                     #[allow(dead_code)]
-                    pub(crate) unsafe fn into_alternate_push_pull(self, alt: AlternateFunction, r: &mut Regs) -> $PXi<Alternate<PushPull>> {
+                    unsafe fn into_alternate_push_pull<AF>(self, af: AlternateFunction, r: &mut Regs) -> $PXi<AF>
+                    {
                         let offset = (2 * $i) % 32;
                         // The following read-writes are data race safe because we have locked Regs and there
                         // is only ever one.
@@ -202,17 +229,16 @@ macro_rules! gpio {
                             .moder.modify(|r, w| { w.bits((r.bits() & !(0b11 << offset)) | (0b10 << offset)) });
                         (*$GPIOX::ptr())
                             .otyper.modify(|r, w| { w.bits(r.bits() & !(0b1 << ($i % 32))) });
-                        self.into_alternate_impl(alt, r)
+                        self.into_alternate_impl(af, r)
                     }
 
                     /// Configures the pin into alternate mode with an open-drain driver
                     ///
                     /// This is unsafe because it does no checking on which alternate function is
-                    /// selected and whether that is valid for this particular pin. It is intended
-                    /// that this will be used by another HAL module to implement a pin-specific
-                    /// trait to change the pin.
+                    /// selected and whether that is valid for this particular pin.
                     #[allow(dead_code)]
-                    pub(crate) unsafe fn into_alternate_open_drain(self, alt: AlternateFunction, r: &mut Regs) -> $PXi<Alternate<OpenDrain>> {
+                    unsafe fn into_alternate_open_drain<AF>(self, af: AlternateFunction, r: &mut Regs) -> $PXi<AF>
+                    {
                         let offset = (2 * $i) % 32;
                         // The following read-writes are data race safe because we have locked Regs and there
                         // is only ever one.
@@ -220,12 +246,13 @@ macro_rules! gpio {
                             .moder.modify(|r, w| { w.bits((r.bits() & !(0b11 << offset)) | (0b10 << offset)) });
                         (*$GPIOX::ptr())
                             .otyper.modify(|r, w| { w.bits(r.bits() & !(0b1 << ($i % 32))) });
-                        self.into_alternate_impl(alt, r)
+                        self.into_alternate_impl(af, r)
                     }
 
                     /// Sets the appropriate AFR for this pin
-                    unsafe fn into_alternate_impl<AltMode>(self, alt: AlternateFunction, _: &mut Regs) -> $PXi<Alternate<AltMode>> {
-                        let alternate_function = match alt {
+                    unsafe fn into_alternate_impl<AF>(self, af: AlternateFunction, _: &mut Regs) -> $PXi<AF>
+                    {
+                        let alternate_function = match af {
                             AlternateFunction::AF0 => 0b0000,
                             AlternateFunction::AF1 => 0b0001,
                             AlternateFunction::AF2 => 0b0010,
@@ -266,6 +293,25 @@ macro_rules! gpio {
                     }
                 }
 
+                $(
+                    /// Implements an open drain alternate function
+                    impl<Mode> IntoAlternate<super::$AFn<OpenDrain>> for $PXi<Mode> {
+                        type Regs = Regs;
+                        type Output = $PXi<super::$AFn<OpenDrain>>;
+                        fn into_alternate(self, regs: &mut Regs) -> $PXi<super::$AFn<OpenDrain>> {
+                            unsafe { self.into_alternate_open_drain(AlternateFunction::$AFn, regs) }
+                        }
+                    }
+                    /// Implements a push pull alternate function
+                    impl<Mode> IntoAlternate<super::$AFn<PushPull>> for $PXi<Mode> {
+                        type Regs = Regs;
+                        type Output = $PXi<super::$AFn<PushPull>>;
+                        fn into_alternate(self, regs: &mut Regs) -> $PXi<super::$AFn<PushPull>> {
+                            unsafe { self.into_alternate_push_pull(AlternateFunction::$AFn, regs) }
+                        }
+                    }
+                )*
+
                 impl<Mode> OutputPin for $PXi<Output<Mode>> {
                     fn is_high(&self) -> bool {
                         !self.is_low()
@@ -305,32 +351,32 @@ macro_rules! gpio {
 // This configuration is specifically for the QFN32 package
 
 gpio!(GPIOA, gpioa, iopaen, PAx, [
-      PA0: (pa0, 0, Input<Floating>),
-      PA1: (pa1, 1, Input<Floating>),
-      PA2: (pa2, 2, Input<Floating>),
-      PA3: (pa3, 3, Input<Floating>),
-      PA4: (pa4, 4, Input<Floating>),
-      PA5: (pa5, 5, Input<Floating>),
-      PA6: (pa6, 6, Input<Floating>),
-      PA7: (pa7, 7, Input<Floating>),
-      PA8: (pa8, 8, Input<Floating>),
-      PA9: (pa9, 9, Input<Floating>),
-      PA10: (pa10, 10, Input<Floating>),
-      PA11: (pa11, 11, Input<Floating>),
-      PA12: (pa12, 12, Input<Floating>),
-      PA13: (pa13, 13, Input<Floating>),
-      PA14: (pa14, 14, Input<Floating>),
-      PA15: (pa15, 15, Input<Floating>),
+      PA0: (pa0, 0, Input<Floating>, [AF1, AF2,]),
+      PA1: (pa1, 1, Input<Floating>, [AF0, AF1, AF2,]),
+      PA2: (pa2, 2, Input<Floating>, [AF1, AF2,]),
+      PA3: (pa3, 3, Input<Floating>, [AF1, AF2,]),
+      PA4: (pa4, 4, Input<Floating>, [AF0, AF1, AF4,]),
+      PA5: (pa5, 5, Input<Floating>, [AF0, AF2,]),
+      PA6: (pa6, 6, Input<Floating>, [AF0, AF1, AF2, AF5, AF6,]),
+      PA7: (pa7, 7, Input<Floating>, [AF0, AF1, AF2, AF4, AF5, AF6,]),
+      PA8: (pa8, 8, Input<Floating>, [AF0, AF1, AF2, AF3,]),
+      PA9: (pa9, 9, Input<Floating>, [AF1, AF2, AF4,]),
+      PA10: (pa10, 10, Input<Floating>, [AF0, AF1, AF2, AF4,]),
+      PA11: (pa11, 11, Input<Floating>, [AF0, AF1, AF2,]),
+      PA12: (pa12, 12, Input<Floating>, [AF0, AF1, AF2,]),
+      PA13: (pa13, 13, Input<Floating>, [AF0, AF1,]),
+      PA14: (pa14, 14, Input<Floating>, [AF0, AF1,]),
+      PA15: (pa15, 15, Input<Floating>, [AF0, AF1, AF2, AF3,]),
 ]);
 
 gpio!(GPIOB, gpiob, iopben, PBx, [
-      PB0: (pb0, 0, Input<Floating>),
-      PB1: (pb1, 1, Input<Floating>),
-      PB2: (pb2, 2, Input<Floating>),
-      PB3: (pb3, 3, Input<Floating>),
-      PB4: (pb4, 4, Input<Floating>),
-      PB5: (pb5, 5, Input<Floating>),
-      PB6: (pb6, 6, Input<Floating>),
-      PB7: (pb7, 7, Input<Floating>),
+      PB0: (pb0, 0, Input<Floating>, [AF0, AF1, AF2,]),
+      PB1: (pb1, 1, Input<Floating>, [AF0, AF1, AF2,]),
+      PB2: (pb2, 2, Input<Floating>, []),
+      PB3: (pb3, 3, Input<Floating>, [AF0, AF1, AF2,]),
+      PB4: (pb4, 4, Input<Floating>, [AF0, AF1, AF2,]),
+      PB5: (pb5, 5, Input<Floating>, [AF0, AF1, AF2, AF3,]),
+      PB6: (pb6, 6, Input<Floating>, [AF0, AF1, AF2,]),
+      PB7: (pb7, 7, Input<Floating>, [AF0, AF1, AF2,]),
 ]);
 

@@ -6,7 +6,7 @@ use cortex_m;
 use stm32f031x;
 use stm32f031x::{RCC, TIM1, NVIC};
 use stm32f031x_hal::rcc::{APB2, Clocks};
-use stm32f031x_hal::pwm::{PwmExt, pwm1};
+use stm32f031x_hal::pwm::{PwmExt, IntoPwm, pwm1};
 use stm32f031x_hal::gpio::gpioa;
 use stm32f031x_hal::time::Hertz;
 
@@ -45,7 +45,7 @@ impl Buzzer {
     /// only ever be one Buzzer at a time.
     pub fn new<Mode>(tim: TIM1, apb2: &mut APB2, nvic: &mut NVIC, pa8: gpioa::PA8<Mode>, gpioa: &mut gpioa::Regs) -> Self {
         let mut pwm = tim.constrain_pwm(apb2);
-        let mut ch1 = pwm.ch1(pa8, gpioa);
+        let mut ch1 = pwm.ch1(pa8.into_pwm(gpioa));
         ch1.enable();
         pwm.dier().modify(|_, w| w.uie().bit(true));
 

@@ -2,19 +2,13 @@
 //!
 //! Based on the STM32F103xx HAL
 
-use gpio::{gpioa, Alternate, PushPull, AlternateFunction};
-use gpio::gpioa::PA8;
-
 /// Trait applied to pins that are PWM-capable
-pub trait ConfigurePwm<P, R> {
-    fn map_pwm(self, regs: &mut R) -> P;
-}
+pub trait IntoPwm<ChannelPin> {
+    /// GPIO regs
+    type Regs;
 
-/// Implementation
-impl<Mode> ConfigurePwm<PA8<Alternate<PushPull>>, gpioa::Regs> for PA8<Mode> {
-    fn map_pwm(self, regs: &mut gpioa::Regs) -> PA8<Alternate<PushPull>> {
-        unsafe { self.into_alternate_push_pull(AlternateFunction::AF2, regs) }
-    }
+    /// Switches this pin into the PWM function
+    fn into_pwm(self, regs: &mut Self::Regs) -> ChannelPin;
 }
 
 pub trait PwmExt {
@@ -27,23 +21,24 @@ pub trait PwmExt {
     fn constrain_pwm(self, bus: &mut Self::Bus) -> Self::Parts;
 }
 
+pub unsafe trait ChannelPin<Channel> {
+}
+
 macro_rules! pwm {
     ($TIMX: ident, $timx:ident, $pwmx: ident, $busx:ident, $busxenr:ident, [
-        $($CHi:ident: ($PXi:ident, $name:ident, $gpiox:ident, $af:ident, $ccmrx:ident,
-                       $ccmrxocxm:ident, $ccmrxocxpe:ident, $ccrx:ident, $ccenr:ident),)+
+        $($CHi:ident: ($name:ident, $ccmrx:ident, $ccmrxocxm:ident,
+                       $ccmrxocxpe:ident, $ccrx:ident, $ccenr:ident, [
+                       $($PXi:ident: ($gpiox:ident, $af:ident),)+]),)+
     ]) => {
         pub mod $pwmx {
             use cortex_m;
             use hal::PwmPin;
             use stm32f031x::{$TIMX, $timx};
             use rcc::{$busx, Clocks};
-            use gpio::{Alternate, PushPull, AlternateFunction};
-            $(
-                use gpio::$gpiox;
-                use gpio::$gpiox::$PXi;
-            )+
+            use gpio;
+            use gpio::{PushPull, IntoAlternate};
             use time::Hertz;
-            use super::PwmExt;
+            use super::{PwmExt, IntoPwm, ChannelPin};
 
             impl PwmExt for $TIMX {
                 type Bus = $busx;
@@ -96,13 +91,16 @@ macro_rules! pwm {
                     //TODO: Is this even safe? All of the PWM output frequencies will change
                     let period = (clocks.pclk().0 / freq.into().0) as u16;
                     // This proxy grants exclusive access
-                    unsafe { (*$TIMX::ptr()).psc.write(|w| unsafe { w.psc().bits(0) }) };
-                    unsafe { (*$TIMX::ptr()).arr.write(|w| unsafe { w.arr().bits(period) }) };
+                    unsafe { (*$TIMX::ptr()).psc.write(|w| { w.psc().bits(0) }) };
+                    unsafe { (*$TIMX::ptr()).arr.write(|w| { w.arr().bits(period) }) };
                 }
 
                 $(
                     /// Break out PWM channel with a pin.
-                    pub fn $name<Mode>(&mut self, pin: $PXi<Mode>, regs: &mut $gpiox::Regs) -> $CHi {
+                    pub fn $name<T>(&mut self, pin: T) -> $CHi
+                    where T: ChannelPin<$CHi>
+                    {
+                        //TODO: This will no longer work with multiple pins per channel
                         // This proxy provides exclusive access to $TIMx
                         unsafe { (*$TIMX::ptr()).$ccmrx.modify(|_, w| {
                             w.$ccmrxocxm().bits(0b110).$ccmrxocxpe().bit(true)
@@ -110,7 +108,6 @@ macro_rules! pwm {
 
                         // We trust the macro invoker to have verified this is a valid alternate
                         // function and will do the thing we expect.
-                        unsafe { pin.into_alternate_push_pull(AlternateFunction::$af, regs) };
                         $CHi { _0: () }
                     }
                 )+
@@ -155,12 +152,25 @@ macro_rules! pwm {
                         unsafe { (*$TIMX::ptr()).$ccrx.write(|w| w.$ccrx().bits(duty)) }
                     }
                 }
+
+                $(
+                    unsafe impl<Mode> ChannelPin<$CHi> for gpio::$gpiox::$PXi<gpio::$af<Mode>> {
+                    }
+                    impl<Mode> IntoPwm<gpio::$gpiox::$PXi<gpio::$af<PushPull>>> for gpio::$gpiox::$PXi<Mode> {
+                        type Regs = gpio::$gpiox::Regs;
+                        fn into_pwm(self, regs: &mut gpio::$gpiox::Regs) -> gpio::$gpiox::$PXi<gpio::$af<PushPull>> {
+                            IntoAlternate::<gpio::$af<PushPull>>::into_alternate(self, regs)
+                        }
+                    }
+                )+
             )+
         }
     }
 }
 
 pwm!(TIM1, tim1,  pwm1, APB2, tim1en, [
-     CH1: (PA8, ch1, gpioa, AF2, ccmr1_output, oc1m, oc1pe, ccr1, cc1e),
+     CH1: (ch1, ccmr1_output, oc1m, oc1pe, ccr1, cc1e, [
+           PA8: (gpioa, AF2),
+     ]),
 ]);
 
