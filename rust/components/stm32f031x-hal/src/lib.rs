@@ -12,6 +12,7 @@ pub extern crate stm32f031x;
 pub mod flash;
 pub mod rcc;
 pub mod gpio;
+pub mod i2c;
 pub mod pwm;
 pub mod time;
 
