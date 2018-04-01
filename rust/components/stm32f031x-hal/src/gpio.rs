@@ -72,6 +72,9 @@ pub struct PushPull;
 /// Open-Drain mode
 pub struct OpenDrain;
 
+/// Open-Drain mode with a pullup
+pub struct OpenDrainPullUp;
+
 pub(crate) trait IntoAlternate<Mode> {
     type Regs;
     type Output;
@@ -109,7 +112,7 @@ macro_rules! gpio {
             use super::{
                 GpioExt,
                 Input, Floating, PullUp, PullDown,
-                Output, PushPull, OpenDrain,
+                Output, PushPull, OpenDrain, OpenDrainPullUp,
                 IntoAlternate, AlternateFunction,
                 Analog
             };
@@ -150,69 +153,58 @@ macro_rules! gpio {
                 }
 
                 impl<Mode> $PXi<Mode> {
-                    /// Configures the pin into a push-pull output
-                    pub fn into_output_push_pull(self, _: &mut Regs) -> $PXi<Output<PushPull>> {
+                    /// Configures the pin as passed.
+                    ///
+                    /// Unsafe because no checking of the consistency between ToMode and the passed
+                    /// arguments is perfomed. The purpose of this function is to facilitate DRY.
+                    unsafe fn configure<ToMode>(self, _: &mut Regs, moder: u32, otyper: bool, pupdr: u32) -> $PXi<ToMode> {
                         let offset = (2 * $i) % 32;
-                        // The following read-writes are safe because we have locked Regs and there
-                        // is only ever one.
-                        unsafe { (*$GPIOX::ptr())
-                            .moder.modify(|r, w| { w.bits((r.bits() & !(0b11 << offset)) | (0b01 << offset)) }) };
-                        unsafe { (*$GPIOX::ptr())
-                            .otyper.modify(|r, w| { w.bits(r.bits() & !(0b1 << ($i % 32))) }) };
-
+                        //mask off any unruly bits
+                        let moder = moder & 0x3;
+                        let pupdr = pupdr & 0x3;
+                        (*$GPIOX::ptr())
+                            .moder.modify(|r, w| { w.bits((r.bits() & !(0b11 << offset)) | (moder << offset)) });
+                        if otyper {
+                            (*$GPIOX::ptr())
+                                .otyper.modify(|r, w| { w.bits(r.bits() | (0b1 << ($i % 32))) });
+                        }
+                        else {
+                            (*$GPIOX::ptr())
+                                .otyper.modify(|r, w| { w.bits(r.bits() & !(0b1 << ($i % 32))) });
+                        }
+                        (*$GPIOX::ptr())
+                            .pupdr.modify(|r, w| { w.bits((r.bits() & (!0b11 << offset)) | (pupdr << offset)) });
                         $PXi { _mode: PhantomData }
+                    }
+
+                    /// Configures the pin into a push-pull output
+                    pub fn into_output_push_pull(self, r: &mut Regs) -> $PXi<Output<PushPull>> {
+                        unsafe { self.configure::<Output<PushPull>>(r, 0b01, false, 0) }
                     }
 
                     /// Configures the pin into an open-drain output
-                    pub fn into_output_open_drain(self, _: &mut Regs) -> $PXi<Output<OpenDrain>> {
-                        let offset = (2 * $i) % 32;
-                        // The following read-writes are safe because we have locked Regs and there
-                        // is only ever one.
-                        unsafe { (*$GPIOX::ptr())
-                            .moder.modify(|r, w| { w.bits((r.bits() & !(0b11 << offset)) | (0b01 << offset)) }) };
-                        unsafe { (*$GPIOX::ptr())
-                            .otyper.modify(|r, w| { w.bits(r.bits() | (0b1 << ($i % 32))) }) };
+                    pub fn into_output_open_drain(self, r: &mut Regs) -> $PXi<Output<OpenDrain>> {
+                        unsafe { self.configure::<Output<OpenDrain>>(r, 0b01, true, 0) }
+                    }
 
-                        $PXi { _mode: PhantomData }
+                    /// Configures the pin into an open-drain output with the pullup enabled
+                    pub fn into_output_open_drain_pull_up(self, r: &mut Regs) -> $PXi<Output<OpenDrainPullUp>> {
+                        unsafe { self.configure::<Output<OpenDrainPullUp>>(r, 0b01, true, 0b01) }
                     }
 
                     /// Configures the pin into a floating input
-                    pub fn into_input_floating(self, _: &mut Regs) -> $PXi<Input<Floating>> {
-                        let offset = (2 * $i) % 32;
-                        // The following read-writes are safe because we have locked Regs and there
-                        // is only ever one.
-                        unsafe { (*$GPIOX::ptr())
-                            .moder.modify(|r, w| { w.bits(r.bits() & !(0b11 << offset)) }) };
-                        unsafe { (*$GPIOX::ptr())
-                            .pupdr.modify(|r, w| { w.bits(r.bits() & !(0b11 << offset)) }) };
-
-                        $PXi { _mode: PhantomData }
+                    pub fn into_input_floating(self, r: &mut Regs) -> $PXi<Input<Floating>> {
+                        unsafe { self.configure::<Input<Floating>>(r, 0, false, 0) }
                     }
 
                     /// Configures the pin into a pulled up input
-                    pub fn into_input_pullup(self, _: &mut Regs) -> $PXi<Input<PullUp>> {
-                        let offset = (2 * $i) % 32;
-                        // The following read-writes are safe because we have locked Regs and there
-                        // is only ever one.
-                        unsafe { (*$GPIOX::ptr())
-                            .moder.modify(|r, w| { w.bits(r.bits() & !(0b11 << offset)) }) };
-                        unsafe { (*$GPIOX::ptr())
-                            .pupdr.modify(|r, w| { w.bits((r.bits() & !(0b11 << offset)) | (0b01 << offset)) }) };
-
-                        $PXi { _mode: PhantomData }
+                    pub fn into_input_pullup(self, r: &mut Regs) -> $PXi<Input<PullUp>> {
+                        unsafe { self.configure::<Input<PullUp>>(r, 0, false, 0b01) }
                     }
 
                     /// Configures the pin into a pulled down input
-                    pub fn into_input_pulldown(self, _: &mut Regs) -> $PXi<Input<PullDown>> {
-                        let offset = (2 * $i) % 32;
-                        // The following read-writes are safe because we have locked Regs and there
-                        // is only ever one.
-                        unsafe { (*$GPIOX::ptr())
-                            .moder.modify(|r, w| { w.bits(r.bits() & !(0b11 << offset)) }) };
-                        unsafe { (*$GPIOX::ptr())
-                            .pupdr.modify(|r, w| { w.bits((r.bits() & !(0b11 << offset)) | (0b10 << offset)) }) };
-
-                        $PXi { _mode: PhantomData }
+                    pub fn into_input_pulldown(self, r: &mut Regs) -> $PXi<Input<PullDown>> {
+                        unsafe { self.configure::<Input<PullDown>>(r, 0, false, 0b10) }
                     }
 
                     /// Configures the pin into alternate mode with a push pull driver
@@ -222,14 +214,8 @@ macro_rules! gpio {
                     #[allow(dead_code)]
                     unsafe fn into_alternate_push_pull<AF>(self, af: AlternateFunction, r: &mut Regs) -> $PXi<AF>
                     {
-                        let offset = (2 * $i) % 32;
-                        // The following read-writes are data race safe because we have locked Regs and there
-                        // is only ever one.
-                        (*$GPIOX::ptr())
-                            .moder.modify(|r, w| { w.bits((r.bits() & !(0b11 << offset)) | (0b10 << offset)) });
-                        (*$GPIOX::ptr())
-                            .otyper.modify(|r, w| { w.bits(r.bits() & !(0b1 << ($i % 32))) });
-                        self.into_alternate_impl(af, r)
+                        self.configure::<AF>(r, 0b10, false, 0b00)
+                            .into_alternate_impl(af, r)
                     }
 
                     /// Configures the pin into alternate mode with an open-drain driver
@@ -239,14 +225,8 @@ macro_rules! gpio {
                     #[allow(dead_code)]
                     unsafe fn into_alternate_open_drain<AF>(self, af: AlternateFunction, r: &mut Regs) -> $PXi<AF>
                     {
-                        let offset = (2 * $i) % 32;
-                        // The following read-writes are data race safe because we have locked Regs and there
-                        // is only ever one.
-                        (*$GPIOX::ptr())
-                            .moder.modify(|r, w| { w.bits((r.bits() & !(0b11 << offset)) | (0b10 << offset)) });
-                        (*$GPIOX::ptr())
-                            .otyper.modify(|r, w| { w.bits(r.bits() & !(0b1 << ($i % 32))) });
-                        self.into_alternate_impl(af, r)
+                        self.configure::<AF>(r, 0b10, true, 0b00)
+                            .into_alternate_impl(af, r)
                     }
 
                     /// Sets the appropriate AFR for this pin
@@ -283,13 +263,8 @@ macro_rules! gpio {
                     /// used by another HAL module to implement a pin-specific trait to change the
                     /// pin.
                     #[allow(dead_code)]
-                    pub(crate) unsafe fn into_analog(self, _: &mut Regs) -> $PXi<Analog> {
-                        let offset = (2 * $i) % 32;
-                        // The following read-writes are data race safe because we have locked Regs and there
-                        // is only ever one.
-                        (*$GPIOX::ptr())
-                            .moder.modify(|r, w| { w.bits(r.bits() | (0b11 << offset)) });
-                        $PXi { _mode: PhantomData }
+                    pub(crate) unsafe fn into_analog(self, r: &mut Regs) -> $PXi<Analog> {
+                        self.configure::<Analog>(r, 0b11, false, 0)
                     }
                 }
 
