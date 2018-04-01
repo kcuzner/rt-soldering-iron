@@ -21,7 +21,9 @@ use stm32f031x_hal::rcc::RccExt;
 use stm32f031x_hal::time::{U32Ext};
 use stm32f031x_hal::flash::{FlashExt};
 use stm32f031x_hal::gpio::GpioExt;
-use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, MasterI2c};
+use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting, MasterI2cError};
+
+use embedded_hal::digital::OutputPin;
 
 pub use board::{SYS_TICK, TIM1_BRK_UP_IRQ};
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
@@ -40,9 +42,6 @@ fn test() {
     let mut gpioa = peripherals.GPIOA.split(&mut rcc.ahb);
     let mut gpiob = peripherals.GPIOB.split(&mut rcc.ahb);
     let mut flash = peripherals.FLASH.constrain();
-    let mut i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
-        .bind(gpiob.pb6.into_scl(&mut gpiob.regs), gpiob.pb7.into_sda(&mut gpiob.regs))
-        .master();
     let tim1 = peripherals.TIM1;
 
     rcc.cfgr = rcc.cfgr.sysclk(8.mhz())
@@ -50,14 +49,27 @@ fn test() {
         .pclk(8.mhz());
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
+    let mut reset = gpiob.pb3.into_output_open_drain(&mut gpiob.regs);
+    for i in 0..80100 {
+        reset.set_low();
+    }
+    reset.set_high();
+
+    let mut i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
+        .bind(gpiob.pb6.into_scl(&mut gpiob.regs), gpiob.pb7.into_sda(&mut gpiob.regs))
+        .master(I2cTiming::new(clocks.clone(), I2cTimingSetting::Standard).unwrap());
     let mut buzzer = board::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
     buzzer.beep(100, 1000.hz(), clocks.clone());
 
     let mut addr_fn = move || {
         loop {
-            let mut trans = i2c.begin_write(0x78, &CMD);
-            await!(trans.end_write()).unwrap();
+            let mut trans = i2c.begin_write(0x3C, &CMD);
+            match await!(trans.end_write()) {
+                Ok(_) => {},
+                Err(MasterI2cError::Nack) => buzzer.beep(100, 1000.hz(), clocks.clone()),
+                Err(_) => {},
+            }
             i2c = trans.finish();
         }
     };
