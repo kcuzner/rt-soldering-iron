@@ -1,4 +1,4 @@
-//! Board abstractions for easy use
+//! Buzzer abstraction
 
 use nb;
 use cortex_m;
@@ -11,25 +11,6 @@ use stm32f031x_hal::gpio::gpioa;
 use stm32f031x_hal::time::Hertz;
 
 use embedded_hal::PwmPin;
-
-static mut TICK_COUNT: u32 = 0;
-
-#[no_mangle]
-#[used]
-pub extern "C" fn SYS_TICK() {
-    unsafe { TICK_COUNT += 1; }
-}
-
-pub fn wait_until(tick: u32) -> nb::Result<u32, !> {
-    cortex_m::interrupt::free(|_| unsafe {
-        if TICK_COUNT >= tick {
-            Ok(TICK_COUNT)
-        }
-        else {
-            Err(nb::Error::WouldBlock)
-        }
-    })
-}
 
 static mut BUZZER_COUNTDOWN: u32 = 0;
 

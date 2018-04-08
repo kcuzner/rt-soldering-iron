@@ -25,6 +25,9 @@ path = "./components/stm32f031x-hal"
 features = ["unproven"]
 version = "0.1.0"
 
+[dependencies.board-support]
+path = "./components/board-support"
+
 [dependencies.rtos]
 path = "./components/rtos"
 

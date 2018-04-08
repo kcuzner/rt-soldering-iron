@@ -10,6 +10,7 @@ extern crate bare_metal;
 extern crate embedded_hal;
 extern crate stm32f031x;
 extern crate stm32f031x_hal;
+extern crate board_support;
 #[macro_use(await)]
 extern crate nb;
 
@@ -25,10 +26,9 @@ use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting,
 
 use embedded_hal::digital::OutputPin;
 
-pub use board::{SYS_TICK, TIM1_BRK_UP_IRQ};
+pub use board_support::{TIM1_BRK_UP_IRQ, SYS_TICK};
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
 
-mod board;
 mod debug;
 
 static mut TEST_STACK: [u8; 256] = [0; 256];
@@ -37,6 +37,7 @@ static CMD: [u8; 2] = [0, 0xae];
 fn test() {
     let core_peripherals = stm32f031x::CorePeripherals::take().unwrap();
     let peripherals = stm32f031x::Peripherals::take().unwrap();
+    let mut syst = core_peripherals.SYST;
     let mut nvic = core_peripherals.NVIC;
     let mut rcc = peripherals.RCC.constrain();
     let mut gpioa = peripherals.GPIOA.split(&mut rcc.ahb);
@@ -49,6 +50,8 @@ fn test() {
         .pclk(8.mhz());
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
+    board_support::systick::calibrate(&mut syst, clocks.clone());
+
     let mut reset = gpiob.pb3.into_output_open_drain_pull_up(&mut gpiob.regs);
     for i in 0..80100 {
         reset.set_low();
@@ -58,7 +61,7 @@ fn test() {
     let mut i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
         .bind(gpiob.pb6.into_scl(&mut gpiob.regs), gpiob.pb7.into_sda(&mut gpiob.regs))
         .master(I2cTiming::new(I2cTimingSetting::Fast).unwrap());
-    let mut buzzer = board::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
+    let mut buzzer = board_support::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
     buzzer.beep(100, 1000.hz(), clocks.clone());
 
@@ -73,8 +76,16 @@ fn test() {
             i2c = trans.finish();
         }
     };
+    let mut beep_fn = move || {
+        loop {
+            let now = board_support::systick::now();
+            await!(board_support::systick::wait_until(now + 500)).unwrap();
+            buzzer.beep(100, 1500.hz(), clocks.clone());
+        }
+    };
     loop {
         unsafe { addr_fn.resume() };
+        unsafe { beep_fn.resume() };
     }
 }
 
