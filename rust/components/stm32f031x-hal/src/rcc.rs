@@ -121,7 +121,7 @@ impl CFGR {
 
         let sysclk = pllmul * HSI / 2;
 
-        assert!(sysclk < 48000000);
+        assert!(sysclk <= 48000000);
 
         let hpre_bits = self.hclk
             .map(|hclk| match sysclk / hclk {
@@ -140,7 +140,7 @@ impl CFGR {
 
         let hclk = sysclk / (1 << (hpre_bits - 0b0111));
 
-        assert!(hclk < 48000000);
+        assert!(hclk <= 48000000);
 
         let ppre_bits = self.pclk
             .map(|pclk| match hclk / pclk {
@@ -155,7 +155,7 @@ impl CFGR {
 
         let pclk = hclk / (1 << (ppre_bits - 0b011));
 
-        assert!(pclk < 48000000);
+        assert!(pclk <= 48000000);
 
         //adjust flash wait states
         unsafe {
@@ -223,6 +223,15 @@ impl Clocks {
 
     pub(crate) fn ppre(&self) -> u8 {
         self.ppre
+    }
+
+    pub(crate) fn timclk(&self) -> Hertz {
+        if self.ppre() & 0x3 > 0 {
+            return Hertz(self.pclk().0 * 2);
+        }
+        else {
+            return self.pclk();
+        }
     }
 }
 

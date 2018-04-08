@@ -44,12 +44,12 @@ fn test() {
     let mut flash = peripherals.FLASH.constrain();
     let tim1 = peripherals.TIM1;
 
-    rcc.cfgr = rcc.cfgr.sysclk(8.mhz())
-        .hclk(8.mhz())
+    rcc.cfgr = rcc.cfgr.sysclk(48.mhz())
+        .hclk(48.mhz())
         .pclk(8.mhz());
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-    let mut reset = gpiob.pb3.into_output_open_drain(&mut gpiob.regs);
+    let mut reset = gpiob.pb3.into_output_open_drain_pull_up(&mut gpiob.regs);
     for i in 0..80100 {
         reset.set_low();
     }
@@ -57,7 +57,7 @@ fn test() {
 
     let mut i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
         .bind(gpiob.pb6.into_scl(&mut gpiob.regs), gpiob.pb7.into_sda(&mut gpiob.regs))
-        .master(I2cTiming::new(clocks.clone(), I2cTimingSetting::Standard).unwrap());
+        .master(I2cTiming::new(I2cTimingSetting::Fast).unwrap());
     let mut buzzer = board::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
     buzzer.beep(100, 1000.hz(), clocks.clone());
@@ -67,7 +67,7 @@ fn test() {
             let mut trans = i2c.begin_write(0x3C, &CMD);
             match await!(trans.end_write()) {
                 Ok(_) => {},
-                Err(MasterI2cError::Nack) => buzzer.beep(100, 1000.hz(), clocks.clone()),
+                Err(MasterI2cError::Nack) => {},// buzzer.beep(100, 1000.hz(), clocks.clone()),
                 Err(_) => {},
             }
             i2c = trans.finish();

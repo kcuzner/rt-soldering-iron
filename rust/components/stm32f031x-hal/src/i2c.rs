@@ -151,46 +151,21 @@ impl I2cTiming {
     /// Creates a timing from a predefined value.
     ///
     /// This uses the datasheet-provided presets for various sysclk frequencies.
-    /// Since CFGR3 isn't exposed in this HAL, we assume that sysclk is the
+    /// Since CFGR3 isn't exposed in this HAL, we assume that HSI is the
     /// I2C clock. Based on the passed clocks and the passed timing setting,
     /// this creates an I2cTiming which represents the required settings for
     /// the I2C peripheral to meet that timing.
-    pub fn new(clocks: Clocks, setting: I2cTimingSetting) -> Result<I2cTiming, I2cTimingError> {
-        match clocks.sysclk().0 {
-            8_000_000 => match setting {
-                I2cTimingSetting::Standard => Ok(I2cTiming {
-                    presc: 1, scll: 0x13, sclh: 0xf, sdadel: 0x2, scldel: 0x4,
-                }),
-                I2cTimingSetting::Fast => Ok(I2cTiming {
-                    presc: 0, scll: 0x9, sclh: 0x3, sdadel: 0x1, scldel: 0x3,
-                }),
-                I2cTimingSetting::FastPlus => Ok(I2cTiming {
-                    presc: 0, scll: 0x6, sclh: 3, sdadel: 0x0, scldel: 0x1,
-                }),
-            },
-            16_000_000 => match setting {
-                I2cTimingSetting::Standard => Ok(I2cTiming {
-                    presc: 3, scll: 0x13, sclh: 0xf, sdadel: 0x2, scldel: 0x4,
-                }),
-                I2cTimingSetting::Fast => Ok(I2cTiming {
-                    presc: 1, scll: 0x9, sclh: 0x3, sdadel: 0x2, scldel: 0x3,
-                }),
-                I2cTimingSetting::FastPlus => Ok(I2cTiming {
-                    presc: 0, scll: 0x4, sclh: 0x2, sdadel: 0x0, scldel: 0x2,
-                }),
-            },
-            48_000_000 => match setting {
-                I2cTimingSetting::Standard => Ok(I2cTiming {
-                    presc: 0xb, scll: 0x13, sclh: 0xf, sdadel: 0x2, scldel: 0x4,
-                }),
-                I2cTimingSetting::Fast => Ok(I2cTiming {
-                    presc: 5, scll: 0x9, sclh: 0x3, sdadel: 0x3, scldel: 0x3,
-                }),
-                I2cTimingSetting::FastPlus => Ok(I2cTiming {
-                    presc: 5, scll: 0x3, sclh: 0x1, sdadel: 0x0, scldel: 0x1,
-                }),
-            },
-            _ => Err(I2cTimingError::BadSysclkSetting)
+    pub fn new(setting: I2cTimingSetting) -> Result<I2cTiming, I2cTimingError> {
+        match setting {
+            I2cTimingSetting::Standard => Ok(I2cTiming {
+                presc: 1, scll: 0x13, sclh: 0xf, sdadel: 0x2, scldel: 0x4,
+            }),
+            I2cTimingSetting::Fast => Ok(I2cTiming {
+                presc: 0, scll: 0x9, sclh: 0x3, sdadel: 0x1, scldel: 0x3,
+            }),
+            I2cTimingSetting::FastPlus => Ok(I2cTiming {
+                presc: 0, scll: 0x6, sclh: 3, sdadel: 0x0, scldel: 0x1,
+            }),
         }
     }
 
@@ -310,22 +285,25 @@ impl<'a> MasterWriteTransaction<'a> {
             Err(nb::Error::WouldBlock) => return Err(nb::Error::WouldBlock), 
             Err(nb::Error::Other(e)) => return Err(nb::Error::Other(e)),
             Ok(()) => {
-                unsafe { (*I2C1::ptr()).txdr.write(|w| w.txdata().bits(self.data[self.index])) }
-                self.index += 1;
+                if self.index < self.data.len() {
+                    unsafe { (*I2C1::ptr()).txdr.write(|w| w.txdata().bits(self.data[self.index])) }
+                    self.index += 1;
+                    return Err(nb::Error::WouldBlock);
+                }
+                else if unsafe { (*I2C1::ptr()).isr.read().stopf().bit() } {
+                    return Ok(());
+                }
+                else {
+                    unreachable!();
+                }
             }
-        }
-        if unsafe { (*I2C1::ptr()).isr.read().stopf().bit() } {
-            return Ok(());
-        }
-        else {
-            return Err(nb::Error::WouldBlock);
         }
     }
 
     /// Finishes this transaction, whether or not the write has been completed.
     /// This method must be called in order to perform another transaction.
     pub fn finish(self) -> MasterI2c {
-        unsafe { (*I2C1::ptr()).cr1.write(|w| w) }
+        unsafe { (*I2C1::ptr()).cr1.write(|w| w.bits(0)) }
         MasterI2c { _0: () }
     }
 }

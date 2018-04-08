@@ -89,7 +89,7 @@ macro_rules! pwm {
                 where T: Into<Hertz>
                 {
                     //TODO: Is this even safe? All of the PWM output frequencies will change
-                    let period = (clocks.pclk().0 / freq.into().0) as u16;
+                    let period = (clocks.timclk().0 / freq.into().0) as u16;
                     // This proxy grants exclusive access
                     unsafe { (*$TIMX::ptr()).psc.write(|w| { w.psc().bits(0) }) };
                     unsafe { (*$TIMX::ptr()).arr.write(|w| { w.arr().bits(period) }) };
