@@ -21,3 +21,6 @@ path = "../stm32f031x"
 [dependencies.bare-take-mut]
 path = "../bare-take-mut"
 
+[dependencies.nb-sync]
+path = "../nb-sync"
+
