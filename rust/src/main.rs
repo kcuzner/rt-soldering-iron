@@ -22,7 +22,8 @@ use stm32f031x_hal::rcc::RccExt;
 use stm32f031x_hal::time::{U32Ext};
 use stm32f031x_hal::flash::{FlashExt};
 use stm32f031x_hal::gpio::GpioExt;
-use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting, MasterI2cError};
+use stm32f031x_hal::i2c;
+use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting, MasterI2cError, MasterI2c};
 
 use embedded_hal::digital::OutputPin;
 
@@ -33,6 +34,37 @@ mod debug;
 
 static mut TEST_STACK: [u8; 256] = [0; 256];
 static CMD: [u8; 2] = [0, 0xae];
+
+struct I2cWriteTransaction<'a> {
+    write: i2c::MasterWrite,
+    data: &'a [u8],
+    index: usize
+}
+
+impl<'a> I2cWriteTransaction<'a> {
+    fn new(master: MasterI2c, addr: u8, data: &'a [u8]) -> I2cWriteTransaction<'a> {
+        let write = master.begin_write(addr, data.len() as u8);
+        I2cWriteTransaction { write: write, data: data, index: 0 }
+    }
+    fn end_write(&mut self) -> nb::Result<(), MasterI2cError> {
+        match self.write.write_next(self.data[self.index]) {
+            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
+            Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
+            Ok(result) => match result {
+                i2c::MasterWriteResult::Advance => {
+                    self.index += 1;
+                    Err(nb::Error::WouldBlock)
+                },
+                i2c::MasterWriteResult::Complete => {
+                    Ok(())
+                }
+            }
+        }
+    }
+    fn finish(self) -> MasterI2c {
+        self.write.finish()
+    }
+}
 
 fn test() {
     let core_peripherals = stm32f031x::CorePeripherals::take().unwrap();
@@ -60,32 +92,26 @@ fn test() {
 
     let mut i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
         .bind(gpiob.pb6.into_scl(&mut gpiob.regs), gpiob.pb7.into_sda(&mut gpiob.regs))
-        .master(I2cTiming::new(I2cTimingSetting::Fast).unwrap());
+        .master(I2cTiming::from(I2cTimingSetting::Fast));
     let mut buzzer = board_support::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
     buzzer.beep(100, 1000.hz(), clocks.clone());
 
     let mut addr_fn = move || {
+        let mut now = board_support::systick::now();
         loop {
-            let mut trans = i2c.begin_write(0x3C, &CMD);
+            let mut trans = I2cWriteTransaction::new(i2c, 0x3C, &CMD);
             match await!(trans.end_write()) {
                 Ok(_) => {},
-                Err(MasterI2cError::Nack) => {},// buzzer.beep(100, 1000.hz(), clocks.clone()),
+                Err(MasterI2cError::Nack) => buzzer.beep(100, 1000.hz(), clocks.clone()),
                 Err(_) => {},
             }
             i2c = trans.finish();
-        }
-    };
-    let mut beep_fn = move || {
-        loop {
-            let now = board_support::systick::now();
-            await!(board_support::systick::wait_until(now + 500)).unwrap();
-            buzzer.beep(100, 1500.hz(), clocks.clone());
+            now = await!(board_support::systick::wait_until(now + 1)).unwrap();
         }
     };
     loop {
         unsafe { addr_fn.resume() };
-        unsafe { beep_fn.resume() };
     }
 }
 

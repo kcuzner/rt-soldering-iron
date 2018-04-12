@@ -4,6 +4,8 @@ use stm32f031x::{I2C1, i2c1};
 
 use nb;
 
+use core::convert::From;
+
 use gpio::{gpioa, gpiob, AF1, AF4, OpenDrain, IntoAlternate};
 use gpio::gpioa::{PA9, PA10};
 use gpio::gpiob::{PB6, PB7};
@@ -148,6 +150,18 @@ pub struct I2cTiming {
 }
 
 impl I2cTiming {
+    /// Creates a new I2C timing.
+    ///
+    /// Consider using From<I2cTimingSetting> instead of calling this function
+    /// directly.
+    pub fn new(presc: u8, scll: u8, sclh: u8, sdadel: u8, scldel: u8) -> Self {
+        I2cTiming {
+            presc: presc, scll: scll, sclh: sclh, sdadel: sdadel, scldel: scldel,
+        }
+    }
+}
+
+impl From<I2cTimingSetting> for I2cTiming {
     /// Creates a timing from a predefined value.
     ///
     /// This uses the datasheet-provided presets for various sysclk frequencies.
@@ -155,24 +169,11 @@ impl I2cTiming {
     /// I2C clock. Based on the passed clocks and the passed timing setting,
     /// this creates an I2cTiming which represents the required settings for
     /// the I2C peripheral to meet that timing.
-    pub fn new(setting: I2cTimingSetting) -> Result<I2cTiming, I2cTimingError> {
+    fn from(setting: I2cTimingSetting) -> I2cTiming {
         match setting {
-            I2cTimingSetting::Standard => Ok(I2cTiming {
-                presc: 1, scll: 0x13, sclh: 0xf, sdadel: 0x2, scldel: 0x4,
-            }),
-            I2cTimingSetting::Fast => Ok(I2cTiming {
-                presc: 0, scll: 0x9, sclh: 0x3, sdadel: 0x1, scldel: 0x3,
-            }),
-            I2cTimingSetting::FastPlus => Ok(I2cTiming {
-                presc: 0, scll: 0x6, sclh: 3, sdadel: 0x0, scldel: 0x1,
-            }),
-        }
-    }
-
-    /// Creates some custom timing
-    pub unsafe fn new_custom(presc: u8, scll: u8, sclh: u8, sdadel: u8, scldel: u8) -> Self {
-        I2cTiming {
-            presc: presc, scll: scll, sclh: sclh, sdadel: sdadel, scldel: scldel,
+            I2cTimingSetting::Standard => I2cTiming::new(1, 0x13, 0xf, 0x2, 0x4),
+            I2cTimingSetting::Fast => I2cTiming::new(0, 0x9, 0x3, 0x1, 0x3),
+            I2cTimingSetting::FastPlus => I2cTiming::new(0, 0x6, 3, 0x0, 0x1),
         }
     }
 }
@@ -216,17 +217,10 @@ pub enum MasterI2cError {
     Nack
 }
 
-impl MasterI2cError {
-    /// Recovers the peripheral from an error and prepares it for new transactions
-    pub fn recover(self) -> MasterI2c {
-        MasterI2c { _0: () }
-    }
-}
-
 /// Common function for querying for a mask to appear on the ISR. This is unsafe
 /// because the caller needs to guarantee exclusive access to the I2C peripheral
 /// before calling.
-pub unsafe fn i2c_wait_for_mask<F>(mask_fn: F) -> nb::Result<(), MasterI2cError>
+pub unsafe fn i2c_wait_for_mask<F>(mask_fn: F) -> nb::Result<i2c1::isr::R, MasterI2cError>
 where F: FnOnce(&i2c1::isr::R) -> bool
 {
     let r = (*I2C1::ptr()).isr.read();
@@ -240,7 +234,7 @@ where F: FnOnce(&i2c1::isr::R) -> bool
         return Err(nb::Error::Other(MasterI2cError::Nack));
     }
     else if mask_fn(&r) {
-        return Ok(())
+        return Ok(r)
     }
     return Err(nb::Error::WouldBlock);
 }
@@ -253,45 +247,78 @@ impl MasterI2c {
     /// Begins a write transaction with this peripheral. This consumes the proxy
     /// so that the write transaction is the exclusive operation going on.
     ///
-    /// At the end of the write, the MasterI2c will be re-instantiated.
-    pub fn begin_write<'a>(self, addr: u8, data: &'a [u8]) -> MasterWriteTransaction<'a> {
+    /// The MasterWrite state is advanced by calling its poll() function. The
+    /// result of this function is a "next" struct which consumes the MasterWrite
+    /// and produces a struct for the next state of the transaction.
+    ///
+    /// When poll() produces a MasterWriteResult::Continue, the inner MasterNextWrite
+    /// consumes the existing MasterWrite along with the next byte to send.
+    ///
+    /// When poll() produces a MasterWriteResult::Done, the passed number of bytes
+    /// has been sent and the inner MasterNextDone consumes the MasterWrite
+    /// to re-instantiate the MasterI2c.
+    ///
+    /// At any time, the finish() function on the MasterWrite may be called to
+    /// abort the write and re-instantiate the MasterI2c.
+    pub fn begin_write(self, addr: u8, len: u8) -> MasterWrite {
         unsafe { (*I2C1::ptr()).cr1.write(|w| w.pe().bit(true)) }
         // set up address, register byte, and buffer data
         unsafe { (*I2C1::ptr()).cr2.write(|w| w.autoend().bit(true)
-                                          .nbytes().bits(data.len() as u8)
+                                          .nbytes().bits(len)
                                           .start().bit(true)
                                           .sadd1().bits(addr)) }
         unsafe { (*I2C1::ptr()).isr.write(|w| w.txe().bit(true)) }
-        unsafe { (*I2C1::ptr()).txdr.write(|w| w.txdata().bits(data[0])) }
-        MasterWriteTransaction { data: data, index: 1 }
+        MasterWrite { waiting: false, remaining: len }
     }
 }
 
-pub enum MasterWriteResult<'a> {
-    Continue(MasterWriteTransaction<'a>),
-    Done(MasterI2c)
+/// Ongoing master write transaction
+pub struct MasterWrite {
+    waiting: bool,
+    remaining: u8,
 }
 
-pub struct MasterWriteTransaction<'a> {
-    data: &'a [u8],
-    index: usize,
+/// When polling concludes, this is produced and will determine the valid next
+/// state for the master transaction.
+pub enum MasterWriteResult {
+    /// Advance the data to the next byte
+    Advance,
+    /// The transaction is complete and no further bytes will be accepted.
+    Complete
 }
 
-impl<'a> MasterWriteTransaction<'a> {
-    /// Attempts to end this write. This should be called periodically in order
-    /// to keep the transaction going.
-    pub fn end_write(&mut self) -> nb::Result<(), MasterI2cError> {
-        match unsafe {i2c_wait_for_mask(|r| r.stopf().bit() || r.txis().bit()) } {
-            Err(nb::Error::WouldBlock) => return Err(nb::Error::WouldBlock), 
+impl MasterWrite {
+    /// Writes the next byte.
+    ///
+    /// When this is called for the first time, or the first call after the
+    /// preceding call returns a MasterWriteResult::Advance, this will
+    /// write the passed data to the buffer. At all other times, the passed
+    /// value is ignored.
+    ///
+    /// This function returns MasterWriteResult::Advance when a byte has been
+    /// sent and there are still more bytes to send, according to the arguments
+    /// passed to MasterI2c::begin_write.
+    /// 
+    /// this function returns MasterWriteResult::Complete when there are no
+    /// further bytes to transmit and the transaction has been completed.
+    pub fn write_next(&mut self, data: u8) -> nb::Result<MasterWriteResult, MasterI2cError> {
+        if !self.waiting {
+            // Safe, because this is the exclusive proxy to access I2C1.
+            unsafe { (*I2C1::ptr()).txdr.write(|w| w.txdata().bits(data)) }
+            self.remaining -= 1;
+            self.waiting = true;
+        }
+        // Safe, because this is the exclusive proxy to access I2C1.
+        match unsafe { i2c_wait_for_mask(|r| r.stopf().bit() || r.txis().bit()) } {
+            Err(nb::Error::WouldBlock) => return Err(nb::Error::WouldBlock),
             Err(nb::Error::Other(e)) => return Err(nb::Error::Other(e)),
-            Ok(()) => {
-                if self.index < self.data.len() {
-                    unsafe { (*I2C1::ptr()).txdr.write(|w| w.txdata().bits(self.data[self.index])) }
-                    self.index += 1;
-                    return Err(nb::Error::WouldBlock);
+            Ok(r) => {
+                if r.stopf().bit() {
+                    return Ok(MasterWriteResult::Complete);
                 }
-                else if unsafe { (*I2C1::ptr()).isr.read().stopf().bit() } {
-                    return Ok(());
+                else if self.remaining > 0 {
+                    self.waiting = false;
+                    return Ok(MasterWriteResult::Advance);
                 }
                 else {
                     unreachable!();
@@ -300,8 +327,7 @@ impl<'a> MasterWriteTransaction<'a> {
         }
     }
 
-    /// Finishes this transaction, whether or not the write has been completed.
-    /// This method must be called in order to perform another transaction.
+    /// Completes or aborts this transaction. May be called at any time.
     pub fn finish(self) -> MasterI2c {
         unsafe { (*I2C1::ptr()).cr1.write(|w| w.bits(0)) }
         MasterI2c { _0: () }
