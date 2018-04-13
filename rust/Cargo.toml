@@ -31,6 +31,9 @@ path = "./components/board-support"
 [dependencies.rtos]
 path = "./components/rtos"
 
+[dependencies.bare-take-mut]
+path = "./components/bare-take-mut"
+
 [profile.release]
 debug = true
 lto = true

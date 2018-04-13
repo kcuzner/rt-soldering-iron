@@ -260,21 +260,23 @@ impl MasterI2c {
     ///
     /// At any time, the finish() function on the MasterWrite may be called to
     /// abort the write and re-instantiate the MasterI2c.
+    ///
+    /// addr: 7-bit address
+    /// len: Length of transaction
     pub fn begin_write(self, addr: u8, len: u8) -> MasterWrite {
         unsafe { (*I2C1::ptr()).cr1.write(|w| w.pe().bit(true)) }
         // set up address, register byte, and buffer data
         unsafe { (*I2C1::ptr()).cr2.write(|w| w.autoend().bit(true)
                                           .nbytes().bits(len)
                                           .start().bit(true)
-                                          .sadd1().bits(addr)) }
+                                          .sadd1().bits(addr >> 1)) }
         unsafe { (*I2C1::ptr()).isr.write(|w| w.txe().bit(true)) }
-        MasterWrite { waiting: false, remaining: len }
+        MasterWrite { remaining: len }
     }
 }
 
 /// Ongoing master write transaction
 pub struct MasterWrite {
-    waiting: bool,
     remaining: u8,
 }
 
@@ -282,32 +284,15 @@ pub struct MasterWrite {
 /// state for the master transaction.
 pub enum MasterWriteResult {
     /// Advance the data to the next byte
-    Advance,
-    /// The transaction is complete and no further bytes will be accepted.
-    Complete
+    Advance(MasterWriteAdvance),
+    /// The transaction is complete and no further bytes will be accepted. The
+    /// caller should call MasterWrite::finish
+    Complete,
 }
 
 impl MasterWrite {
-    /// Writes the next byte.
-    ///
-    /// When this is called for the first time, or the first call after the
-    /// preceding call returns a MasterWriteResult::Advance, this will
-    /// write the passed data to the buffer. At all other times, the passed
-    /// value is ignored.
-    ///
-    /// This function returns MasterWriteResult::Advance when a byte has been
-    /// sent and there are still more bytes to send, according to the arguments
-    /// passed to MasterI2c::begin_write.
-    /// 
-    /// this function returns MasterWriteResult::Complete when there are no
-    /// further bytes to transmit and the transaction has been completed.
-    pub fn write_next(&mut self, data: u8) -> nb::Result<MasterWriteResult, MasterI2cError> {
-        if !self.waiting {
-            // Safe, because this is the exclusive proxy to access I2C1.
-            unsafe { (*I2C1::ptr()).txdr.write(|w| w.txdata().bits(data)) }
-            self.remaining -= 1;
-            self.waiting = true;
-        }
+    /// Polls the master to determine the next state of this write
+    pub fn poll(&mut self) -> nb::Result<MasterWriteResult, MasterI2cError> {
         // Safe, because this is the exclusive proxy to access I2C1.
         match unsafe { i2c_wait_for_mask(|r| r.stopf().bit() || r.txis().bit()) } {
             Err(nb::Error::WouldBlock) => return Err(nb::Error::WouldBlock),
@@ -317,8 +302,7 @@ impl MasterWrite {
                     return Ok(MasterWriteResult::Complete);
                 }
                 else if self.remaining > 0 {
-                    self.waiting = false;
-                    return Ok(MasterWriteResult::Advance);
+                    return Ok(MasterWriteResult::Advance(MasterWriteAdvance { _0: () }));
                 }
                 else {
                     unreachable!();
@@ -331,6 +315,18 @@ impl MasterWrite {
     pub fn finish(self) -> MasterI2c {
         unsafe { (*I2C1::ptr()).cr1.write(|w| w.bits(0)) }
         MasterI2c { _0: () }
+    }
+}
+
+pub struct MasterWriteAdvance {
+    _0: ()
+}
+
+impl MasterWriteAdvance {
+    /// Advance the write to the next byte
+    pub fn advance(self, write: MasterWrite, data: u8) -> MasterWrite {
+        unsafe { (*I2C1::ptr()).txdr.write(|w| w.txdata().bits(data)) }
+        MasterWrite { remaining: write.remaining - 1 }
     }
 }
 

@@ -14,6 +14,8 @@ extern crate board_support;
 #[macro_use(await)]
 extern crate nb;
 
+extern crate bare_take_mut as take_mut;
+
 use core::ops::Generator;
 
 use cortex_m::asm;
@@ -47,11 +49,15 @@ impl<'a> I2cWriteTransaction<'a> {
         I2cWriteTransaction { write: write, data: data, index: 0 }
     }
     fn end_write(&mut self) -> nb::Result<(), MasterI2cError> {
-        match self.write.write_next(self.data[self.index]) {
+        match self.write.poll() {
             Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
             Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
             Ok(result) => match result {
-                i2c::MasterWriteResult::Advance => {
+                i2c::MasterWriteResult::Advance(t) => {
+                    let byte = self.data[self.index];
+                    take_mut::take(&mut self.write, move |w| {
+                        t.advance(w, byte)
+                    });
                     self.index += 1;
                     Err(nb::Error::WouldBlock)
                 },
@@ -100,7 +106,7 @@ fn test() {
     let mut addr_fn = move || {
         let mut now = board_support::systick::now();
         loop {
-            let mut trans = I2cWriteTransaction::new(i2c, 0x3C, &CMD);
+            let mut trans = I2cWriteTransaction::new(i2c, 0x78, &CMD);
             match await!(trans.end_write()) {
                 Ok(_) => {},
                 Err(MasterI2cError::Nack) => buzzer.beep(100, 1000.hz(), clocks.clone()),

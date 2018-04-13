@@ -1,0 +1,6 @@
+[package]
+name = "bare-take-mut"
+version = "0.1.0"
+authors = ["Kevin Cuzner <kevin@kevincuzner.com>"]
+
+[dependencies]
