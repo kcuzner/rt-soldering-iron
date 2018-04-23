@@ -302,7 +302,7 @@ impl MasterWrite {
                     return Ok(MasterWriteResult::Complete);
                 }
                 else if self.remaining > 0 {
-                    return Ok(MasterWriteResult::Advance(MasterWriteAdvance { _0: () }));
+                    return Ok(MasterWriteResult::Advance(MasterWriteAdvance::new()));
                 }
                 else {
                     unreachable!();
@@ -323,6 +323,10 @@ pub struct MasterWriteAdvance {
 }
 
 impl MasterWriteAdvance {
+    /// Create a new masterwriteadvance. Only use in this mod.
+    fn new() -> Self {
+        MasterWriteAdvance { _0: () }
+    }
     /// Advance the write to the next byte
     pub fn advance(self, write: MasterWrite, data: u8) -> MasterWrite {
         unsafe { (*I2C1::ptr()).txdr.write(|w| w.txdata().bits(data)) }

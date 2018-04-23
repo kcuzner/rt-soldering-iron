@@ -3,6 +3,7 @@
 #![no_std]
 #![feature(used)]
 
+extern crate bare_take_mut;
 extern crate cortex_m;
 extern crate embedded_hal;
 extern crate stm32f031x_hal;
