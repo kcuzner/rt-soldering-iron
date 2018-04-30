@@ -11,7 +11,7 @@ extern crate stm32f031x;
 extern crate nb;
 
 mod buzzer;
-mod ssd1306;
+pub mod ssd1306;
 pub mod systick;
 
 pub use buzzer::Buzzer;

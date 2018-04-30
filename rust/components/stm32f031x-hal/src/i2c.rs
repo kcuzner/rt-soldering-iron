@@ -343,16 +343,16 @@ impl MasterWriteAdvance {
 ///
 /// Currently, this only supports statics so that we don't accidentally run
 /// into "cannot borrow across yield" errors if we use Generators.
-struct I2cSliceWrite {
+pub struct MasterSliceWrite {
     write: MasterWrite,
     data: &'static [u8],
     index: usize,
 }
 
-impl I2cSliceWrite {
+impl MasterSliceWrite {
     /// Creates a new static write transaction
-    fn new(master: MasterI2c, addr: u8, data: &'static [u8]) -> Self {
-        I2cSliceWrite {
+    pub fn new(master: MasterI2c, addr: u8, data: &'static [u8]) -> Self {
+        MasterSliceWrite {
             write: master.begin_write(addr, data.len() as u8),
             data: data,
             index: 0,
@@ -360,7 +360,7 @@ impl I2cSliceWrite {
     }
 
     /// Nonblocking poll funciton for this write tarnsaction
-    fn poll(&mut self) -> nb::Result<(), MasterI2cError> {
+    pub fn poll(&mut self) -> nb::Result<(), MasterI2cError> {
         match self.write.poll() {
             Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
             Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
@@ -379,7 +379,7 @@ impl I2cSliceWrite {
     }
 
     /// Finishes or aborts this transaction
-    fn finish(self) -> MasterI2c {
+    pub fn finish(self) -> MasterI2c {
         self.write.finish()
     }
 }

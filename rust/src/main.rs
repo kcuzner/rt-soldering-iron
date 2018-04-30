@@ -10,7 +10,7 @@ extern crate bare_metal;
 extern crate embedded_hal;
 extern crate stm32f031x;
 extern crate stm32f031x_hal;
-extern crate board_support;
+extern crate board_support as bs;
 #[macro_use(await)]
 extern crate nb;
 
@@ -29,48 +29,12 @@ use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting,
 
 use embedded_hal::digital::OutputPin;
 
-pub use board_support::{TIM1_BRK_UP_IRQ, SYS_TICK};
+pub use bs::{TIM1_BRK_UP_IRQ, SYS_TICK};
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
 
 mod debug;
 
 static mut TEST_STACK: [u8; 256] = [0; 256];
-static CMD: [u8; 2] = [0, 0xae];
-
-struct I2cWriteTransaction<'a> {
-    write: i2c::MasterWrite,
-    data: &'a [u8],
-    index: usize
-}
-
-impl<'a> I2cWriteTransaction<'a> {
-    fn new(master: MasterI2c, addr: u8, data: &'a [u8]) -> I2cWriteTransaction<'a> {
-        let write = master.begin_write(addr, data.len() as u8);
-        I2cWriteTransaction { write: write, data: data, index: 0 }
-    }
-    fn end_write(&mut self) -> nb::Result<(), MasterI2cError> {
-        match self.write.poll() {
-            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
-            Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
-            Ok(result) => match result {
-                i2c::MasterWriteResult::Advance(t) => {
-                    let byte = self.data[self.index];
-                    take_mut::take(&mut self.write, move |w| {
-                        t.advance(w, byte)
-                    });
-                    self.index += 1;
-                    Err(nb::Error::WouldBlock)
-                },
-                i2c::MasterWriteResult::Complete => {
-                    Ok(())
-                }
-            }
-        }
-    }
-    fn finish(self) -> MasterI2c {
-        self.write.finish()
-    }
-}
 
 fn test() {
     let core_peripherals = stm32f031x::CorePeripherals::take().unwrap();
@@ -88,7 +52,7 @@ fn test() {
         .pclk(8.mhz());
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-    board_support::systick::calibrate(&mut syst, clocks.clone());
+    bs::systick::calibrate(&mut syst, clocks.clone());
 
     let mut reset = gpiob.pb3.into_output_open_drain_pull_up(&mut gpiob.regs);
     for i in 0..80100 {
@@ -99,21 +63,16 @@ fn test() {
     let mut i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
         .bind(gpiob.pb6.into_scl(&mut gpiob.regs), gpiob.pb7.into_sda(&mut gpiob.regs))
         .master(I2cTiming::from(I2cTimingSetting::Fast));
-    let mut buzzer = board_support::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
+    let mut buzzer = bs::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
-    buzzer.beep(100, 1000.hz(), clocks.clone());
 
     let mut addr_fn = move || {
-        let mut now = board_support::systick::now();
+        let mut ssd1306_init = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low).initialize();
+        let mut ssd1306 = await!(ssd1306_init.poll()).unwrap().finish(ssd1306_init);
+        buzzer.beep(100, 1000.hz(), clocks.clone());
+        let mut now = bs::systick::now();
         loop {
-            let mut trans = I2cWriteTransaction::new(i2c, 0x78, &CMD);
-            match await!(trans.end_write()) {
-                Ok(_) => {},
-                Err(MasterI2cError::Nack) => buzzer.beep(100, 1000.hz(), clocks.clone()),
-                Err(_) => {},
-            }
-            i2c = trans.finish();
-            now = await!(board_support::systick::wait_until(now + 1)).unwrap();
+            now = await!(bs::systick::wait_until(now + 1)).unwrap();
         }
     };
     loop {

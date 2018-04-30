@@ -87,8 +87,70 @@ impl From<SSD1306Address> for u8 {
     fn from(addr: SSD1306Address) -> u8 {
         match addr {
             SSD1306Address::Low => 0x78,
-            SSD1306Address::High => 0x79,
+            SSD1306Address::High => 0x7a,
         }
+    }
+}
+
+/// Writes SSD1306 command sequences
+///
+/// The SSD1306 listens to 2-byte command sequences which consist of a 0x00
+/// followed by a single byte specifying a command or an argument for the
+/// previous command. This struct will chunk a passed slice into 2-byte
+/// segments.
+struct CommandWrite {
+    addr: SSD1306Address,
+    write: i2c::MasterSliceWrite,
+    data: &'static [u8],
+    index: usize
+}
+
+impl CommandWrite {
+    /// Creates a new commandwrite. The passed command slice must conform to the
+    /// followinb standards:
+    /// - It must have a length greater than or equal to 2
+    /// - It must have an even length
+    fn new(master: i2c::MasterI2c, address: SSD1306Address, commands: &'static [u8]) -> Self {
+        if commands.len() < 2 || commands.len() % 2 != 0 {
+            panic!();
+        }
+        CommandWrite {
+            addr: address,
+            write: i2c::MasterSliceWrite::new(master, address.into(), &commands[0..2]),
+            data: commands,
+            index: 0+2,
+        }
+    }
+
+    /// Polls this command write to completion
+    fn poll(&mut self) -> nb::Result<(), i2c::MasterI2cError> {
+        match self.write.poll() {
+            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
+            Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
+            Ok(_) => {
+                if self.index < self.data.len() {
+                    let next = &self.data[self.index..(self.index+2)];
+                    let addr: u8 = self.addr.into();
+                    take_mut::take(&mut self.write, |w| {
+                        i2c::MasterSliceWrite::new(w.finish(), addr, next)
+                    });
+                    self.index += 2;
+                    Err(nb::Error::WouldBlock)
+                }
+                else {
+                    Ok(())
+                }
+            }
+        }
+    }
+
+    fn get_addr(&self) -> SSD1306Address {
+        self.addr
+    }
+
+    /// Finishes or aborts this write
+    fn finish(self) -> i2c::MasterI2c {
+        self.write.finish()
     }
 }
 
@@ -121,18 +183,14 @@ impl Uninitialized {
 }
 
 pub struct Initializing {
-    addr: SSD1306Address,
-    write: i2c::MasterWrite,
-    index: usize,
+    write: CommandWrite,
 }
 
 impl Initializing {
     fn new(ui: Uninitialized) -> Self {
         let addr = ui.addr.clone();
         Initializing {
-            addr: ui.addr,
-            write: ui.master.begin_write(addr.into(), INITIALIZATION_COMMANDS.len() as u8),
-            index: 0,
+            write: CommandWrite::new(ui.master, ui.addr, &INITIALIZATION_COMMANDS),
         }
     }
     /// Polling function for waiting for initialization to be complete
@@ -140,17 +198,7 @@ impl Initializing {
         match self.write.poll() {
             Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
             Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
-            Ok(result) => match result {
-                i2c::MasterWriteResult::Advance(t) => {
-                    let byte = INITIALIZATION_COMMANDS[self.index];
-                    take_mut::take(&mut self.write, move |w| {
-                        t.advance(w, byte)
-                    });
-                    self.index += 1;
-                    Err(nb::Error::WouldBlock)
-                },
-                i2c::MasterWriteResult::Complete => Ok(InitializedToken::new()),
-            }
+            Ok(_) => Ok(InitializedToken::new()),
         }
     }
 }
@@ -166,7 +214,7 @@ impl InitializedToken {
         InitializedToken { _0: () }
     }
 
-    fn finish(i: Initializing) -> Display {
+    pub fn finish(self, i: Initializing) -> Display {
         Display::new(i)
     }
 }
@@ -179,11 +227,13 @@ pub enum DisplayError {
 static mut DISPLAY_BUFFER: [u8; 128*32 / 8] = [0; 128*32/8];
 
 pub struct Display {
+    addr: SSD1306Address,
+    i2c: i2c::MasterI2c,
 }
 
 impl Display {
     fn new(i: Initializing) -> Self {
-        Display { }
+        Display { addr: i.write.get_addr(), i2c: i.write.finish() }
     }
 
     /// Clears the display buffer
@@ -194,7 +244,7 @@ impl Display {
 
     /// Sets a single pixel in the buffer on or off
     pub fn set_pixel(&mut self, x: u8, y: u8, on: bool) -> Result<(), DisplayError> {
-        // This is a proxy for DISPLAY_BUFFER
+        // This is a proxy for DISPLAY_BUFFER, so DISPLAY_BUFFER is safe
         let shiftOffset = y % 8;
         match (x, y) {
             (0...127, 0...31) => {
@@ -213,6 +263,7 @@ impl Display {
 
     /// Quickly draws a horizontal line in the buffer
     pub fn hline(&mut self, start_x: u8, start_y: u8, end_x: u8) -> Result<(), DisplayError> {
+        // This is a proxy for DISPLAY_BUFFER, so DISPLAY_BUFFER is safe
         if start_x > end_x {
             return Err(DisplayError::OutOfRange);
         }
@@ -231,6 +282,7 @@ impl Display {
 
     /// Quickly draws a vertical line in the buffer
     pub fn vline(&mut self, start_x: u8, start_y: u8, end_y: u8) -> Result<(), DisplayError> {
+        // This is a proxy for DISPLAY_BUFFER, so DISPLAY_BUFFER is safe
         if start_y > end_y {
             return Err(DisplayError::OutOfRange);
         }
@@ -253,12 +305,81 @@ impl Display {
     }
 }
 
+struct DisplayWriteStart {
+    write: CommandWrite,
+}
+
+impl DisplayWriteStart {
+    /// Start a write of the display contents. This performs the command
+    /// sequence for setting the initial page.
+    fn new(d: Display) -> Self {
+        DisplayWriteStart {
+            write: CommandWrite::new(d.i2c, d.addr, &DISPLAY_COMMANDS),
+        }
+    }
+
+    fn poll(&mut self) -> nb::Result<(), i2c::MasterI2cError> {
+        match self.write.poll() {
+            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
+            Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
+            Ok(_) => Ok(()),
+        }
+    }
+}
+
+struct DisplayWritePage {
+    addr: SSD1306Address,
+    write: i2c::MasterSliceWrite,
+    page: usize,
+}
+
+impl DisplayWritePage {
+    fn new(s: DisplayWriteStart) -> Self {
+        // NOTE: This proxies DISPLAY_BUFFER and so the access is safe
+        let addr = s.write.get_addr();
+        DisplayWritePage {
+            addr: addr,
+            //NOTE: This needs to be fixed: It needs to precede the page with 0x40
+            write: i2c::MasterSliceWrite::new(s.write.finish(), addr.into(), unsafe { &DISPLAY_BUFFER[0..16] }),
+            page: 0,
+        }
+    }
+
+    fn poll(&mut self) -> nb::Result<(), i2c::MasterI2cError> {
+        Err(nb::Error::WouldBlock)
+    }
+}
+
+enum DisplayWriteState {
+    Start(DisplayWriteStart),
+    Page(DisplayWritePage),
+}
+
+impl DisplayWriteState {
+    fn new(d: Display) -> Self {
+        DisplayWriteState::Start(DisplayWriteStart::new(d))
+    }
+
+    fn next(self) -> Self {
+        self
+    }
+
+    /// Polls
+    fn poll(&mut self) -> nb::Result<(), i2c::MasterI2cError> {
+        match self {
+            &mut DisplayWriteState::Start(_) => Err(nb::Error::WouldBlock),
+            &mut DisplayWriteState::Page(ref mut p) => p.poll(),
+        }
+    }
+}
+
 pub struct DisplayWrite {
+    state: DisplayWriteState,
 }
 
 impl DisplayWrite {
     fn new (d: Display) -> Self {
-        DisplayWrite { }
+        DisplayWrite { state: DisplayWriteState::Start(DisplayWriteStart::new(d)) }
     }
 }
 
