@@ -7,6 +7,7 @@
 extern crate cortex_m;
 extern crate embedded_hal as hal;
 extern crate nb;
+extern crate bare_take_mut as take_mut;
 pub extern crate stm32f031x;
 
 pub mod flash;

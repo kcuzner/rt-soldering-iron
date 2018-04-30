@@ -16,3 +16,6 @@ features = ["rt"]
 path = "../stm32f031x"
 version = "0.2.0"
 
+[dependencies.bare-take-mut]
+path = "../bare-take-mut"
+

@@ -5,6 +5,7 @@ use stm32f031x::{I2C1, i2c1};
 use nb;
 
 use core::convert::From;
+use take_mut;
 
 use gpio::{gpioa, gpiob, AF1, AF4, OpenDrain, IntoAlternate};
 use gpio::gpioa::{PA9, PA10};
@@ -271,7 +272,7 @@ impl MasterI2c {
                                           .start().bit(true)
                                           .sadd1().bits(addr >> 1)) }
         unsafe { (*I2C1::ptr()).isr.write(|w| w.txe().bit(true)) }
-        MasterWrite { remaining: len }
+        MasterWrite::new(len)
     }
 }
 
@@ -291,6 +292,10 @@ pub enum MasterWriteResult {
 }
 
 impl MasterWrite {
+    /// Creates a new write state machine
+    fn new(remaining: u8) -> Self {
+        MasterWrite { remaining: remaining }
+    }
     /// Polls the master to determine the next state of this write
     pub fn poll(&mut self) -> nb::Result<MasterWriteResult, MasterI2cError> {
         // Safe, because this is the exclusive proxy to access I2C1.
@@ -331,6 +336,51 @@ impl MasterWriteAdvance {
     pub fn advance(self, write: MasterWrite, data: u8) -> MasterWrite {
         unsafe { (*I2C1::ptr()).txdr.write(|w| w.txdata().bits(data)) }
         MasterWrite { remaining: write.remaining - 1 }
+    }
+}
+
+/// Allows writing of static slices to the I2C peripheral
+///
+/// Currently, this only supports statics so that we don't accidentally run
+/// into "cannot borrow across yield" errors if we use Generators.
+struct I2cSliceWrite {
+    write: MasterWrite,
+    data: &'static [u8],
+    index: usize,
+}
+
+impl I2cSliceWrite {
+    /// Creates a new static write transaction
+    fn new(master: MasterI2c, addr: u8, data: &'static [u8]) -> Self {
+        I2cSliceWrite {
+            write: master.begin_write(addr, data.len() as u8),
+            data: data,
+            index: 0,
+        }
+    }
+
+    /// Nonblocking poll funciton for this write tarnsaction
+    fn poll(&mut self) -> nb::Result<(), MasterI2cError> {
+        match self.write.poll() {
+            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
+            Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
+            Ok(r) => match r {
+                MasterWriteResult::Complete => Ok(()),
+                MasterWriteResult::Advance(t) => {
+                    let byte = self.data[self.index];
+                    take_mut::take(&mut self.write, |w| {
+                        t.advance(w, byte)
+                    });
+                    self.index += 1;
+                    Err(nb::Error::WouldBlock)
+                }
+            }
+        }
+    }
+
+    /// Finishes or aborts this transaction
+    fn finish(self) -> MasterI2c {
+        self.write.finish()
     }
 }
 
