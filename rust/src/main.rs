@@ -72,14 +72,20 @@ fn test() {
         buzzer.beep(100, 1000.hz(), clocks.clone());
         let mut now = bs::systick::now();
         let mut y = 0;
+        let mut x = 0;
         loop {
             now = await!(bs::systick::wait_until(now + 100)).unwrap();
             let mut display = await!(display_write.poll()).unwrap().finish(display_write);
             display.clear();
-            display.hline(10, y, 127).unwrap();
+            display.hline(0, y, 127).unwrap();
+            display.vline(x, 0, 31).unwrap();
             y += 1;
             if y >= 32 {
                 y = 0;
+            }
+            x += 1;
+            if x >= 128 {
+                x = 0;
             }
             display_write = display.commit();
         }

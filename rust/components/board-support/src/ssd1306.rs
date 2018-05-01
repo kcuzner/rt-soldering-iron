@@ -12,7 +12,7 @@ use stm32f031x_hal::i2c;
 // where I could ensure that the right arguments only were sent and
 // that they were properly formatted. However, I realized that this
 // would take up far more code space than some blobs. Therefore,
-// the command sequences for initializing the display and 
+// the command sequences for initializing the display and
 // transferring a page to be displayed are represented as binary blobs.
 
 const CMD_SET_CONTRAST: u8 = 0x81;
@@ -314,7 +314,7 @@ impl Display {
     }
 
     /// Sets a single pixel in the buffer on or off
-    pub fn set_pixel(&mut self, x: u8, y: u8, on: bool) -> Result<(), DisplayError> {
+    pub fn set_pixel(&mut self, x: usize, y: usize, on: bool) -> Result<(), DisplayError> {
         // This is a proxy for DISPLAY_BUFFER, so DISPLAY_BUFFER is safe
         let shiftOffset = y % 8;
         match (x, y) {
@@ -333,7 +333,7 @@ impl Display {
     }
 
     /// Quickly draws a horizontal line in the buffer
-    pub fn hline(&mut self, start_x: u8, start_y: u8, end_x: u8) -> Result<(), DisplayError> {
+    pub fn hline(&mut self, start_x: usize, start_y: usize, end_x: usize) -> Result<(), DisplayError> {
         // This is a proxy for DISPLAY_BUFFER, so DISPLAY_BUFFER is safe
         if start_x > end_x {
             return Err(DisplayError::OutOfRange);
@@ -342,7 +342,7 @@ impl Display {
             (0...127, 0...31, 0...127) => {
                 let mask = 1 << (start_y % 8);
                 for x in 0..(end_x - start_x) {
-                    let index = (start_y/8*128 + start_x + x) as usize;
+                    let index = start_y/8*128 + start_x + x;
                     unsafe { DISPLAY_BUFFER[index] |= mask };
                 }
                 Ok(())
@@ -352,7 +352,7 @@ impl Display {
     }
 
     /// Quickly draws a vertical line in the buffer
-    pub fn vline(&mut self, start_x: u8, start_y: u8, end_y: u8) -> Result<(), DisplayError> {
+    pub fn vline(&mut self, start_x: usize, start_y: usize, end_y: usize) -> Result<(), DisplayError> {
         // This is a proxy for DISPLAY_BUFFER, so DISPLAY_BUFFER is safe
         if start_y > end_y {
             return Err(DisplayError::OutOfRange);
@@ -361,7 +361,7 @@ impl Display {
             (0...127, 0...31, 0...127) => {
                 for y in 0..(end_y - start_y) {
                     let mask = 0xFF >> y % 8;
-                    let index = ((start_y+y)/8*128 + start_x) as usize;
+                    let index = (start_y+y)/8*128 + start_x;
                     unsafe { DISPLAY_BUFFER[index] |= mask };
                 }
                 Ok(())
