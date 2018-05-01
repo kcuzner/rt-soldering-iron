@@ -140,10 +140,81 @@ impl CommandWrite {
                 else {
                     Ok(())
                 }
-            }
+            },
         }
     }
 
+    /// Gets the address of this command
+    ///
+    /// Ugh my API is so inconsistent...
+    fn get_addr(&self) -> SSD1306Address {
+        self.addr
+    }
+
+    /// Finishes or aborts this write
+    fn finish(self) -> i2c::MasterI2c {
+        self.write.finish()
+    }
+}
+
+/// Writes buffer pages
+///
+/// A page is written to the device by sending 0x40 followed by the 16 bytes
+/// comprising the page. In order to avoid a copy, this will operate directly
+/// on the DISPLAY_BUFFER and prepend 0x40 as the MasterWrite requests the
+/// first byte.
+struct PageWrite {
+    addr: SSD1306Address,
+    write: i2c::MasterWrite,
+    data: &'static [u8],
+    index: Option<usize>,
+}
+
+impl PageWrite {
+    /// Creates a new pagewrite. The passed page is the page number to write
+    fn new(master: i2c::MasterI2c, address: SSD1306Address, page: usize) -> Self {
+        /// Since there is only one MasterI2c, this functions as a proxy for DISPLAY_BUFFER
+        let index = page*16;
+        PageWrite {
+            addr: address,
+            write: master.begin_write(address.into(), 17), //all page writes have 17 bytes
+            data: unsafe { &DISPLAY_BUFFER[index..(index+16)] },
+            index: None,
+        }
+    }
+
+    /// Polls this page write to completion
+    fn poll(&mut self) -> nb::Result<(), i2c::MasterI2cError> {
+        match self.write.poll() {
+            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
+            Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
+            Ok(r) => match r {
+                i2c::MasterWriteResult::Complete => Ok(()),
+                i2c::MasterWriteResult::Advance(t) => {
+                    match self.index {
+                        None => {
+                            take_mut::take(&mut self.write, |w| {
+                                t.advance(w, 0x40)
+                            });
+                            self.index = Some(0);
+                        },
+                        Some(i) => {
+                            let byte = self.data[i];
+                            take_mut::take(&mut self.write, |w| {
+                                t.advance(w, byte)
+                            });
+                            self.index = Some(i + 1);
+                        },
+                    };
+                    Err(nb::Error::WouldBlock)
+                }
+            },
+        }
+    }
+
+    /// Gets the address of this command
+    ///
+    /// Ugh my API is so inconsistent...
     fn get_addr(&self) -> SSD1306Address {
         self.addr
     }
@@ -214,8 +285,8 @@ impl InitializedToken {
         InitializedToken { _0: () }
     }
 
-    pub fn finish(self, i: Initializing) -> Display {
-        Display::new(i)
+    pub fn commit(self, i: Initializing) -> DisplayWrite {
+        DisplayWrite::new_init(i)
     }
 }
 
@@ -232,8 +303,8 @@ pub struct Display {
 }
 
 impl Display {
-    fn new(i: Initializing) -> Self {
-        Display { addr: i.write.get_addr(), i2c: i.write.finish() }
+    fn new(dw: DisplayWrite) -> Self {
+        Display { addr: dw.write.get_addr(), i2c: dw.write.finish() }
     }
 
     /// Clears the display buffer
@@ -305,11 +376,20 @@ impl Display {
     }
 }
 
+/// Writes the start command sequence for a display write
 struct DisplayWriteStart {
     write: CommandWrite,
 }
 
 impl DisplayWriteStart {
+    /// Start a write of the display contents for the first time.
+    fn new_init(i: Initializing) -> Self {
+        let addr = i.write.get_addr();
+        DisplayWriteStart {
+            write: CommandWrite::new(i.write.finish(), addr, &DISPLAY_COMMANDS),
+        }
+    }
+
     /// Start a write of the display contents. This performs the command
     /// sequence for setting the initial page.
     fn new(d: Display) -> Self {
@@ -318,68 +398,172 @@ impl DisplayWriteStart {
         }
     }
 
+    /// Polls this write to completion
     fn poll(&mut self) -> nb::Result<(), i2c::MasterI2cError> {
-        match self.write.poll() {
-            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
-            Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
-            Ok(_) => Ok(()),
-        }
+        self.write.poll()
+    }
+
+    /// Gets the address of our write
+    fn get_addr(&self) -> SSD1306Address {
+        self.write.get_addr()
+    }
+
+    /// Finishes or aborts this write
+    fn finish(self) -> i2c::MasterI2c {
+        self.write.finish()
     }
 }
 
-struct DisplayWritePage {
-    addr: SSD1306Address,
-    write: i2c::MasterSliceWrite,
+/// Writes all the buffer pages to the SSD1306
+struct DisplayWritePages {
+    write: PageWrite,
     page: usize,
 }
 
-impl DisplayWritePage {
+impl DisplayWritePages {
+    /// Begins writing the pages
+    ///
+    /// Note that this finishes the display write.
     fn new(s: DisplayWriteStart) -> Self {
-        // NOTE: This proxies DISPLAY_BUFFER and so the access is safe
         let addr = s.write.get_addr();
-        DisplayWritePage {
-            addr: addr,
-            //NOTE: This needs to be fixed: It needs to precede the page with 0x40
-            write: i2c::MasterSliceWrite::new(s.write.finish(), addr.into(), unsafe { &DISPLAY_BUFFER[0..16] }),
+        DisplayWritePages {
+            write: PageWrite::new(s.write.finish(), addr, 0),
             page: 0,
         }
     }
 
+    /// Poll the page writing to completion
     fn poll(&mut self) -> nb::Result<(), i2c::MasterI2cError> {
-        Err(nb::Error::WouldBlock)
+        match self.write.poll() {
+            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
+            Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
+            Ok(_) => {
+                if self.page < unsafe { DISPLAY_BUFFER.len() / 16 - 1 } {
+                    let page = self.page + 1;
+                    take_mut::take(&mut self.write, |w| {
+                        let addr = w.addr;
+                        PageWrite::new(w.finish(), addr, page)
+                    });
+                    self.page = page;
+                    Err(nb::Error::WouldBlock)
+                }
+                else {
+                    Ok(())
+                }
+            }
+        }
+    }
+
+    /// Gets the address of our write
+    fn get_addr(&self) -> SSD1306Address {
+        self.write.get_addr()
+    }
+
+    /// Finishes or aborts this write
+    fn finish(self) -> i2c::MasterI2c {
+        self.write.finish()
     }
 }
 
+/// State machine for a display write
 enum DisplayWriteState {
     Start(DisplayWriteStart),
-    Page(DisplayWritePage),
+    Page(DisplayWritePages),
 }
 
 impl DisplayWriteState {
+    /// Creates a new DisplayWriteState to start the state machine
     fn new(d: Display) -> Self {
         DisplayWriteState::Start(DisplayWriteStart::new(d))
     }
 
-    fn next(self) -> Self {
-        self
+    fn get_addr(&self) -> SSD1306Address {
+        match self {
+            &DisplayWriteState::Start(ref s) => s.get_addr(),
+            &DisplayWriteState::Page(ref p) => p.get_addr(),
+        }
     }
 
-    /// Polls
-    fn poll(&mut self) -> nb::Result<(), i2c::MasterI2cError> {
+    /// Change this state to the next state
+    fn next(self) -> Self {
         match self {
-            &mut DisplayWriteState::Start(_) => Err(nb::Error::WouldBlock),
+            DisplayWriteState::Start(mut s) => match s.poll() {
+                Ok(_) => DisplayWriteState::Page(DisplayWritePages::new(s)),
+                _ => DisplayWriteState::Start(s),
+            },
+            DisplayWriteState::Page(mut p) => DisplayWriteState::Page(p),
+        }
+    }
+
+    /// Polls the current state
+    fn poll(&mut self) -> nb::Result<(), i2c::MasterI2cError> {
+        // The actual movement of a state comes from next. This only polls again
+        // and tells the caller whether or not this write can be finished.
+        match self {
+            &mut DisplayWriteState::Start(ref mut s) => match s.poll() {
+                Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
+                _ => Err(nb::Error::WouldBlock), // the start state always blocks because a page will follow
+            },
             &mut DisplayWriteState::Page(ref mut p) => p.poll(),
+        }
+    }
+
+    /// Finishes or aborts this display write
+    fn finish(self) -> i2c::MasterI2c {
+        match self {
+            DisplayWriteState::Start(s) => s.finish(),
+            DisplayWriteState::Page(p) => p.finish(),
         }
     }
 }
 
+/// Publicly facing display write
+///
+/// This encapsulates the series of steps required for a display write in a form
+/// factor suitable for public consumption with a nonblocking API.
 pub struct DisplayWrite {
-    state: DisplayWriteState,
+    write: DisplayWriteState,
 }
 
 impl DisplayWrite {
+    /// Initiates the first write of the display buffer to the SSD1306
+    fn new_init(i: Initializing) -> Self {
+        DisplayWrite { write: DisplayWriteState::Start(DisplayWriteStart::new_init(i)) }
+    }
+    /// Initiates a new write of the display buffer to the SSD1306
     fn new (d: Display) -> Self {
-        DisplayWrite { state: DisplayWriteState::Start(DisplayWriteStart::new(d)) }
+        DisplayWrite { write: DisplayWriteState::Start(DisplayWriteStart::new(d)) }
+    }
+
+    /// Polls this write to completion
+    pub fn poll(&mut self) -> nb::Result<DisplayWriteCompleteToken, i2c::MasterI2cError> {
+        take_mut::take(&mut self.write, |w| {
+            w.next()
+        });
+        match self.write.poll() {
+            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
+            Err(nb::Error::Other(e)) => Err(nb::Error::Other(e)),
+            Ok(_) => Ok(DisplayWriteCompleteToken::new()),
+        }
+    }
+}
+
+/// Token created when a display write is complete
+pub struct DisplayWriteCompleteToken {
+    _0: ()
+}
+
+impl DisplayWriteCompleteToken {
+    /// Creates a new DisplayWriteCompleteToken
+    fn new() -> Self {
+        DisplayWriteCompleteToken { _0: () }
+    }
+    /// Finishes this write and produces a display interface.
+    ///
+    /// The display can be mutated as needed and then changed back into a
+    /// DisplayWrite when it is ready to be committed.
+    pub fn finish(self, dw: DisplayWrite) -> Display {
+        Display::new(dw)
     }
 }
 

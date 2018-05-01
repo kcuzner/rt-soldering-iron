@@ -68,11 +68,20 @@ fn test() {
 
     let mut addr_fn = move || {
         let mut ssd1306_init = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low).initialize();
-        let mut ssd1306 = await!(ssd1306_init.poll()).unwrap().finish(ssd1306_init);
+        let mut display_write = await!(ssd1306_init.poll()).unwrap().commit(ssd1306_init);
         buzzer.beep(100, 1000.hz(), clocks.clone());
         let mut now = bs::systick::now();
+        let mut y = 0;
         loop {
-            now = await!(bs::systick::wait_until(now + 1)).unwrap();
+            now = await!(bs::systick::wait_until(now + 100)).unwrap();
+            let mut display = await!(display_write.poll()).unwrap().finish(display_write);
+            display.clear();
+            display.hline(10, y, 127).unwrap();
+            y += 1;
+            if y >= 32 {
+                y = 0;
+            }
+            display_write = display.commit();
         }
     };
     loop {
