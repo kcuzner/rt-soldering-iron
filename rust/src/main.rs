@@ -27,7 +27,8 @@ use stm32f031x_hal::time::{U32Ext};
 use stm32f031x_hal::flash::{FlashExt};
 use stm32f031x_hal::gpio::GpioExt;
 use stm32f031x_hal::i2c;
-use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting, MasterI2cError, MasterI2c};
+use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting};
+use stm32f031x_hal::adc::{AdcExt, IntoAnalog};
 
 use embedded_hal::digital::OutputPin;
 
@@ -49,6 +50,7 @@ fn test() {
     let mut gpioa = peripherals.GPIOA.split(&mut rcc.ahb);
     let mut gpiob = peripherals.GPIOB.split(&mut rcc.ahb);
     let mut flash = peripherals.FLASH.constrain();
+    let mut uncalibrated_adc = peripherals.ADC.constrain(&mut rcc.apb2);
     let tim1 = peripherals.TIM1;
 
     rcc.cfgr = rcc.cfgr.sysclk(48.mhz())
@@ -69,11 +71,12 @@ fn test() {
         .master(I2cTiming::from(I2cTimingSetting::Fast));
     let mut buzzer = bs::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
+    let mut heater_sense = gpioa.pa0.into_analog_input(&mut gpioa.regs);
     let mut array: [u8; 5] = [0; 5];
     array[..].clone_from_slice("HELLO".as_bytes());
     let shared_value: nb_sync::Mutex<&mut str> = nb_sync::Mutex::new(unsafe { from_utf8_unchecked_mut(&mut array[..]) });
 
-    let mut addr_fn = || {
+    let mut ui_fn = || {
         let mut ssd1306_init = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low).initialize();
         let mut display_write = await!(ssd1306_init.poll()).unwrap().commit(ssd1306_init);
         buzzer.beep(100, 1000.hz(), clocks.clone());
@@ -102,6 +105,15 @@ fn test() {
             display_write = display.commit();
         }
     };
+    let mut adc_fn = move || {
+        let mut calibrated_adc = await!(uncalibrated_adc.poll()).unwrap().finish(uncalibrated_adc);
+        loop {
+            let mut conversion = calibrated_adc.single(heater_sense);
+            let (mut adc, mut hs, value) = await!(conversion.poll()).unwrap().finish(conversion);
+            calibrated_adc = adc;
+            heater_sense = hs;
+        }
+    };
     let mut incr_fn = || {
         let mut now = bs::systick::now();
         loop {
@@ -119,7 +131,8 @@ fn test() {
         }
     };
     loop {
-        unsafe { addr_fn.resume() };
+        unsafe { ui_fn.resume() };
+        unsafe { adc_fn.resume() };
         unsafe { incr_fn.resume() };
     }
 }

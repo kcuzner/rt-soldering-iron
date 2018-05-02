@@ -2,6 +2,7 @@
 
 #![feature(unsize)]
 #![feature(never_type)]
+#![feature(associated_consts)]
 #![no_std]
 
 extern crate cortex_m;
@@ -10,6 +11,7 @@ extern crate nb;
 extern crate bare_take_mut as take_mut;
 pub extern crate stm32f031x;
 
+pub mod adc;
 pub mod flash;
 pub mod rcc;
 pub mod gpio;
