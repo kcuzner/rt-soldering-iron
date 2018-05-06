@@ -217,7 +217,7 @@ impl Uncalibrated {
     ///
     /// By default, the ADC is assumed to be uncalibrated, so this is the only
     /// thing that can be constructed from an ADC instance.
-    pub fn new(adc: ADC, bus: &mut APB2) -> Self {
+    pub fn new(_adc: ADC, bus: &mut APB2) -> Self {
         // Enable the ADC clock
         bus.enr().modify(|_, w| w.adcen().bit(true));
         // We are a proxy for ADC, so this is safe
@@ -296,6 +296,11 @@ impl Calibrated {
     {
         SingleConversion::new(self, pin)
     }
+
+    /// Begins a conversion sequence
+    pub fn sequence(self, seq: ConversionSequence) -> SequencedConversion {
+        SequencedConversion::new(self, seq)
+    }
 }
 
 /// ADC conversion of a single pin
@@ -354,6 +359,122 @@ impl<P: AnalogPin> ConversionComplete<P> {
         // we have the conv, which has the adc, so this is safe
         let value = unsafe { AdcValue::new() };
         (conv.adc, conv.pin, value)
+    }
+}
+
+/// Scan direction to use during sequenced conversion
+#[derive(Copy, Clone)]
+pub enum ScanDirection {
+    /// Ascending scan direction
+    Ascending,
+    /// Descending scan direction
+    Descending,
+}
+
+/// Represents a sequenced conversion
+///
+/// This consumes pins and is in turn consumed by the Initialized ADC to perform a sequenced
+/// conversion.
+pub struct ConversionSequence {
+    channel_mask: u32,
+    scan: ScanDirection,
+}
+
+impl ConversionSequence {
+    /// Creates a new empty conversion sequence
+    pub fn new() -> Self {
+        ConversionSequence { channel_mask: 0, scan: ScanDirection::Ascending }
+    }
+
+    pub fn scan_direction(&self) -> ScanDirection {
+        self.scan
+    }
+
+    /// Sets the scan direction for this conversion sequence
+    pub fn set_scan_direction(&mut self, d: ScanDirection) {
+        self.scan = d;
+    }
+
+    /// Adds a channel to this conversion
+    ///
+    /// Channels are added to the mask and will be sample in ascending order, not order of adding.
+    /// This is due to the way the STM32 ADC works.
+    ///
+    /// This returns a `PinToken<P>` which can be used to restore the pin and remove it from this
+    /// conversion sequence.
+    pub fn add<P>(&mut self, pin: P) -> PinToken<P> where P: AnalogPin {
+        // There should be a one-to-one relationship between pins and channels, so we do not have
+        // fear of issuing a pintoken for a duplicate channel. In addition, the pintoken must be
+        // released by this conversion sequence before it could be used in another (since `add`
+        // only takes in `AnalogPin`.
+        self.channel_mask |= 1 << P::CHANNEL;
+        PinToken::new(pin)
+    }
+
+    /// Removes a channel from this conversion
+    ///
+    /// If the channel is not part of this conversion sequence, the `PinToken<P>` is passed back to
+    /// the caller inside an Err.
+    pub fn remove<P>(&mut self, token: PinToken<P>) -> Result<P, PinToken<P>> where P: AnalogPin {
+        let pin_mask = 1 << P::CHANNEL;
+        if self.channel_mask & pin_mask > 0 {
+            Ok(token.pin())
+        }
+        else {
+            Err(token)
+        }
+    }
+
+    /// Gets the mask for this conversion sequence
+    fn channel_mask(&self) -> u32 {
+        self.channel_mask
+    }
+}
+
+/// Token object used for interacting with conversions in a conversion sequence
+/// for a particular pin.
+///
+/// This serves the purpose of preventing the `AnalogPin` `P` from being used in any other
+/// conversion sequences.
+pub struct PinToken<P> where P: AnalogPin {
+    pin: P,
+}
+
+impl<P: AnalogPin> PinToken<P> {
+    /// Creates a new pin token for a pin
+    fn new(pin: P) -> Self {
+        PinToken { pin: pin }
+    }
+
+    /// Gets the pin from this token, consuming it in the process
+    ///
+    /// This is safe because if this is accidentally called, there will still only be one `P`
+    /// in existence.
+    fn pin(self) -> P {
+        self.pin
+    }
+}
+
+/// ADC conversion of multiple pins in a sequence
+pub struct SequencedConversion {
+    adc: Calibrated,
+    sequence: ConversionSequence,
+}
+
+impl SequencedConversion {
+    /// Begins a new sequenced conversion
+    ///
+    /// This can also be performed by invoking the `Calibrated::sequence` method.
+    pub fn new(adc: Calibrated, sequence: ConversionSequence) -> Self {
+        // adc is the proxy for ADC and we own it now. We are the proxy.
+        // Clear the EOC flag
+        unsafe { (*ADC::ptr()).isr.write(|w| w.eoc().bit(true)) };
+        // Set the channel
+        let channel_mask = sequence.channel_mask();
+        unsafe { (*ADC::ptr()).chselr.write(|w| w.bits(channel_mask)) }
+        // Start the conversion
+        unsafe { (*ADC::ptr()).cr.modify(|_, w| w.adstart().bit(true)) }
+        SequencedConversion { adc: adc, sequence: sequence }
     }
 }
 
