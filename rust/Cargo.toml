@@ -34,6 +34,9 @@ path = "./components/rtos"
 [dependencies.bare-take-mut]
 path = "./components/bare-take-mut"
 
+[dependencies.nb-sync]
+path = "./components/nb-sync"
+
 [profile.release]
 debug = true
 lto = true

@@ -31,7 +31,7 @@ impl<T> Mutex<T> {
     ///
     /// Once this function returns a `MutexGuard`, all other ongoing calls to `try_lock` will fail
     /// until the `MutexGuard` is `Drop`d.
-    pub fn try_lock(&self) -> nb::Result<MutexGuard<T>, !> {
+    pub fn lock(&self) -> nb::Result<MutexGuard<T>, !> {
         // This critical section ensures that the references to our interior are safe.
         cortex_m::interrupt::free(|_| unsafe {
             if *self.count.get() > 0 {
@@ -66,6 +66,9 @@ impl<T> From<T> for Mutex<T> {
     fn from(v: T) -> Mutex<T> {
         Mutex::new(v)
     }
+}
+
+unsafe impl<T> Sync for Mutex<T> {
 }
 
 /// Scoped mutex access. This will unlock the mutex when dropped.

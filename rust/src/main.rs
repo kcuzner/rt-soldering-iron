@@ -11,12 +11,14 @@ extern crate embedded_hal;
 extern crate stm32f031x;
 extern crate stm32f031x_hal;
 extern crate board_support as bs;
+extern crate nb_sync;
 #[macro_use(await)]
 extern crate nb;
 
 extern crate bare_take_mut as take_mut;
 
 use core::ops::Generator;
+use core::str::from_utf8;
 
 use cortex_m::asm;
 use stm32f031x::{GPIOA, RCC, TIM1};
@@ -67,8 +69,9 @@ fn test() {
         .master(I2cTiming::from(I2cTimingSetting::Fast));
     let mut buzzer = bs::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
+    let shared_value: nb_sync::Mutex<[u8; 5]> = nb_sync::Mutex::new([b'H', b'E', b'L', b'L', b'O']);
 
-    let mut addr_fn = move || {
+    let mut addr_fn = || {
         let mut ssd1306_init = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low).initialize();
         let mut display_write = await!(ssd1306_init.poll()).unwrap().commit(ssd1306_init);
         buzzer.beep(100, 1000.hz(), clocks.clone());
@@ -76,11 +79,14 @@ fn test() {
         let mut y = 0;
         let mut x = 0;
         loop {
-            now = await!(bs::systick::wait_until(now + 100)).unwrap();
+            //now = await!(bs::systick::wait_until(now + 100)).unwrap();
             let mut display = await!(display_write.poll()).unwrap().finish(display_write);
             display.clear();
             let font = font::Font::EightByEight;
-            font.render_string("AELLO", gfx::Point::new(0, 0), &mut display).unwrap();
+            {
+                let string = await!(shared_value.lock()).unwrap();
+                font.render_string(from_utf8(&string[0..5]).unwrap(), gfx::Point::new(0, 0), &mut display).unwrap();
+            }
             display.hline(0, y, 127).unwrap();
             display.vline(x, 0, 31).unwrap();
             y += 1;
@@ -94,8 +100,22 @@ fn test() {
             display_write = display.commit();
         }
     };
+    let mut incr_fn = || {
+        let mut now = bs::systick::now();
+        loop {
+            now = await!(bs::systick::wait_until(now + 100)).unwrap();
+            {
+                let mut string = await!(shared_value.lock()).unwrap();
+                string[0] += 1;
+                if string[0] > b'Z' {
+                    string[0] = b'A';
+                }
+            }
+        }
+    };
     loop {
         unsafe { addr_fn.resume() };
+        unsafe { incr_fn.resume() };
     }
 }
 
