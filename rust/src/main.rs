@@ -31,10 +31,13 @@ use embedded_hal::digital::OutputPin;
 
 pub use bs::{TIM1_BRK_UP_IRQ, SYS_TICK};
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
+pub use gfx::LAST_INDEX;
 
 mod debug;
+mod font;
+mod gfx;
 
-static mut TEST_STACK: [u8; 256] = [0; 256];
+use gfx::RenderTarget;
 
 fn test() {
     let core_peripherals = stm32f031x::CorePeripherals::take().unwrap();
@@ -77,6 +80,8 @@ fn test() {
             now = await!(bs::systick::wait_until(now + 100)).unwrap();
             let mut display = await!(display_write.poll()).unwrap().finish(display_write);
             display.clear();
+            let font = font::Font::EightByEight;
+            font.render_string("AELLO", gfx::Point::new(0, 0), &mut display).unwrap();
             display.hline(0, y, 127).unwrap();
             display.vline(x, 0, 31).unwrap();
             y += 1;
