@@ -31,7 +31,6 @@ use embedded_hal::digital::OutputPin;
 
 pub use bs::{TIM1_BRK_UP_IRQ, SYS_TICK};
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
-pub use gfx::LAST_INDEX;
 
 mod debug;
 mod font;
