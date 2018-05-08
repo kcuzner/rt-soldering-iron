@@ -4,5 +4,6 @@ version = "0.1.0"
 authors = ["Kevin Cuzner <kevin@kevincuzner.com>"]
 
 [dependencies]
+cortex-m = "0.4.0"
 nb = "0.1.1"
 
