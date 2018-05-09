@@ -18,7 +18,7 @@ extern crate nb;
 extern crate bare_take_mut as take_mut;
 
 use core::ops::Generator;
-use core::str::from_utf8;
+use core::str::from_utf8_unchecked_mut;
 
 use cortex_m::asm;
 use stm32f031x::{GPIOA, RCC, TIM1};
@@ -69,7 +69,9 @@ fn test() {
         .master(I2cTiming::from(I2cTimingSetting::Fast));
     let mut buzzer = bs::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
-    let shared_value: nb_sync::Mutex<[u8; 5]> = nb_sync::Mutex::new([b'H', b'E', b'L', b'L', b'O']);
+    let mut array: [u8; 5] = [0; 5];
+    array[..].clone_from_slice("HELLO".as_bytes());
+    let shared_value: nb_sync::Mutex<&mut str> = nb_sync::Mutex::new(unsafe { from_utf8_unchecked_mut(&mut array[..]) });
 
     let mut addr_fn = || {
         let mut ssd1306_init = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low).initialize();
@@ -85,7 +87,7 @@ fn test() {
             let font = font::Font::EightByEight;
             {
                 let string = await!(shared_value.lock()).unwrap();
-                font.render_string(from_utf8(&string[0..5]).unwrap(), gfx::Point::new(0, 0), &mut display).unwrap();
+                font.render_string(&string, gfx::Point::new(0, 0), &mut display).unwrap();
             }
             display.hline(0, y, 127).unwrap();
             display.vline(x, 0, 31).unwrap();
@@ -106,9 +108,12 @@ fn test() {
             now = await!(bs::systick::wait_until(now + 100)).unwrap();
             {
                 let mut string = await!(shared_value.lock()).unwrap();
-                string[0] += 1;
-                if string[0] > b'Z' {
-                    string[0] = b'A';
+                unsafe {
+                    let bytes = string.as_bytes_mut();
+                    bytes[0] += 1;
+                    if bytes[0] > b'Z' {
+                        bytes[0] = b'A';
+                    }
                 }
             }
         }

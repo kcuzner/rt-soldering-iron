@@ -3,7 +3,7 @@
 use gfx;
 
 /// IBM 8x8 font, public domain
-const FONT_8X8_DATA: [[u8; 8]; 37] = [
+static FONT_8X8_DATA: [[u8; 8]; 37] = [
     [ 0x3E, 0x63, 0x73, 0x7B, 0x6F, 0x67, 0x3E, 0x00 ],   // U+0030 (0)
     [ 0x0C, 0x0E, 0x0C, 0x0C, 0x0C, 0x0C, 0x3F, 0x00 ],   // U+0031 (1)
     [ 0x1E, 0x33, 0x30, 0x1C, 0x06, 0x33, 0x3F, 0x00 ],   // U+0032 (2)
@@ -47,14 +47,10 @@ const FONT_8X8_DATA: [[u8; 8]; 37] = [
 ///
 /// Also consider using the `Font::get_character` method
 pub fn get_8x8_character(character: char) -> Option<gfx::Bitmap<'static>> {
-    if character.len_utf8() > 1 {
-        return None
-    }
-    let literal: u8 = character as u8;
-    match literal {
-        b'0'...b'9' => Some(gfx::Bitmap::new(&FONT_8X8_DATA[(literal - b'0') as usize], 8, 8)),
-        b'A'...b'Z' => Some(gfx::Bitmap::new(&FONT_8X8_DATA[(10 + literal - b'A') as usize], 8, 8)),
-        0xB0 => Some(gfx::Bitmap::new(&FONT_8X8_DATA[36], 8, 8)),
+    match character {
+        '0'...'9' => Some(gfx::Bitmap::new(&FONT_8X8_DATA[character as usize - b'0' as usize], 8, 8)),
+        'A'...'Z' => Some(gfx::Bitmap::new(&FONT_8X8_DATA[10 + character as usize - b'A' as usize], 8, 8)),
+        '\u{00B0}' => Some(gfx::Bitmap::new(&FONT_8X8_DATA[36], 8, 8)),
         _ => None,
     }
 }
