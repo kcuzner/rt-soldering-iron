@@ -65,25 +65,35 @@ fn test() {
     let mut uncalibrated_adc = peripherals.ADC.constrain(&mut rcc.apb2);
     let tim1 = peripherals.TIM1;
 
+    // Set up the clocks
     rcc.cfgr = rcc.cfgr.sysclk(48.mhz())
         .hclk(48.mhz())
         .pclk(8.mhz());
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
+    // Calibrate the system tick for 1 ms
     bs::systick::calibrate(&mut syst, clocks.clone());
 
+    // Create the I2C master
     let i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
         .bind(gpiob.pb6.into_scl(&mut gpiob.regs), gpiob.pb7.into_sda(&mut gpiob.regs))
         .master(I2cTiming::from(I2cTimingSetting::Fast));
+
+    // Create the buzzer
     let mut buzzer = bs::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
+    // Create the heater sense line
     let mut heater_sense = gpioa.pa0.into_analog_input(&mut gpioa.regs);
+
+    // Create the SSD1306
+    let mut ssd1306_reset = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low, gpiob.pb3, &mut gpiob.regs).reset();
+
+    // Create the mutex used for communicating between the tasks
     let mut array: [u8; 8] = [0; 8];
     array[..].clone_from_slice("000000ZZ".as_bytes());
     let shared_value: nb_sync::Mutex<&mut str> = nb_sync::Mutex::new(unsafe { from_utf8_unchecked_mut(&mut array[..]) });
 
-    let mut ssd1306_reset = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low, gpiob.pb3, &mut gpiob.regs).reset();
-
+    // UI task
     let mut ui_fn = || {
         let mut ssd1306_init = await!(ssd1306_reset.poll()).unwrap().initialize(ssd1306_reset);
         let mut display_write = await!(ssd1306_init.poll()).unwrap().commit(ssd1306_init);
@@ -113,6 +123,8 @@ fn test() {
             display_write = display.commit();
         }
     };
+
+    // ADC task
     let mut adc_fn = || {
         let mut calibrated_adc = await!(uncalibrated_adc.poll()).unwrap().finish(uncalibrated_adc);
         loop {
@@ -126,6 +138,8 @@ fn test() {
             heater_sense = hs;
         }
     };
+
+    // Dummy task for fun
     let mut incr_fn = || {
         let mut now = bs::systick::now();
         loop {
