@@ -65,6 +65,10 @@ fn test() {
     let mut uncalibrated_adc = peripherals.ADC.constrain(&mut rcc.apb2);
     let tim1 = peripherals.TIM1;
 
+    let mut buf: [Option<u8>; 4] = [None; 4];
+    let mut chan = nb_sync::mpsc::Channel::new(&mut buf);
+    let (mut receiver, sender) = chan.build();
+
     // Set up the clocks
     rcc.cfgr = rcc.cfgr.sysclk(48.mhz())
         .hclk(48.mhz())
@@ -103,6 +107,7 @@ fn test() {
         let mut x = 0;
         loop {
             now = await!(bs::systick::wait_until(now + 100)).unwrap();
+            await!(receiver.recv()).unwrap();
             let mut display = await!(display_write.poll()).unwrap().finish(display_write);
             display.clear();
             let font = font::Font::EightByEight;
@@ -134,6 +139,7 @@ fn test() {
                 let mut string = await!(shared_value.lock()).unwrap();
                 hex(value.into(), &mut string)
             }
+            await!(sender.send(5)).unwrap();
             calibrated_adc = adc;
             heater_sense = hs;
         }

@@ -6,16 +6,22 @@
 extern crate nb;
 extern crate cortex_m;
 
+pub mod mpsc;
+
 use core::cell::UnsafeCell;
 use core::ops::{Deref, DerefMut};
 
-/// Mutex exposing interior mutability safely
+/// Mutex with interior mutability
 ///
 /// This mutex assues that `panic!` is unrecoverable and crashes the program. This is a safe
 /// assumption for this embedded application since the `panic!` transforms into two `udf`
 /// instructions which result in a hard fault. If the user program incorporates any measures to
 /// recover from this sort of hard fault, this mutex is no longer safe since it does not implement
 /// the concept of "poisoning".
+///
+/// Since this mutex is polled and does not block, it is easy to have resource starvation occur.
+/// Care should be taken as to where the `lock` function is called to allow other tasks to have an
+/// opportunity to also grab the mutex.
 pub struct Mutex<T> {
     data: UnsafeCell<T>,
     count: UnsafeCell<i32>,
