@@ -41,6 +41,25 @@ mod gfx;
 
 use gfx::RenderTarget;
 
+/// Performs an integer to hex conversion
+///
+/// Requires an &str of at least 8 bytes length
+fn hex(value: u32, out: &mut str) {
+    unsafe {
+        let bytes = out.as_bytes_mut();
+        for i in 0..8 {
+            let shift = i * 4;
+            let mask = 0xF0000000 >> shift;
+            let nibble = ((value & mask) >> 28 - shift) as u8;
+            bytes[i] = match nibble {
+                0...9 => b'0' + nibble,
+                10...15 => b'A' + (nibble - 10),
+                _ => b'Z',
+            }
+        }
+    }
+}
+
 fn test() {
     let core_peripherals = stm32f031x::CorePeripherals::take().unwrap();
     let peripherals = stm32f031x::Peripherals::take().unwrap();
@@ -72,8 +91,8 @@ fn test() {
     let mut buzzer = bs::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);
 
     let mut heater_sense = gpioa.pa0.into_analog_input(&mut gpioa.regs);
-    let mut array: [u8; 5] = [0; 5];
-    array[..].clone_from_slice("HELLO".as_bytes());
+    let mut array: [u8; 8] = [0; 8];
+    array[..].clone_from_slice("000000ZZ".as_bytes());
     let shared_value: nb_sync::Mutex<&mut str> = nb_sync::Mutex::new(unsafe { from_utf8_unchecked_mut(&mut array[..]) });
 
     let mut ui_fn = || {
@@ -84,7 +103,7 @@ fn test() {
         let mut y = 0;
         let mut x = 0;
         loop {
-            //now = await!(bs::systick::wait_until(now + 100)).unwrap();
+            now = await!(bs::systick::wait_until(now + 100)).unwrap();
             let mut display = await!(display_write.poll()).unwrap().finish(display_write);
             display.clear();
             let font = font::Font::EightByEight;
@@ -105,11 +124,15 @@ fn test() {
             display_write = display.commit();
         }
     };
-    let mut adc_fn = move || {
+    let mut adc_fn = || {
         let mut calibrated_adc = await!(uncalibrated_adc.poll()).unwrap().finish(uncalibrated_adc);
         loop {
             let mut conversion = calibrated_adc.single(heater_sense);
             let (mut adc, mut hs, value) = await!(conversion.poll()).unwrap().finish(conversion);
+            {
+                let mut string = await!(shared_value.lock()).unwrap();
+                hex(value.into(), &mut string)
+            }
             calibrated_adc = adc;
             heater_sense = hs;
         }
@@ -118,7 +141,7 @@ fn test() {
         let mut now = bs::systick::now();
         loop {
             now = await!(bs::systick::wait_until(now + 100)).unwrap();
-            {
+            /*{
                 let mut string = await!(shared_value.lock()).unwrap();
                 unsafe {
                     let bytes = string.as_bytes_mut();
@@ -127,7 +150,7 @@ fn test() {
                         bytes[0] = b'A';
                     }
                 }
-            }
+            }*/
         }
     };
     loop {

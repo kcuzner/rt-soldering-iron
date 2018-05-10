@@ -143,48 +143,47 @@ impl AdcValue {
     }
 
     /// Gets the raw ADC value
-    pub fn raw(&self) -> u16 {
-        self.value
+    pub fn raw(&self) -> u32 {
+        self.value as u32
     }
 
     /// Gets the right-aligned raw ADC value
-    pub fn raw_right(&self) -> u16 {
-        let preshift = match self.alignment() {
+    pub fn raw_right(&self) -> u32 {
+         match self.alignment() {
             AdcAlignment::Left => match self.resolution() {
-                AdcResolution::TwelveBit => 4,
-                AdcResolution::TenBit => 6,
-                AdcResolution::EightBit => 8,
-                AdcResolution::SixBit => 2,
+                AdcResolution::TwelveBit => self.raw() >> 4,
+                AdcResolution::TenBit => self.raw() >> 6,
+                AdcResolution::EightBit => self.raw() >> 8,
+                AdcResolution::SixBit => self.raw() >> 2,
             },
-            _ => 0,
-        };
-        self.raw() >> preshift
+            _ => self.raw(),
+        }
     }
 }
 
 impl From<AdcValue> for u8 {
     /// Converts an ADC value into a u8, scaling to the range by shifting
     fn from(v: AdcValue) -> u8 {
-        let shift = match v.resolution() {
-            AdcResolution::TwelveBit => 4,
-            AdcResolution::TenBit => 2,
-            AdcResolution::EightBit => 0,
-            AdcResolution::SixBit => -2,
+        let value = match v.resolution() {
+            AdcResolution::TwelveBit => v.raw_right() >> 4,
+            AdcResolution::TenBit => v.raw_right() >> 2,
+            AdcResolution::EightBit => v.raw_right(),
+            AdcResolution::SixBit => v.raw_right() << 2,
         };
-        (v.raw_right() >> shift) as u8
+        value as u8
     }
 }
 
 impl From<AdcValue> for u16 {
     /// Converts an ADC value into a u16, scaling to the range by shifting
     fn from(v: AdcValue) -> u16 {
-        let shift = match v.resolution() {
-            AdcResolution::TwelveBit => -2,
-            AdcResolution::TenBit => -4,
-            AdcResolution::EightBit => -8,
-            AdcResolution::SixBit => -10,
+        let value = match v.resolution() {
+            AdcResolution::TwelveBit => v.raw_right() << 4,
+            AdcResolution::TenBit => v.raw_right() << 6,
+            AdcResolution::EightBit => v.raw_right() << 8,
+            AdcResolution::SixBit => v.raw_right() << 10,
         };
-        (v.raw_right() >> shift) as u16
+        value as u16
     }
 }
 
@@ -222,7 +221,9 @@ impl Uncalibrated {
         bus.enr().modify(|_, w| w.adcen().bit(true));
         // We are a proxy for ADC, so this is safe
         // Step 1: Disable the ADC
-        unsafe { (*ADC::ptr()).cr.modify(|_, w| w.addis().bit(true)) };
+        if unsafe { (*ADC::ptr()).cr.read().aden().bit() } {
+            unsafe { (*ADC::ptr()).cr.modify(|_, w| w.addis().bit(true)) };
+        }
         Uncalibrated { state: CalibrationState::Disabling }
     }
 
