@@ -4,7 +4,7 @@ use core::marker::PhantomData;
 
 use nb;
 
-use stm32f031x::{ADC, adc};
+use stm32f031x::ADC;
 
 use gpio;
 use rcc::{APB2};
@@ -287,7 +287,7 @@ pub struct Calibrated {
 
 impl Calibrated {
     /// Creates a new calibrated ADC instance
-    fn new(_ct: CalibrationToken, adc: Uncalibrated) -> Self {
+    fn new(_ct: CalibrationToken, _: Uncalibrated) -> Self {
         Calibrated { _0: () }
     }
 

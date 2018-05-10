@@ -2,7 +2,6 @@
 
 #![feature(unsize)]
 #![feature(never_type)]
-#![feature(associated_consts)]
 #![no_std]
 
 extern crate cortex_m;

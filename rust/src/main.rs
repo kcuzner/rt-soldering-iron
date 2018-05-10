@@ -128,7 +128,7 @@ fn test() {
         let mut calibrated_adc = await!(uncalibrated_adc.poll()).unwrap().finish(uncalibrated_adc);
         loop {
             let mut conversion = calibrated_adc.single(heater_sense);
-            let (mut adc, mut hs, value) = await!(conversion.poll()).unwrap().finish(conversion);
+            let (adc, hs, value) = await!(conversion.poll()).unwrap().finish(conversion);
             {
                 let mut string = await!(shared_value.lock()).unwrap();
                 hex(value.into(), &mut string)
