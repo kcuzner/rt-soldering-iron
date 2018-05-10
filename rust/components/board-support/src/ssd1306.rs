@@ -4,7 +4,12 @@ use core::convert::From;
 
 use nb;
 use bare_take_mut as take_mut;
+use embedded_hal::digital::OutputPin;
+use stm32f031x_hal::gpio::gpiob;
+use stm32f031x_hal::gpio::{Output, OpenDrainPullUp};
 use stm32f031x_hal::i2c;
+
+use systick;
 
 // A word about implementation:
 //
@@ -254,11 +259,14 @@ impl PageWrite {
 // SSD1306 struct can be used as a proxy for it. This also means that
 // it is a singleton and its presence implies safety when accessing
 // static mutables.
+//
+// TODO: Changed this to accept any reset pin, not just PB3
 
 /// Uninitialized SSD1306
 pub struct Uninitialized {
     addr: SSD1306Address,
     master: i2c::MasterI2c,
+    reset: gpiob::PB3<Output<OpenDrainPullUp>>,
 }
 
 impl Uninitialized {
@@ -266,24 +274,76 @@ impl Uninitialized {
     ///
     /// This does not cooperate well with multiple devices sharing
     /// the I2C bus, but we'll get to that someday.
-    pub fn new(master: i2c::MasterI2c, address: SSD1306Address) -> Self {
-        Uninitialized { master: master, addr: address }
+    pub fn new<Mode>(master: i2c::MasterI2c, address: SSD1306Address, reset: gpiob::PB3<Mode>, gpiob: &mut gpiob::Regs) -> Self {
+        let configured_reset = reset.into_output_open_drain_pull_up(gpiob);
+        Uninitialized { master: master, addr: address, reset: configured_reset }
     }
 
-    /// Kicks off the initialization process for the SSD1306
-    pub fn initialize(self) -> Initializing {
-        Initializing::new(self)
+    /// Resets the SSD1306 in preparation for initialization
+    pub fn reset(self) -> Resetting {
+        Resetting::new(self)
     }
 }
 
+/// SSD1306 being reset
+pub struct Resetting {
+    addr: SSD1306Address,
+    master: i2c::MasterI2c,
+    reset: gpiob::PB3<Output<OpenDrainPullUp>>,
+    start_time: u32,
+}
+
+impl Resetting {
+    fn new(mut ui: Uninitialized) -> Self {
+        ui.reset.set_low();
+        Resetting {
+            addr: ui.addr,
+            master: ui.master,
+            reset: ui.reset,
+            start_time: systick::now(),
+        }
+    }
+
+    /// Polling function for reset completion
+    pub fn poll(&mut self) -> nb::Result<ResetToken, !> {
+        match systick::wait_until(self.start_time + 1) {
+            Err(nb::Error::WouldBlock) => Err(nb::Error::WouldBlock),
+            Err(nb::Error::Other(_)) => unreachable!(),
+            Ok(_) => {
+                self.reset.set_high();
+                Ok(ResetToken::new())
+            }
+        }
+    }
+}
+
+/// Token produced only when reset has completed
+pub struct ResetToken {
+    _0: (),
+}
+
+impl ResetToken {
+    /// Creates a new reset token. Only use in this mod.
+    fn new() -> Self {
+        ResetToken { _0: () }
+    }
+
+    /// Following a reset, this begins the initialization process
+    pub fn initialize(self, r: Resetting) -> Initializing {
+        Initializing::new(r)
+    }
+}
+
+/// SSD1306 being initialized
 pub struct Initializing {
     write: CommandWrite,
 }
 
 impl Initializing {
-    fn new(ui: Uninitialized) -> Self {
+    fn new(r: Resetting) -> Self {
+        // Note that r's reset pin gets dropped
         Initializing {
-            write: CommandWrite::new(ui.master, ui.addr, &INITIALIZATION_COMMANDS),
+            write: CommandWrite::new(r.master, r.addr, &INITIALIZATION_COMMANDS),
         }
     }
     /// Polling function for waiting for initialization to be complete

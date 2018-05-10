@@ -27,8 +27,6 @@ use stm32f031x_hal::gpio::GpioExt;
 use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting};
 use stm32f031x_hal::adc::{AdcExt, IntoAnalog};
 
-use embedded_hal::digital::OutputPin;
-
 pub use bs::{TIM1_BRK_UP_IRQ, SYS_TICK};
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
 
@@ -74,13 +72,6 @@ fn test() {
 
     bs::systick::calibrate(&mut syst, clocks.clone());
 
-    //TODO: Put this in the SSD1306...I don't even know what its doing here...
-    let mut reset = gpiob.pb3.into_output_open_drain_pull_up(&mut gpiob.regs);
-    for _i in 0..80100 {
-        reset.set_low();
-    }
-    reset.set_high();
-
     let i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
         .bind(gpiob.pb6.into_scl(&mut gpiob.regs), gpiob.pb7.into_sda(&mut gpiob.regs))
         .master(I2cTiming::from(I2cTimingSetting::Fast));
@@ -91,8 +82,10 @@ fn test() {
     array[..].clone_from_slice("000000ZZ".as_bytes());
     let shared_value: nb_sync::Mutex<&mut str> = nb_sync::Mutex::new(unsafe { from_utf8_unchecked_mut(&mut array[..]) });
 
+    let mut ssd1306_reset = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low, gpiob.pb3, &mut gpiob.regs).reset();
+
     let mut ui_fn = || {
-        let mut ssd1306_init = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low).initialize();
+        let mut ssd1306_init = await!(ssd1306_reset.poll()).unwrap().initialize(ssd1306_reset);
         let mut display_write = await!(ssd1306_init.poll()).unwrap().commit(ssd1306_init);
         buzzer.beep(100, 1000.hz(), clocks.clone());
         let mut now = bs::systick::now();
