@@ -1,0 +1,45 @@
+[package]
+name = "rt-soldering-iron"
+version = "0.1.0"
+authors = ["Kevin Cuzner <kevin@kevincuzner.com>"]
+
+[dependencies]
+cortex-m = "0.4.0"
+cortex-m-semihosting = "0.2.0"
+bare-metal = "0.1.0"
+nb = "0.1.1"
+
+[dependencies.cortex-m-rt]
+features = ["abort-on-panic"]
+version = "0.3.13"
+
+[dependencies.stm32f031x]
+features = ["rt"]
+path = "./components/stm32f031x"
+version = "0.2.0"
+
+[dependencies.stm32f031x-hal]
+path = "./components/stm32f031x-hal"
+
+[dependencies.embedded-hal]
+features = ["unproven"]
+version = "0.1.0"
+
+[dependencies.board-support]
+path = "./components/board-support"
+
+# The RTOS will be broken into a separate repository eventually.
+# It is not currently being used in this project.
+#[dependencies.rtos]
+#path = "./components/rtos"
+
+[dependencies.bare-take-mut]
+path = "./components/bare-take-mut"
+
+[dependencies.nb-sync]
+path = "./components/nb-sync"
+
+[profile.release]
+debug = true
+lto = true
+

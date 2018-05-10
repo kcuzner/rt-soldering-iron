@@ -1,0 +1,9 @@
+[package]
+authors = ["Kevin Cuzner <kevin@kevincuzner.com>"]
+name = "rtos"
+version = "0.1.0"
+
+[dependencies]
+cortex-m = "0.4.0"
+bare-metal = "0.1.0"
+

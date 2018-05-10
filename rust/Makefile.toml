@@ -1,0 +1,82 @@
+[tasks.build]
+command = "xargo"
+args = ["build"]
+dependencies = []
+
+[tasks.build-release]
+command = "xargo"
+args = ["build", "--release"]
+dependencies = []
+
+[tasks.pre-build]
+dependencies = [ ]
+
+[tasks.embedded-dump]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "dump"]
+
+[tasks.embedded-copy-hex]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "copy", "ihex"]
+
+[tasks.embedded-copy-bin]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "copy", "binary"]
+
+[tasks.embedded-size]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "size"]
+
+[tasks.embedded-flash]
+command = "./scripts/embedded.py"
+args = ["--target=rt-soldering-iron", "flash"]
+
+[tasks.embedded-dump-release]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "dump"]
+
+[tasks.embedded-copy-hex-release]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "copy", "ihex"]
+
+[tasks.embedded-copy-bin-release]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "copy", "binary"]
+
+[tasks.embedded-size-release]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "size"]
+
+[tasks.embedded-flash-release]
+command = "./scripts/embedded.py"
+args = ["--release", "--target=rt-soldering-iron", "flash"]
+
+[tasks.post-build]
+dependencies = ["embedded-dump", "embedded-copy-hex", "embedded-size"]
+
+[tasks.post-build-release]
+dependencies = ["embedded-dump-release", "embedded-copy-hex-release", "embedded-size-release"]
+
+[tasks.embedded-flow]
+dependencies = [
+    "pre-build",
+    "build",
+    "post-build"
+]
+
+[tasks.embedded-flow-release]
+dependencies = [
+    "pre-build",
+    "build-release",
+    "post-build-release"
+]
+
+[tasks.install-embedded-release]
+dependencies = [
+	"embedded-flow-release",
+	"embedded-flash-release"
+]
+
+[tasks.default]
+alias = "embedded-flow-release"
+
