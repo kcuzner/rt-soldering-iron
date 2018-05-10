@@ -15,32 +15,55 @@ use stm32f031x_hal::i2c;
 // the command sequences for initializing the display and
 // transferring a page to be displayed are represented as binary blobs.
 
+#[allow(dead_code)]
 const CMD_SET_CONTRAST: u8 = 0x81;
+#[allow(dead_code)]
 const CMD_DISPLAY_ALL_ON: u8 = 0xa5;
+#[allow(dead_code)]
 const CMD_DISPLAY_ALL_ON_RESUME: u8 = 0xa4;
+#[allow(dead_code)]
 const CMD_NORMAL_DISPLAY: u8 = 0xa6;
+#[allow(dead_code)]
 const CMD_INVERT_DISPLAY: u8 = 0xa7;
+#[allow(dead_code)]
 const CMD_DISPLAY_OFF: u8 = 0xae;
+#[allow(dead_code)]
 const CMD_DISPLAY_ON: u8 = 0xaf;
+#[allow(dead_code)]
 const CMD_SET_DISPLAY_OFFSET: u8 = 0xd3;
+#[allow(dead_code)]
 const CMD_SET_COM_PINS: u8 = 0xda;
+#[allow(dead_code)]
 const CMD_SET_V_COM_DETECT: u8 = 0xdb;
+#[allow(dead_code)]
 const CMD_SET_DISPLAY_CLOCK_DIV: u8 = 0xd5;
+#[allow(dead_code)]
 const CMD_SET_PRECHARGE: u8 = 0xd9;
+#[allow(dead_code)]
 const CMD_SET_MULTIPLEX: u8 = 0xa8;
+#[allow(dead_code)]
 const CMD_SET_LOW_COLUMN: u8 = 0x00;
+#[allow(dead_code)]
 const CMD_SET_HIGH_COLUMN: u8 = 0x10;
+#[allow(dead_code)]
 const CMD_SET_START_LINE: u8 = 0x40;
+#[allow(dead_code)]
 const CMD_MEMORY_MODE: u8 = 0x20;
+#[allow(dead_code)]
 const CMD_COLUMN_ADDR: u8 = 0x21;
+#[allow(dead_code)]
 const CMD_PAGE_ADDR: u8 = 0x22;
+#[allow(dead_code)]
 const CMD_COM_SCAN_INC: u8 = 0xc0;
+#[allow(dead_code)]
 const CMD_COM_SCAN_DEC: u8 = 0xc8;
+#[allow(dead_code)]
 const CMD_SEG_REMAP: u8 = 0xa0;
+#[allow(dead_code)]
 const CMD_CHARGE_PUMP: u8 = 0x8d;
 
 /// Command sequence for initializing the SSD1306
-const INITIALIZATION_COMMANDS: [u8; 50] = [
+static INITIALIZATION_COMMANDS: [u8; 50] = [
     0x00, CMD_DISPLAY_OFF,
     0x00, CMD_SET_DISPLAY_CLOCK_DIV,
     0x00, 0x80,
@@ -68,7 +91,7 @@ const INITIALIZATION_COMMANDS: [u8; 50] = [
     0x00, CMD_DISPLAY_ON,
 ];
 
-const DISPLAY_COMMANDS: [u8; 12] = [
+static DISPLAY_COMMANDS: [u8; 12] = [
     0x00, CMD_COLUMN_ADDR,
     0x00, 0,
     0x00, 127,
@@ -173,7 +196,7 @@ struct PageWrite {
 impl PageWrite {
     /// Creates a new pagewrite. The passed page is the page number to write
     fn new(master: i2c::MasterI2c, address: SSD1306Address, page: usize) -> Self {
-        /// Since there is only one MasterI2c, this functions as a proxy for DISPLAY_BUFFER
+        // Since there is only one MasterI2c, this functions as a proxy for DISPLAY_BUFFER
         let index = page*16;
         PageWrite {
             addr: address,
@@ -259,7 +282,6 @@ pub struct Initializing {
 
 impl Initializing {
     fn new(ui: Uninitialized) -> Self {
-        let addr = ui.addr.clone();
         Initializing {
             write: CommandWrite::new(ui.master, ui.addr, &INITIALIZATION_COMMANDS),
         }
@@ -316,15 +338,15 @@ impl Display {
     /// Sets a single pixel in the buffer on or off
     pub fn set_pixel(&mut self, x: usize, y: usize, on: bool) -> Result<(), DisplayError> {
         // This is a proxy for DISPLAY_BUFFER, so DISPLAY_BUFFER is safe
-        let shiftOffset = y % 8;
+        let shift_offset = y % 8;
         match (x, y) {
             (0...127, 0...31) => {
                 let index = (y/8*128 + x) as usize;
                 if on {
-                    unsafe { DISPLAY_BUFFER[index] |= 0x1 << shiftOffset };
+                    unsafe { DISPLAY_BUFFER[index] |= 0x1 << shift_offset };
                 }
                 else {
-                    unsafe { DISPLAY_BUFFER[index] &= !(0x1 << shiftOffset) };
+                    unsafe { DISPLAY_BUFFER[index] &= !(0x1 << shift_offset) };
                 }
                 Ok(())
             },
@@ -472,11 +494,6 @@ enum DisplayWriteState {
 }
 
 impl DisplayWriteState {
-    /// Creates a new DisplayWriteState to start the state machine
-    fn new(d: Display) -> Self {
-        DisplayWriteState::Start(DisplayWriteStart::new(d))
-    }
-
     fn get_addr(&self) -> SSD1306Address {
         match self {
             &DisplayWriteState::Start(ref s) => s.get_addr(),
@@ -491,7 +508,7 @@ impl DisplayWriteState {
                 Ok(_) => DisplayWriteState::Page(DisplayWritePages::new(s)),
                 _ => DisplayWriteState::Start(s),
             },
-            DisplayWriteState::Page(mut p) => DisplayWriteState::Page(p),
+            DisplayWriteState::Page(p) => DisplayWriteState::Page(p),
         }
     }
 

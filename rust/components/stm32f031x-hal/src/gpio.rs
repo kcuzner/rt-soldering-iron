@@ -85,6 +85,7 @@ pub(crate) trait IntoAlternate<Mode> {
 pub struct Analog;
 
 /// Alternate function used for configuration of pins
+#[allow(dead_code)]
 enum AlternateFunction {
     AF0, AF1, AF2, AF3, AF4, AF5, AF6, AF7
 }

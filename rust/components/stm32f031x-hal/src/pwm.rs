@@ -97,7 +97,7 @@ macro_rules! pwm {
 
                 $(
                     /// Break out PWM channel with a pin.
-                    pub fn $name<T>(&mut self, pin: T) -> $CHi
+                    pub fn $name<T>(&mut self, _pin: T) -> $CHi
                     where T: ChannelPin<$CHi>
                     {
                         //TODO: This will no longer work with multiple pins per channel

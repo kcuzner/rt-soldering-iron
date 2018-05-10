@@ -28,8 +28,10 @@ version = "0.1.0"
 [dependencies.board-support]
 path = "./components/board-support"
 
-[dependencies.rtos]
-path = "./components/rtos"
+# The RTOS will be broken into a separate repository eventually.
+# It is not currently being used in this project.
+#[dependencies.rtos]
+#path = "./components/rtos"
 
 [dependencies.bare-take-mut]
 path = "./components/bare-take-mut"

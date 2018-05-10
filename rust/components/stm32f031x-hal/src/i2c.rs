@@ -10,8 +10,7 @@ use take_mut;
 use gpio::{gpioa, gpiob, AF1, AF4, OpenDrain, IntoAlternate};
 use gpio::gpioa::{PA9, PA10};
 use gpio::gpiob::{PB6, PB7};
-use rcc::{APB1, Clocks};
-use time::U32Ext;
+use rcc::APB1;
 
 /// Trait applied to pins that are SCL-capable
 pub trait IntoScl<SclPin> {

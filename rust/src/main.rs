@@ -20,13 +20,10 @@ extern crate bare_take_mut as take_mut;
 use core::ops::Generator;
 use core::str::from_utf8_unchecked_mut;
 
-use cortex_m::asm;
-use stm32f031x::{GPIOA, RCC, TIM1};
 use stm32f031x_hal::rcc::RccExt;
 use stm32f031x_hal::time::{U32Ext};
 use stm32f031x_hal::flash::{FlashExt};
 use stm32f031x_hal::gpio::GpioExt;
-use stm32f031x_hal::i2c;
 use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting};
 use stm32f031x_hal::adc::{AdcExt, IntoAnalog};
 
@@ -38,8 +35,6 @@ pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
 mod debug;
 mod font;
 mod gfx;
-
-use gfx::RenderTarget;
 
 /// Performs an integer to hex conversion
 ///
@@ -79,13 +74,14 @@ fn test() {
 
     bs::systick::calibrate(&mut syst, clocks.clone());
 
+    //TODO: Put this in the SSD1306...I don't even know what its doing here...
     let mut reset = gpiob.pb3.into_output_open_drain_pull_up(&mut gpiob.regs);
-    for i in 0..80100 {
+    for _i in 0..80100 {
         reset.set_low();
     }
     reset.set_high();
 
-    let mut i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
+    let i2c = peripherals.I2C1.constrain(&mut rcc.apb1)
         .bind(gpiob.pb6.into_scl(&mut gpiob.regs), gpiob.pb7.into_sda(&mut gpiob.regs))
         .master(I2cTiming::from(I2cTimingSetting::Fast));
     let mut buzzer = bs::Buzzer::new(tim1, &mut rcc.apb2, &mut nvic, gpioa.pa8, &mut gpioa.regs);

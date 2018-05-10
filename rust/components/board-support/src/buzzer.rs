@@ -1,10 +1,9 @@
 //! Buzzer abstraction
 
-use nb;
 use cortex_m;
 
 use stm32f031x;
-use stm32f031x::{RCC, TIM1, NVIC};
+use stm32f031x::{TIM1, NVIC};
 use stm32f031x_hal::rcc::{APB2, Clocks};
 use stm32f031x_hal::pwm::{PwmExt, IntoPwm, pwm1};
 use stm32f031x_hal::gpio::gpioa;
