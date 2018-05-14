@@ -65,9 +65,9 @@ fn test() {
     let mut uncalibrated_adc = peripherals.ADC.constrain(&mut rcc.apb2);
     let tim1 = peripherals.TIM1;
 
-    let mut buf: [Option<u8>; 4] = [None; 4];
-    let mut chan = nb_sync::mpsc::Channel::new(&mut buf);
-    let (mut receiver, sender) = chan.build();
+    let mut buf: [Option<u32>; 4] = [None; 4];
+    let mut chan = nb_sync::fifo::Channel::new(&mut buf);
+    let (mut receiver, mut sender) = chan.split();
 
     // Set up the clocks
     rcc.cfgr = rcc.cfgr.sysclk(48.mhz())
@@ -92,11 +92,6 @@ fn test() {
     // Create the SSD1306
     let mut ssd1306_reset = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low, gpiob.pb3, &mut gpiob.regs).reset();
 
-    // Create the mutex used for communicating between the tasks
-    let mut array: [u8; 8] = [0; 8];
-    array[..].clone_from_slice("000000ZZ".as_bytes());
-    let shared_value: nb_sync::Mutex<&mut str> = nb_sync::Mutex::new(unsafe { from_utf8_unchecked_mut(&mut array[..]) });
-
     // UI task
     let mut ui_fn = || {
         let mut ssd1306_init = await!(ssd1306_reset.poll()).unwrap().initialize(ssd1306_reset);
@@ -107,14 +102,14 @@ fn test() {
         let mut x = 0;
         loop {
             now = await!(bs::systick::wait_until(now + 100)).unwrap();
-            await!(receiver.recv()).unwrap();
+            let val = await!(receiver.recv()).unwrap();
             let mut display = await!(display_write.poll()).unwrap().finish(display_write);
+            let mut arr: [u8; 8] = [0; 8];
+            let mut string = unsafe { from_utf8_unchecked_mut(&mut arr) };
+            hex(val, &mut string);
             display.clear();
             let font = font::Font::EightByEight;
-            {
-                let string = await!(shared_value.lock()).unwrap();
-                font.render_string(&string, gfx::Point::new(0, 0), &mut display).unwrap();
-            }
+            font.render_string(&string, gfx::Point::new(0, 0), &mut display).unwrap();
             display.hline(0, y, 127).unwrap();
             display.vline(x, 0, 31).unwrap();
             y += 1;
@@ -135,11 +130,7 @@ fn test() {
         loop {
             let mut conversion = calibrated_adc.single(heater_sense);
             let (adc, hs, value) = await!(conversion.poll()).unwrap().finish(conversion);
-            {
-                let mut string = await!(shared_value.lock()).unwrap();
-                hex(value.into(), &mut string)
-            }
-            await!(sender.send(5)).unwrap();
+            await!(sender.send(value.into())).unwrap();
             calibrated_adc = adc;
             heater_sense = hs;
         }
