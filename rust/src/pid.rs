@@ -11,13 +11,6 @@ pub trait Process {
     fn set(&mut self, value: u16);
 }
 
-impl Process for PwmPin<Duty=u16> {
-    /// Controls a PwmPin using a PID controller
-    fn set(&mut self, value: u16) {
-        self.set_duty(value)
-    }
-}
-
 /// PID Constants
 pub struct Constants {
     a0: i32,
@@ -40,14 +33,14 @@ impl Constants {
 }
 
 /// PID controller for a process
-pub struct PID<P> where P: Process {
+pub struct PID<P> where P: PwmPin<Duty=u16> {
     k: Constants,
     process: P,
     last_value: u16,
     last_feedback: [u16; 2],
 }
 
-impl<P: Process> PID<P> {
+impl<P: PwmPin<Duty=u16>> PID<P> {
     /// Creates a new PID controller that controls a process
     pub fn new(k: Constants, process: P) -> Self {
         PID {
@@ -71,7 +64,7 @@ impl<P: Process> PID<P> {
         else if value < (<u16>::min_value() as i32) {
             value = <u16>::min_value() as i32;
         }
-        self.process.set(value as u16);
+        self.process.set_duty(value as u16);
         self.last_value = value as u16;
         self.last_feedback = [fb_n as u16, fb_n1 as u16];
     }
