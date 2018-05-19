@@ -26,6 +26,7 @@ use stm32f031x_hal::flash::{FlashExt};
 use stm32f031x_hal::gpio::GpioExt;
 use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting};
 use stm32f031x_hal::adc::{AdcExt, IntoAnalog};
+use stm32f031x_hal::pwm::{PwmExt, IntoPwm};
 
 pub use bs::{TIM1_BRK_UP_IRQ, SYS_TICK};
 pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
@@ -33,6 +34,7 @@ pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
 mod debug;
 mod font;
 mod gfx;
+mod pid;
 
 /// Performs an integer to hex conversion
 ///
@@ -64,6 +66,7 @@ fn test() {
     let mut flash = peripherals.FLASH.constrain();
     let mut uncalibrated_adc = peripherals.ADC.constrain(&mut rcc.apb2);
     let tim1 = peripherals.TIM1;
+    let tim14 = peripherals.TIM14;
 
     let mut buf: [Option<u32>; 4] = [None; 4];
     let mut chan = nb_sync::fifo::Channel::new(&mut buf);
@@ -91,6 +94,13 @@ fn test() {
 
     // Create the SSD1306
     let mut ssd1306_reset = bs::ssd1306::Uninitialized::new(i2c, bs::ssd1306::SSD1306Address::Low, gpiob.pb3, &mut gpiob.regs).reset();
+
+    // Create the heater PWM
+    let mut heater_pwm = tim14.constrain_pwm(&mut rcc.apb1);
+    let mut heater_pin = heater_pwm.ch1(gpioa.pa7.into_pwm(&mut gpioa.regs));
+
+    // Create the heater controller
+    let mut heater_pid = pid::PID::new(pid::Constants::new(1, 1, 1), heater_pin);
 
     // UI task
     let mut ui_fn = || {
@@ -124,7 +134,7 @@ fn test() {
         }
     };
 
-    // ADC task
+    // Control task
     let mut adc_fn = || {
         let mut calibrated_adc = await!(uncalibrated_adc.poll()).unwrap().finish(uncalibrated_adc);
         loop {
