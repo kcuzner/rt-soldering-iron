@@ -14,6 +14,8 @@ extern crate board_support as bs;
 extern crate nb_sync;
 #[macro_use(await)]
 extern crate nb;
+extern crate cast;
+extern crate fpa;
 
 extern crate bare_take_mut as take_mut;
 
@@ -107,7 +109,7 @@ fn test() {
     heater_pwm.enable();
     heater_pwm.commit();
     heater_pin.enable();
-    let mut heater_pid = pid::PID::new(pid::Constants::new(1, 1, 1), heater_pin);
+    let mut heater_pid = pid::PID::new(pid::Constants::new(1f64, 0.25f64, 0.00625f64), heater_pin);
 
     // UI task
     let mut ui_fn = || {

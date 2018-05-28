@@ -5,7 +5,8 @@
 
 use embedded_hal::PwmPin;
 use nb;
-
+use cast::u16;
+use fpa::I24F8;
 
 /// Process controlled by a PID controller
 pub trait Process {
@@ -14,21 +15,21 @@ pub trait Process {
 
 /// PID Constants
 pub struct Constants {
-    a0: i32,
-    a1: i32,
-    a2: i32,
+    a0: I24F8,
+    a1: I24F8,
+    a2: I24F8,
 }
 
 impl Constants {
     /// Creates a new constants structure
-    pub fn new(p: u16, i: u16, d:u16) -> Self {
-        let p_32 = p as i32;
-        let i_32 = i as i32;
-        let d_32 = d as i32;
+    pub fn new(p: f64, i: f64, d: f64) -> Self {
+        let p_fxp = I24F8(p).unwrap();
+        let i_fxp = I24F8(i).unwrap();
+        let d_fxp = I24F8(d).unwrap();
         Constants {
-            a0: p_32 + i_32 + d_32,
-            a1: (-p_32) - (2*d_32),
-            a2: d_32,
+            a0: p_fxp + i_fxp + d_fxp,
+            a1: (-p_fxp) - (2*d_fxp),
+            a2: d_fxp,
         }
     }
 }
@@ -38,7 +39,7 @@ pub struct PID<P> where P: PwmPin<Duty=u16> {
     k: Constants,
     process: P,
     last_value: u16,
-    last_feedback: [u16; 2],
+    last_feedback: [I24F8; 2],
 }
 
 impl<P: PwmPin<Duty=u16>> PID<P> {
@@ -48,26 +49,26 @@ impl<P: PwmPin<Duty=u16>> PID<P> {
             k: k,
             process: process,
             last_value: 0,
-            last_feedback: [0; 2],
+            last_feedback: [I24F8(0i8); 2],
         }
     }
 
     /// Runs an iteration of the PID control loop
     pub fn step(&mut self, feedback: u16) {
-        let fb_n = feedback as i32;
-        let fb_n1 = self.last_feedback[0] as i32;
-        let fb_n2 = self.last_feedback[1] as i32;
-        let v_n1 = self.last_value as i32;
+        let fb_n = I24F8(feedback);
+        let fb_n1 = self.last_feedback[0];
+        let fb_n2 = self.last_feedback[1];
+        let v_n1 = I24F8(self.last_value);
         let mut value = v_n1 + self.k.a0 * fb_n + self.k.a1 * fb_n1 + self.k.a2 * fb_n2;
-        if value > self.process.get_max_duty() as i32 {
-            value = self.process.get_max_duty() as i32;
+        if value > I24F8(self.process.get_max_duty()) {
+            value = I24F8(self.process.get_max_duty());
         }
-        else if value < 0 {
-            value = 0;
+        else if value < I24F8(0i8) {
+            value = I24F8(0i8);
         }
-        self.process.set_duty(value as u16);
-        self.last_value = value as u16;
-        self.last_feedback = [fb_n as u16, fb_n1 as u16];
+        self.process.set_duty(u16(value).unwrap());
+        self.last_value = u16(value).unwrap();
+        self.last_feedback = [fb_n, fb_n1];
     }
 }
 
