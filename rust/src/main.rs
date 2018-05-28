@@ -20,6 +20,8 @@ extern crate bare_take_mut as take_mut;
 use core::ops::Generator;
 use core::str::from_utf8_unchecked_mut;
 
+use embedded_hal::PwmPin;
+
 use stm32f031x_hal::rcc::RccExt;
 use stm32f031x_hal::time::{U32Ext};
 use stm32f031x_hal::flash::{FlashExt};
@@ -100,6 +102,11 @@ fn test() {
     let mut heater_pin = heater_pwm.ch1(gpioa.pa7.into_pwm(&mut gpioa.regs));
 
     // Create the heater controller
+    heater_pin.set_duty(0);
+    heater_pwm.set_period(clocks.clone(), 1.khz());
+    heater_pwm.enable();
+    heater_pwm.commit();
+    heater_pin.enable();
     let mut heater_pid = pid::PID::new(pid::Constants::new(1, 1, 1), heater_pin);
 
     // UI task
@@ -140,6 +147,7 @@ fn test() {
         loop {
             let mut conversion = calibrated_adc.single(heater_sense);
             let (adc, hs, value) = await!(conversion.poll()).unwrap().finish(conversion);
+            heater_pid.step(value.into());
             await!(sender.send(value.into())).unwrap();
             calibrated_adc = adc;
             heater_sense = hs;

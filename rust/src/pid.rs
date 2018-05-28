@@ -6,6 +6,7 @@
 use embedded_hal::PwmPin;
 use nb;
 
+
 /// Process controlled by a PID controller
 pub trait Process {
     fn set(&mut self, value: u16);
@@ -52,17 +53,17 @@ impl<P: PwmPin<Duty=u16>> PID<P> {
     }
 
     /// Runs an iteration of the PID control loop
-    pub fn iterate(&mut self, feedback: u16) {
+    pub fn step(&mut self, feedback: u16) {
         let fb_n = feedback as i32;
         let fb_n1 = self.last_feedback[0] as i32;
         let fb_n2 = self.last_feedback[1] as i32;
         let v_n1 = self.last_value as i32;
         let mut value = v_n1 + self.k.a0 * fb_n + self.k.a1 * fb_n1 + self.k.a2 * fb_n2;
-        if value > (<u16>::max_value() as i32) {
-            value = <u16>::max_value() as i32;
+        if value > self.process.get_max_duty() as i32 {
+            value = self.process.get_max_duty() as i32;
         }
-        else if value < (<u16>::min_value() as i32) {
-            value = <u16>::min_value() as i32;
+        else if value < 0 {
+            value = 0;
         }
         self.process.set_duty(value as u16);
         self.last_value = value as u16;
