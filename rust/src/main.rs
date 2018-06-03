@@ -16,13 +16,18 @@ extern crate nb_sync;
 extern crate nb;
 extern crate cast;
 extern crate fpa;
+extern crate numtoa;
 
 extern crate bare_take_mut as take_mut;
 
 use core::ops::Generator;
-use core::str::from_utf8_unchecked_mut;
+use core::str::{from_utf8_unchecked, from_utf8_unchecked_mut};
 
 use embedded_hal::PwmPin;
+
+use numtoa::NumToA;
+use cast::u16;
+use fpa::I16F16;
 
 use stm32f031x_hal::rcc::RccExt;
 use stm32f031x_hal::time::{U32Ext};
@@ -39,6 +44,18 @@ mod debug;
 mod font;
 mod gfx;
 mod pid;
+
+#[derive(Copy, Clone)]
+struct DisplayData {
+    adc: u32,
+    pid: u32,
+}
+
+impl DisplayData {
+    pub fn new(adc: u32, pid: u32) -> Self {
+        DisplayData { adc: adc, pid: pid }
+    }
+}
 
 /// Performs an integer to hex conversion
 ///
@@ -72,7 +89,8 @@ fn test() {
     let tim1 = peripherals.TIM1;
     let tim14 = peripherals.TIM14;
 
-    let mut buf: [Option<u32>; 4] = [None; 4];
+    // Display queue
+    let mut buf: [Option<DisplayData>; 4] = [None, None, None, None];
     let mut chan = nb_sync::fifo::Channel::new(&mut buf);
     let (mut receiver, mut sender) = chan.split();
 
@@ -109,7 +127,14 @@ fn test() {
     heater_pwm.enable();
     heater_pwm.commit();
     heater_pin.enable();
-    let mut heater_pid = pid::PID::new(pid::Constants::new(1f64, 0.25f64, 0.00625f64), heater_pin);
+    let mut heater_pid = pid::PID::new(pid::Constants::new(0.1f64, 0.00001f64, 0.000001f64), heater_pin);
+
+    // Build a setpoint using fixed point arithmetic
+    //let c_per_bit = I16F16(0.053618f64).unwrap(); //based on seebeck and bad assumptions
+    let c_per_bit = I16F16(0.13431f64).unwrap(); //based on 500C = 3.0V calculation
+    //let bits_per_c = I16F16(18.650f64).unwrap();
+    let bits_per_c = I16F16(7.4455f64).unwrap();
+    let setpoint = u16(I16F16(300i16) * bits_per_c).unwrap();
 
     // UI task
     let mut ui_fn = || {
@@ -121,14 +146,22 @@ fn test() {
         let mut x = 0;
         loop {
             now = await!(bs::systick::wait_until(now + 100)).unwrap();
-            let val = await!(receiver.recv()).unwrap();
+            let display_data = await!(receiver.recv()).unwrap();
             let mut display = await!(display_write.poll()).unwrap().finish(display_write);
-            let mut arr: [u8; 8] = [0; 8];
-            let mut string = unsafe { from_utf8_unchecked_mut(&mut arr) };
-            hex(val, &mut string);
             display.clear();
             let font = font::Font::EightByEight;
-            font.render_string(&string, gfx::Point::new(0, 0), &mut display).unwrap();
+            let mut arr: [u8; 8] = [0; 8];
+            {
+                let c = I16F16(display_data.adc).unwrap() * c_per_bit;
+                let start_index = u16(c).unwrap().numtoa(10, &mut arr);
+                let string = unsafe { from_utf8_unchecked(&arr[start_index..]) };
+                font.render_string(&string, gfx::Point::new(0, 0), &mut display).unwrap();
+            }
+            {
+                let mut string = unsafe { from_utf8_unchecked_mut(&mut arr) };
+                hex(display_data.pid, &mut string);
+                font.render_string(&string, gfx::Point::new(0, 12), &mut display).unwrap();
+            }
             display.hline(0, y, 127).unwrap();
             display.vline(x, 0, 31).unwrap();
             y += 1;
@@ -149,8 +182,14 @@ fn test() {
         loop {
             let mut conversion = calibrated_adc.single(heater_sense);
             let (adc, hs, value) = await!(conversion.poll()).unwrap().finish(conversion);
-            heater_pid.step(value.into());
-            await!(sender.send(value.into())).unwrap();
+            let pid_output = heater_pid.step(setpoint, value.raw_right() as u16);
+            heater_pwm.commit();
+            let data = DisplayData::new(value.raw_right(), pid_output.into());
+            //yuck. Send inside a vanilla await! requires Copy.
+            match sender.send(data) {
+                _ => ()
+            };
+            await!(sender.send(data)).unwrap();
             calibrated_adc = adc;
             heater_sense = hs;
         }

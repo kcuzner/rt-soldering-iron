@@ -38,7 +38,7 @@ impl Constants {
 pub struct PID<P> where P: PwmPin<Duty=u16> {
     k: Constants,
     process: P,
-    last_value: u16,
+    last_value: I24F8,
     last_feedback: [I24F8; 2],
 }
 
@@ -48,17 +48,17 @@ impl<P: PwmPin<Duty=u16>> PID<P> {
         PID {
             k: k,
             process: process,
-            last_value: 0,
+            last_value: I24F8(0i8),
             last_feedback: [I24F8(0i8); 2],
         }
     }
 
     /// Runs an iteration of the PID control loop
-    pub fn step(&mut self, feedback: u16) {
-        let fb_n = I24F8(feedback);
+    pub fn step(&mut self, setpoint: u16, feedback: u16) -> u16 {
+        let fb_n = I24F8(setpoint) - I24F8(feedback);
         let fb_n1 = self.last_feedback[0];
         let fb_n2 = self.last_feedback[1];
-        let v_n1 = I24F8(self.last_value);
+        let v_n1 = self.last_value;
         let mut value = v_n1 + self.k.a0 * fb_n + self.k.a1 * fb_n1 + self.k.a2 * fb_n2;
         if value > I24F8(self.process.get_max_duty()) {
             value = I24F8(self.process.get_max_duty());
@@ -67,8 +67,9 @@ impl<P: PwmPin<Duty=u16>> PID<P> {
             value = I24F8(0i8);
         }
         self.process.set_duty(u16(value).unwrap());
-        self.last_value = u16(value).unwrap();
+        self.last_value = value;
         self.last_feedback = [fb_n, fb_n1];
+        u16(value).unwrap()
     }
 }
 

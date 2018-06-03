@@ -10,6 +10,7 @@ bare-metal = "0.1.0"
 nb = "0.1.1"
 nb-sync = "0.1.0"
 fpa = "0.1.0"
+numtoa = "0.0.7"
 
 [dependencies.cortex-m-rt]
 features = ["abort-on-panic"]
