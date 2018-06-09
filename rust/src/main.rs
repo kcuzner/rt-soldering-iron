@@ -127,7 +127,7 @@ fn test() {
     heater_pwm.enable();
     heater_pwm.commit();
     heater_pin.enable();
-    let mut heater_pid = pid::PID::new(pid::Constants::new(0.1f64, 0.00001f64, 0.000001f64), heater_pin);
+    let mut heater_pid = pid::PID::new(pid::Constants::new(0.2f64, 0.1f64, 0.001f64), heater_pin);
 
     // Build a setpoint using fixed point arithmetic
     //let c_per_bit = I16F16(0.053618f64).unwrap(); //based on seebeck and bad assumptions
