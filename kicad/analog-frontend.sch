@@ -989,4 +989,8 @@ Wire Wire Line
 	3650 6650 3650 6550
 Wire Wire Line
 	3650 6550 3750 6550
+Text Notes 1850 6150 0    60   ~ 0
+K-type thermocouple:\nSeebeck coefficient is 40.46uV/C
+Text Notes 9300 6100 0    60   ~ 0
+Gain of 371.3 gives\n15.026mV/C
 $EndSCHEMATC

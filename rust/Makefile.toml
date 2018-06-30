@@ -1,10 +1,10 @@
 [tasks.build]
-command = "xargo"
+command = "cargo"
 args = ["build"]
 dependencies = []
 
 [tasks.build-release]
-command = "xargo"
+command = "cargo"
 args = ["build", "--release"]
 dependencies = []
 

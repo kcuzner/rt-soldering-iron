@@ -4,17 +4,16 @@ name = "stm32f031x-hal"
 version = "0.1.0"
 
 [dependencies]
-cortex-m = "0.4.0"
+cortex-m = "0.5.0"
 nb = "0.1.1"
 
 [dependencies.embedded-hal]
 features = ["unproven"]
-version = "0.1.0"
+version = "0.2.1"
 
 [dependencies.stm32f031x]
 features = ["rt"]
 path = "../stm32f031x"
-version = "0.2.0"
 
 [dependencies.bare-take-mut]
 path = "../bare-take-mut"

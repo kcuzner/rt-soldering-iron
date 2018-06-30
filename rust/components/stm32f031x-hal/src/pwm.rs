@@ -29,7 +29,7 @@ macro_rules! pwm {
         $($CHi:ident: ($name:ident, $ccmrx:ident, $ccmrxocxm:ident,
                        $ccmrxocxpe:ident, $ccrx:ident, $ccenr:ident, [
                        $($PXi:ident: ($gpiox:ident, $af:ident),)+]),)+
-    ]) => {
+    ], $enfunc:expr) => {
         pub mod $pwmx {
             use cortex_m;
             use hal::PwmPin;
@@ -49,7 +49,9 @@ macro_rules! pwm {
                 {
                     bus.enr().modify(|_, w| w.$busxenr().bit(true));
 
-                    unsafe { (*$TIMX::ptr()).bdtr.modify(|_, w| w.moe().bit(true)) }
+                    $enfunc;
+
+                    
 
                     Parts {
                         _0: ()
@@ -172,5 +174,11 @@ pwm!(TIM1, tim1,  pwm1, APB2, tim1en, [
      CH1: (ch1, ccmr1_output, oc1m, oc1pe, ccr1, cc1e, [
            PA8: (gpioa, AF2),
      ]),
-]);
+], unsafe { (*TIM1::ptr()).bdtr.modify(|_, w| w.moe().bit(true)) });
+
+pwm!(TIM14, tim14, pwm14, APB1, tim14en, [
+     CH1: (ch1, ccmr1_output, oc1m, oc1pe, ccr1, cc1e, [
+           PA7: (gpioa, AF4),
+     ]),
+], ());
 

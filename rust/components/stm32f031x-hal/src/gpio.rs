@@ -107,7 +107,7 @@ macro_rules! gpio {
         /// GPIO
         pub mod $gpiox {
             use core::marker::PhantomData;
-            use hal::digital::{OutputPin, InputPin};
+            use hal::digital::{OutputPin, StatefulOutputPin, InputPin};
             use stm32f031x::$GPIOX;
             use rcc::AHB;
             use super::{
@@ -289,15 +289,6 @@ macro_rules! gpio {
                 )*
 
                 impl<Mode> OutputPin for $PXi<Output<Mode>> {
-                    fn is_high(&self) -> bool {
-                        !self.is_low()
-                    }
-
-                    fn is_low(&self) -> bool {
-                        // Atomic read with no side effects
-                        unsafe { (*$GPIOX::ptr()).odr.read().bits() & (1 << $i) == 0 }
-                    }
-
                     fn set_high(&mut self) {
                         // Atomic write to stateless register (BSRR)
                         unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << $i)) }
@@ -308,6 +299,18 @@ macro_rules! gpio {
                         unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << ($i + 16))) }
                     }
                 }
+
+                impl<Mode> StatefulOutputPin for $PXi<Output<Mode>> {
+                    fn is_set_high(&self) -> bool {
+                        !self.is_set_low()
+                    }
+
+                    fn is_set_low(&self) -> bool {
+                        // Atomic read with no side effects
+                        unsafe { (*$GPIOX::ptr()).odr.read().bits() & (1 << $i) == 0 }
+                    }
+                }
+
 
                 impl<Mode> InputPin for $PXi<Input<Mode>> {
                     fn is_high(&self) -> bool {

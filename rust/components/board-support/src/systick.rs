@@ -1,15 +1,15 @@
 //! System timer abstraction layer
 
 use cortex_m;
-use cortex_m::peripheral::SYST;
+use stm32f031x::SYST;
 use stm32f031x_hal::rcc::Clocks;
 use nb;
 
 static mut TICK_COUNT: u32 = 0;
 
-#[no_mangle]
-#[used]
-pub extern "C" fn SYS_TICK() {
+exception!(SysTick, systick);
+
+fn systick() {
     cortex_m::interrupt::free(|_| {
         unsafe { TICK_COUNT += 1; }
     });

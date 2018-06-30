@@ -34,7 +34,7 @@ with building the project to facilitate convenient embedded development. In
 order to build the project conveniently, the following must be installed:
 
  - Nightly Rust
- - [xargo](https://github.com/japaric/xargo)
+ - The thumbv6m target: `$ rustup target add thumbv6m-none-eabi`
  - [cargo-make](https://github.com/sagiegurari/cargo-make)
  - The `arm-none-eabi` toolchain and binutils
  - Python
