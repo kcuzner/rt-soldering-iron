@@ -7,8 +7,9 @@ use nb;
 
 static mut TICK_COUNT: u32 = 0;
 
-#[no_mangle]
-pub extern "C" fn SYS_TICK() {
+exception!(SysTick, systick);
+
+fn systick() {
     cortex_m::interrupt::free(|_| {
         unsafe { TICK_COUNT += 1; }
     });

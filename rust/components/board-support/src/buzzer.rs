@@ -55,7 +55,6 @@ interrupt!(TIM1_BRK_UP_IRQ, buzzer_isr);
 
 /// TIM1 IRQ which modifies the global BUZZER_COUNTDOWN state and turns off TIM1
 /// when required.
-/// pub extern "C" fn TIM1_BRK_UP_IRQ() {
 fn buzzer_isr() {
     if unsafe { (*TIM1::ptr()).sr.read().uif().bit_is_set() } {
         if unsafe { BUZZER_COUNTDOWN == 0 } {

@@ -39,7 +39,7 @@ use stm32f031x_hal::i2c::{I2CExt, IntoScl, IntoSda, I2cTiming, I2cTimingSetting}
 use stm32f031x_hal::adc::{AdcExt, IntoAnalog};
 use stm32f031x_hal::pwm::{PwmExt, IntoPwm};
 
-pub use bs::{TIM1_BRK_UP_IRQ, SYS_TICK};
+pub use bs::{TIM1_BRK_UP_IRQ, SysTick};
 pub use debug::{HARD_FAULT_STACK};
 
 mod debug;
