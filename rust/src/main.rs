@@ -1,12 +1,14 @@
 //! Firmware for the rt soldering iron
 
 #![feature(used, const_fn, asm, naked_functions, const_size_of, const_unsafe_cell_new, const_ptr_null_mut, never_type, generators, generator_trait)]
+#![no_main]
 #![no_std]
 
 extern crate cortex_m;
 #[macro_use]
 extern crate cortex_m_rt;
 extern crate bare_metal;
+extern crate panic_abort;
 extern crate embedded_hal;
 extern crate stm32f031x;
 extern crate stm32f031x_hal;
@@ -38,7 +40,7 @@ use stm32f031x_hal::adc::{AdcExt, IntoAnalog};
 use stm32f031x_hal::pwm::{PwmExt, IntoPwm};
 
 pub use bs::{TIM1_BRK_UP_IRQ, SYS_TICK};
-pub use debug::{HARD_FAULT, HARD_FAULT_STACK};
+pub use debug::{HARD_FAULT_STACK};
 
 mod debug;
 mod font;
@@ -76,7 +78,7 @@ fn hex(value: u32, out: &mut str) {
     }
 }
 
-fn test() {
+fn test() -> ! {
     let core_peripherals = stm32f031x::CorePeripherals::take().unwrap();
     let peripherals = stm32f031x::Peripherals::take().unwrap();
     let mut syst = core_peripherals.SYST;
@@ -219,17 +221,16 @@ fn test() {
     }
 }
 
-fn main() {
+entry!(main);
+
+fn main() -> ! {
     test()
 }
 
-// As we are not using interrupts, we just register a dummy catch all handler
-/*#[allow(dead_code)]
-#[used]
-#[link_section = ".vector_table.interrupts"]
-static INTERRUPTS: [extern "C" fn(); 32] = [default_handler; 32];
+exception!(HardFault, debug::hard_fault_handler);
+exception!(*, default_handler);
 
-extern "C" fn default_handler() {}*/
+fn default_handler(_irqn: i16) {
+    panic!();
+}
 
-default_handler!(exception_handler);
-fn exception_handler() {}

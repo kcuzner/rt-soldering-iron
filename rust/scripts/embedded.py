@@ -110,7 +110,7 @@ def main():
             help='Path to the objcopy executable')
     parser.add_argument('--target', metavar='TARGET', action='append', dest='targets',
             help='Target name for compiler artifacts')
-    parser.add_argument('--cargo', default='xargo',
+    parser.add_argument('--cargo', default='cargo',
             help='Path to the cargo executable')
     subparsers = parser.add_subparsers()
     subparsers.required = True
